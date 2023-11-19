@@ -13,11 +13,15 @@ import org.com.itpple.spot.server.dto.oAuth.UserInfo;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class KakaoInfo {
 
+  private Long id;
+
   private KakaoAccount kakaoAccount;
 
-  public static UserInfo newUserInfo(KakaoInfo kakaoInfo) {
+  public static UserInfo newUserInfo(KakaoInfo kakaoInfo, String oAuthId) {
     return UserInfo.builder()
+        .oAuthId(oAuthId)
         .nickname(kakaoInfo.getKakaoAccount().getProfile().getNickname())
+        .profileImage(kakaoInfo.getKakaoAccount().getProfile().getProfileImageUrl())
         .build();
   }
 }

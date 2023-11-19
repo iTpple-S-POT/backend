@@ -8,4 +8,5 @@ import lombok.ToString;
 public class Profile {
 
   private String nickname;
+  private String profileImageUrl;
 }

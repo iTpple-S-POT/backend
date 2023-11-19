@@ -24,11 +24,4 @@ public class User {
 
   @Column(name = "o_auth_id", nullable = false)
   private String oAuthId;
-
-  @Column(name = "username", nullable = false)
-  private String username;
-
-  @Column(name = "password", nullable = false)
-  private String password;
-
 }

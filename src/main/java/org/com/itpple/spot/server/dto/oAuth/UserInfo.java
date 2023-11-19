@@ -7,6 +7,7 @@ import lombok.Getter;
 @Builder
 public class UserInfo {
 
+  private String oAuthId;
   private String nickname;
-  private String profile_image;
+  private String profileImage;
 }
