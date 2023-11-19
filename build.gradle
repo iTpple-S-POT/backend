@@ -30,7 +30,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.8'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.8'//의존성 문제로 인해 버전 업 불가
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
