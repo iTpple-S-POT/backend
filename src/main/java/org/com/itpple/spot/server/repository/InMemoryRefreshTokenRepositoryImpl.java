@@ -17,7 +17,11 @@ public class InMemoryRefreshTokenRepositoryImpl implements RefreshTokenRepositor
 
   @Override
   public Optional<String> findRefreshTokenByUserId(Long userId) {
-    return Optional.empty();
+    try {
+      return Optional.ofNullable(refreshTokenMap.get(userId));
+    } catch (Exception e) {
+      return Optional.empty();
+    }
   }
 
   @Override
