@@ -6,11 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashSet;
 import org.com.itpple.spot.server.core.jwt.TokenProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 
 @ExtendWith(MockitoExtension.class)
 public class TokenProviderTest {
@@ -23,7 +26,13 @@ public class TokenProviderTest {
     var id = 1L;
     var role = "ROLE_USER";
 
-    var generatedToken = generateTokenService.generateToken(id, role);
+    //role to authentication
+    var authorities = new HashSet<GrantedAuthority>();
+    authorities.add((GrantedAuthority) () -> role);
+
+    var authentication = new UsernamePasswordAuthenticationToken(id, null, authorities);
+
+    var generatedToken = generateTokenService.generateToken(id, authentication);
     var payload = generateTokenService.getPayload(generatedToken.getAccessToken());
 
     assertAll(() -> assertEquals(payload.getId(), "testId"),
@@ -49,8 +58,12 @@ public class TokenProviderTest {
   public void TestExceptionAccessTokenIsModified() {
     var id = 1L;
     var role = "ROLE_USER";
+    var authorities = new HashSet<GrantedAuthority>();
+    authorities.add((GrantedAuthority) () -> role);
 
-    var accessToken = generateTokenService.generateToken(id, role).getAccessToken() + "a";
+    var authentication = new UsernamePasswordAuthenticationToken(id, null, authorities);
+
+    var accessToken = generateTokenService.generateToken(id, authentication).getAccessToken() + "a";
 
     assertThrows(RuntimeException.class, () -> generateTokenService.getPayload(accessToken));
   }
@@ -59,8 +72,12 @@ public class TokenProviderTest {
   public void TestExceptionAccessTokenIsExpired() {
     var id = 1L;
     var role = "ROLE_USER";
+    var authorities = new HashSet<GrantedAuthority>();
+    authorities.add((GrantedAuthority) () -> role);
 
-    var accessToken = generateTokenService.generateToken(id, role).getAccessToken();
+    var authentication = new UsernamePasswordAuthenticationToken(id, null, authorities);
+
+    var accessToken = generateTokenService.generateToken(id, authentication).getAccessToken();
 
     try {
       Thread.sleep(1000L);

@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.SignatureException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -28,47 +29,49 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
+  private static final String AUTHORITIES_KEY = "auth";
+
   @Value("${jwt.accessTokenSecret}")
-  private String accessTokenSecretKey;
+  private String ACCESS_TOKEN_SECRET_KEY;
 
   @Value("${jwt.accessTokenExpiredSeconds}")
-  private Long accessTokenExpiredSeconds;
+  private Long ACCESS_TOKEN_EXPIRED_SECONDS;
 
   @Value("${jwt.refreshTokenSecret}")
-  private String refreshTokenSecretKey;
+  private String REFRESH_TOKEN_SECRET_KEY;
 
   @Value("${jwt.refreshTokenExpiredSeconds}")
-  private Long refreshTokenExpiredSeconds;
+  private Long REFRESH_TOKEN_EXPIRED_SECONDS;
 
   private SecretKey accessTokenKey;
   private SecretKey refreshTokenKey;
+
 
   private final RefreshTokenRepository refreshTokenRepository;
 
   @Override
   public void afterPropertiesSet() {
-    byte[] keyBytes = Decoders.BASE64.decode(accessTokenSecretKey);
+    byte[] keyBytes = Decoders.BASE64.decode(ACCESS_TOKEN_SECRET_KEY);
     this.accessTokenKey = new SecretKeySpec(keyBytes, "HmacSHA256");
 
-    byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshTokenSecretKey);
+    byte[] refreshKeyBytes = Decoders.BASE64.decode(REFRESH_TOKEN_SECRET_KEY);
     this.refreshTokenKey = new SecretKeySpec(refreshKeyBytes, "HmacSHA256");
   }
 
-  public TokenResponse generateToken(Long userId, String role) {
-    String accessToken = generateAccessToken(userId, role);
+  public TokenResponse generateToken(Long userId, Authentication authentication) {
+    String accessToken = generateAccessToken(userId, authentication);
     String refreshToken = generateRefreshToken(userId);
     return new TokenResponse(accessToken, refreshToken);
   }
 
-  private String generateAccessToken(Long userId, String role) {
+  private String generateAccessToken(Long userId, Authentication authentication) {
     return Jwts.builder()
         .signWith(accessTokenKey)
-        .claims()
-        .add("userId", userId)
-        .add("role", role)
+        .subject(userId.toString())
+        .claim(AUTHORITIES_KEY, authentication)
+        .claim("userId", userId)
         .issuedAt(new Date())
-        .expiration(new Date(new Date().getTime() + accessTokenExpiredSeconds))
-        .and()
+        .expiration(new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRED_SECONDS))
         .header()
         .type("JWT")
         .and()
@@ -78,11 +81,9 @@ public class TokenProvider implements InitializingBean {
   private String generateRefreshToken(Long userId) {
     var refreshToken = Jwts.builder()
         .signWith(refreshTokenKey)
-        .claims()
-        .add("userId", userId)
+        .claim("userId", userId)
         .issuedAt(new Date())
-        .expiration(new Date(new Date().getTime() + refreshTokenExpiredSeconds))
-        .and()
+        .expiration(new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRED_SECONDS))
         .header()
         .type("JWT")
         .and()
@@ -105,6 +106,8 @@ public class TokenProvider implements InitializingBean {
       log.info("JWT 토큰이 잘못되었습니다.");
     } catch (UnsupportedJwtException e) {
       log.info("지원되지 않는 JWT 토큰입니다.");
+    } catch (SignatureException e) {
+      log.info("JWT 서명이 잘못되었습니다.");
     }
 
     return false;
@@ -129,7 +132,7 @@ public class TokenProvider implements InitializingBean {
     Claims claims = this.getPayload(accessToken);
 
     Collection<GrantedAuthority> authorities = new HashSet<>();
-    authorities.add((GrantedAuthority) () -> "USER");
+    authorities.add((GrantedAuthority) claims.get("auth"));
 
     User principal = new User(claims.getSubject(), "", authorities);
 

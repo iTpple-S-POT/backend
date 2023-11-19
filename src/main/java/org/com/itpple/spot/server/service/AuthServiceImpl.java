@@ -30,19 +30,19 @@ public class AuthServiceImpl implements AuthService {
 
     var user = userRepository.findByoAuthId(oAuthId);
 
+    //TODO: 유저가 없으면 save가 아니라 authentication을 Geust로 해야함
+    //TODO: 유저가 있으면 authentication을 User로 해야함
     if (user.isEmpty()) {
       var userInfo = oAuthService.getUserInfoByToken(accessToken, refreshToken);
 
       var newUser = User.builder()
           .oAuthId(oAuthId)
-          .username(userInfo.getNickname())
-          .password(oAuthId)
           .build();
 
       user = Optional.of(userRepository.save(newUser));
     }
 
-    return tokenProvider.generateToken(user.get().getId(), null);
+    return tokenProvider.generateToken(user.get().getId(), null);//TODO: authentication를 설정해야 함
 
   }
 
@@ -55,11 +55,10 @@ public class AuthServiceImpl implements AuthService {
     var userId = this.tokenProvider.getPayloadFromRefreshToken(refreshToken)
         .get("userId", Long.class);
 
-    return tokenProvider.generateToken(userId, null);
+    return tokenProvider.generateToken(userId, null);//TODO: authentication를 설정해야 함
   }
 
   @Override
   public void logout(String accessToken) {
-
   }
 }
