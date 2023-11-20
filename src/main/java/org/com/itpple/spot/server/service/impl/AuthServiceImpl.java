@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
     var authentication = this.generateAuthentication(user.get());
 
     return tokenProvider.generateToken(user.get().getId(),
-        authentication);//TODO: authentication를 설정해야 함
+        authentication);
 
   }
 
@@ -69,7 +69,11 @@ public class AuthServiceImpl implements AuthService {
     var userId = this.tokenProvider.getPayloadFromRefreshToken(refreshToken)
         .get("userId", Long.class);
 
-    return tokenProvider.generateToken(userId, null);//TODO: authentication를 설정해야 함
+    var user = userRepository.findById(userId);
+    var authentication = this.generateAuthentication(user.get());
+
+
+    return tokenProvider.generateToken(userId, authentication);
   }
 
   @Override
