@@ -1,15 +1,20 @@
-package org.com.itpple.spot.server.service;
+package org.com.itpple.spot.server.service.impl;
 
 import java.util.Optional;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.core.jwt.TokenProvider;
 import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.entity.User;
 import org.com.itpple.spot.server.model.OAuthType;
+import org.com.itpple.spot.server.model.Role;
 import org.com.itpple.spot.server.repository.UserRepository;
+import org.com.itpple.spot.server.service.AuthService;
+import org.com.itpple.spot.server.service.OAuthServiceFactory;
+import org.com.itpple.spot.server.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -19,6 +24,7 @@ public class AuthServiceImpl implements AuthService {
   private final OAuthServiceFactory oAuthServiceFactory;
   private final UserRepository userRepository;
   private final TokenProvider tokenProvider;
+  private final UserService userService;
 
   @Override
   @Transactional
@@ -30,20 +36,28 @@ public class AuthServiceImpl implements AuthService {
 
     var user = userRepository.findByoAuthId(oAuthId);
 
-    //TODO: 유저가 없으면 save가 아니라 authentication을 Geust로 해야함
-    //TODO: 유저가 있으면 authentication을 User로 해야함
     if (user.isEmpty()) {
       var userInfo = oAuthService.getUserInfoByToken(accessToken, refreshToken);
 
       var newUser = User.builder()
           .oAuthId(oAuthId)
+          .role(Role.USER)
+          .nickname(userInfo.getNickname())
+          .profileImageUrl(userInfo.getProfileImage())
           .build();
 
       user = Optional.of(userRepository.save(newUser));
     }
 
-    return tokenProvider.generateToken(user.get().getId(), null);//TODO: authentication를 설정해야 함
+    var authentication = this.generateAuthentication(user.get());
 
+    return tokenProvider.generateToken(user.get().getId(),
+        authentication);//TODO: authentication를 설정해야 함
+
+  }
+
+  private Authentication generateAuthentication(User user) {
+    return tokenProvider.generateAuthentication(user);
   }
 
   @Override
@@ -61,4 +75,6 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public void logout(String accessToken) {
   }
+
+
 }

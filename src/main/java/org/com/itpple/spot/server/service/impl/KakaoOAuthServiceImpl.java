@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.service;
+package org.com.itpple.spot.server.service.impl;
 
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,7 @@ import org.com.itpple.spot.server.dto.oAuth.UserInfo;
 import org.com.itpple.spot.server.dto.oAuth.kakao.KakaoInfo;
 import org.com.itpple.spot.server.external.KakaoClient;
 import org.com.itpple.spot.server.model.OAuthType;
+import org.com.itpple.spot.server.service.OAuthService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +20,13 @@ public class KakaoOAuthServiceImpl implements OAuthService {
   private final KakaoClient kakaoClient;
 
   @Value("${oauth2.client.kakao.app-id}")
-  private Integer appId;
+  private Integer APP_ID;
 
   @Value("${oauth2.client.kakao.user-info-uri}")
-  private String userInfoUri;
+  private String USER_INFO_URI;
 
   @Value("${oauth2.client.kakao.token-info-uri}")
-  private String tokenUri;
+  private String TOKEN_INFO_URI;
 
   @Override
   public OAuthType getOAuthType() {
@@ -33,15 +34,15 @@ public class KakaoOAuthServiceImpl implements OAuthService {
   }
 
   public String getOAuthIdByToken(String accessToken, String refreshToken) {
-    var tokenInfo = kakaoClient.getTokenInfo(URI.create(tokenUri), "Bearer " + accessToken);
-    if (!appId.equals(tokenInfo.getAppId())) {
+    var tokenInfo = kakaoClient.getTokenInfo(URI.create(TOKEN_INFO_URI), "Bearer " + accessToken);
+    if (!APP_ID.equals(tokenInfo.getAppId())) {
       throw new RuntimeException("appId is not matched");
     }
     return this.generateOAuthId(tokenInfo.getId());
   }
 
   public UserInfo getUserInfoByToken(String accessToken, String refreshToken) {
-    var kakaoInfo = kakaoClient.getInfo(URI.create(userInfoUri), "Bearer " + accessToken);
+    var kakaoInfo = kakaoClient.getInfo(URI.create(USER_INFO_URI), "Bearer " + accessToken);
     var oAuthId = this.generateOAuthId(kakaoInfo.getId());
 
     return KakaoInfo.newUserInfo(kakaoInfo, oAuthId);

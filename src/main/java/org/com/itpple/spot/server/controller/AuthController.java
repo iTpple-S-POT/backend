@@ -8,6 +8,7 @@ import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.model.OAuthType;
 import org.com.itpple.spot.server.service.AuthService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ public class AuthController {
 
   private final AuthService authService;
 
+  @PreAuthorize("hasRole('USER')")
   @GetMapping("/test")
   public ResponseEntity<?> test() {
     return ResponseEntity.ok("test");

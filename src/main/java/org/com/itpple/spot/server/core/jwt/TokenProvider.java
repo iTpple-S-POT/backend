@@ -7,9 +7,10 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.SignatureException;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +70,9 @@ public class TokenProvider implements InitializingBean {
     return Jwts.builder()
         .signWith(accessTokenKey)
         .subject(userId.toString())
-        .claim(AUTHORITIES_KEY, authentication)
+        .claim(AUTHORITIES_KEY,
+            authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(
+                Collectors.joining(",")))
         .claim("userId", userId)
         .issuedAt(new Date())
         .expiration(new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRED_SECONDS))
@@ -128,16 +132,27 @@ public class TokenProvider implements InitializingBean {
     return true;
   }
 
+  public Authentication generateAuthentication(org.com.itpple.spot.server.entity.User user) {
+
+    var authorities = new HashSet<GrantedAuthority>();
+    authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+
+    var principal = new User(user.getId().toString(), "", authorities);
+
+    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+  }
+
   public Authentication getAuthentication(String accessToken) {
-    Claims claims = this.getPayload(accessToken);
+    var claims = this.getPayload(accessToken);
 
-    Collection<GrantedAuthority> authorities = new HashSet<>();
-    authorities.add((GrantedAuthority) claims.get("auth"));
+    var authorities =
+        Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+            .map(SimpleGrantedAuthority::new)
+            .toList();
 
-    User principal = new User(claims.getSubject(), "", authorities);
+    var principal = new User(claims.getSubject(), "", authorities);
 
-    return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
-
+    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
   }
 
   public Claims getPayload(String accessToken) {
