@@ -2,10 +2,10 @@ jwt:
   accessTokenSecret: "testKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKey"
   accessTokenExpiredSeconds: 86400
   refreshTokenSecret: "testKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeyt"
-  refreshTokenExpiredSeconds: 2592000
+  refreshTokenExpiredSeconds: "2592000"
 oauth2:
   client:
     kakao:
-      app-id: 997482O
-      user-info-uri: https://kapi.kakao.com/v2/user/me
-      token-info-uri: https://kapi.kakao.com/v1/user/access_token_info
+      app-id: 997482
+      user-info-uri: "https://kapi.kakao.com/v2/user/me"
+      token-info-uri: "https://kapi.kakao.com/v1/user/access_token_info"
