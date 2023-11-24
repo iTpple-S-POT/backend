@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 public class TokenProvider implements InitializingBean {
 
   private static final String AUTHORITIES_KEY = "auth";
+  private static final String USER_ID_KEY = "userId";
 
   @Value("${jwt.accessTokenSecret}")
   private String ACCESS_TOKEN_SECRET_KEY;
@@ -73,7 +74,7 @@ public class TokenProvider implements InitializingBean {
         .claim(AUTHORITIES_KEY,
             authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(
                 Collectors.joining(",")))
-        .claim("userId", userId)
+        .claim(USER_ID_KEY, userId)
         .issuedAt(new Date())
         .expiration(new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRED_SECONDS * 1000))
         .header()
@@ -85,7 +86,7 @@ public class TokenProvider implements InitializingBean {
   private String generateRefreshToken(Long userId) {
     var refreshToken = Jwts.builder()
         .signWith(refreshTokenKey)
-        .claim("userId", userId)
+        .claim(USER_ID_KEY, userId)
         .issuedAt(new Date())
         .expiration(new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRED_SECONDS * 1000))
         .header()
@@ -103,15 +104,15 @@ public class TokenProvider implements InitializingBean {
       Jwts.parser().verifyWith(accessTokenKey).build().parseSignedClaims(accessToken);
       return true;
     } catch (SecurityException | MalformedJwtException e) {
-      log.info("잘못된 JWT 서명입니다.");
+      log.info("잘못된 JWT 서명입니다.");//향후 custom 에러로 처리
     } catch (ExpiredJwtException e) {
-      log.info("만료된 JWT 토큰입니다.");
+      log.info("만료된 JWT 토큰입니다.");//향후 custom 에러로 처리
     } catch (IllegalArgumentException e) {
-      log.info("JWT 토큰이 잘못되었습니다.");
+      log.info("JWT 토큰이 잘못되었습니다.");//향후 custom 에러로 처리
     } catch (UnsupportedJwtException e) {
-      log.info("지원되지 않는 JWT 토큰입니다.");
+      log.info("지원되지 않는 JWT 토큰입니다.");//향후 custom 에러로 처리
     } catch (SignatureException e) {
-      log.info("JWT 서명이 잘못되었습니다.");
+      log.info("JWT 서명이 잘못되었습니다.");//향후 custom 에러로 처리
     }
 
     return false;
@@ -120,7 +121,7 @@ public class TokenProvider implements InitializingBean {
   public boolean validateRefreshToken(String refreshToken) {
     var claims = Jwts.parser().verifyWith(refreshTokenKey).build()
         .parseSignedClaims(refreshToken);
-    var userId = (Long) claims.getPayload().get("userId");
+    var userId = (Long) claims.getPayload().get(USER_ID_KEY);
 
     var storedRefreshToken = refreshTokenRepository.findRefreshTokenByUserId(userId)
         .orElseThrow(IllegalArgumentException::new);
@@ -160,8 +161,8 @@ public class TokenProvider implements InitializingBean {
         .parseSignedClaims(accessToken).getPayload();
   }
 
-  public Claims getPayloadFromRefreshToken(String refreshToken) {
+  public Long getUserIdFromRefreshToken(String refreshToken) {
     return Jwts.parser().verifyWith(refreshTokenKey).build()
-        .parseSignedClaims(refreshToken).getPayload();
+        .parseSignedClaims(refreshToken).getPayload().get(USER_ID_KEY, Long.class);
   }
 }

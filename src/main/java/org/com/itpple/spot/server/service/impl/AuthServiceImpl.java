@@ -66,8 +66,7 @@ public class AuthServiceImpl implements AuthService {
       throw new RuntimeException("Refresh Token is not valid");
     }
 
-    var userId = this.tokenProvider.getPayloadFromRefreshToken(refreshToken)
-        .get("userId", Long.class);
+    var userId = this.tokenProvider.getUserIdFromRefreshToken(refreshToken);
 
     var user = userRepository.findById(userId);
     var authentication = this.generateAuthentication(user.get());
