@@ -31,138 +31,139 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
-  private static final String AUTHORITIES_KEY = "auth";
-  private static final String USER_ID_KEY = "userId";
+    private static final String AUTHORITIES_KEY = "auth";
+    private static final String USER_ID_KEY = "userId";
 
-  @Value("${jwt.accessTokenSecret}")
-  private String ACCESS_TOKEN_SECRET_KEY;
+    @Value("${jwt.accessTokenSecret}")
+    private String ACCESS_TOKEN_SECRET_KEY;
 
-  @Value("${jwt.accessTokenExpiredSeconds}")
-  private Long ACCESS_TOKEN_EXPIRED_SECONDS;
+    @Value("${jwt.accessTokenExpiredSeconds}")
+    private Long ACCESS_TOKEN_EXPIRED_SECONDS;
 
-  @Value("${jwt.refreshTokenSecret}")
-  private String REFRESH_TOKEN_SECRET_KEY;
+    @Value("${jwt.refreshTokenSecret}")
+    private String REFRESH_TOKEN_SECRET_KEY;
 
-  @Value("${jwt.refreshTokenExpiredSeconds}")
-  private Long REFRESH_TOKEN_EXPIRED_SECONDS;
+    @Value("${jwt.refreshTokenExpiredSeconds}")
+    private Long REFRESH_TOKEN_EXPIRED_SECONDS;
 
-  private SecretKey accessTokenKey;
-  private SecretKey refreshTokenKey;
+    private SecretKey accessTokenKey;
+    private SecretKey refreshTokenKey;
 
 
-  private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-  @Override
-  public void afterPropertiesSet() {
-    byte[] keyBytes = Decoders.BASE64.decode(ACCESS_TOKEN_SECRET_KEY);
-    this.accessTokenKey = new SecretKeySpec(keyBytes, "HmacSHA256");
+    @Override
+    public void afterPropertiesSet() {
+        byte[] keyBytes = Decoders.BASE64.decode(ACCESS_TOKEN_SECRET_KEY);
+        this.accessTokenKey = new SecretKeySpec(keyBytes, "HmacSHA256");
 
-    byte[] refreshKeyBytes = Decoders.BASE64.decode(REFRESH_TOKEN_SECRET_KEY);
-    this.refreshTokenKey = new SecretKeySpec(refreshKeyBytes, "HmacSHA256");
-  }
-
-  public TokenResponse generateToken(Long userId, Authentication authentication) {
-    String accessToken = generateAccessToken(userId, authentication);
-    String refreshToken = generateRefreshToken(userId);
-    return new TokenResponse(accessToken, refreshToken);
-  }
-
-  private String generateAccessToken(Long userId, Authentication authentication) {
-    return Jwts.builder()
-        .signWith(accessTokenKey)
-        .subject(userId.toString())
-        .claim(AUTHORITIES_KEY,
-            authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(
-                Collectors.joining(",")))
-        .claim(USER_ID_KEY, userId)
-        .issuedAt(new Date())
-        .expiration(new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRED_SECONDS * 1000))
-        .header()
-        .type("JWT")
-        .and()
-        .compact();
-  }
-
-  private String generateRefreshToken(Long userId) {
-    var refreshToken = Jwts.builder()
-        .signWith(refreshTokenKey)
-        .claim(USER_ID_KEY, userId)
-        .issuedAt(new Date())
-        .expiration(new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRED_SECONDS * 1000))
-        .header()
-        .type("JWT")
-        .and()
-        .compact();
-
-    this.refreshTokenRepository.save(userId, refreshToken);
-
-    return refreshToken;
-  }
-
-  public boolean validateAccessToken(String accessToken) {
-    try {
-      Jwts.parser().verifyWith(accessTokenKey).build().parseSignedClaims(accessToken);
-      return true;
-    } catch (SecurityException | MalformedJwtException e) {
-      log.info("잘못된 JWT 서명입니다.");//향후 custom 에러로 처리
-    } catch (ExpiredJwtException e) {
-      log.info("만료된 JWT 토큰입니다.");//향후 custom 에러로 처리
-    } catch (IllegalArgumentException e) {
-      log.info("JWT 토큰이 잘못되었습니다.");//향후 custom 에러로 처리
-    } catch (UnsupportedJwtException e) {
-      log.info("지원되지 않는 JWT 토큰입니다.");//향후 custom 에러로 처리
-    } catch (SignatureException e) {
-      log.info("JWT 서명이 잘못되었습니다.");//향후 custom 에러로 처리
+        byte[] refreshKeyBytes = Decoders.BASE64.decode(REFRESH_TOKEN_SECRET_KEY);
+        this.refreshTokenKey = new SecretKeySpec(refreshKeyBytes, "HmacSHA256");
     }
 
-    return false;
-  }
-
-  public boolean validateRefreshToken(String refreshToken) {
-    var claims = Jwts.parser().verifyWith(refreshTokenKey).build()
-        .parseSignedClaims(refreshToken);
-    var userId = (Long) claims.getPayload().get(USER_ID_KEY);
-
-    var storedRefreshToken = refreshTokenRepository.findRefreshTokenByUserId(userId)
-        .orElseThrow(IllegalArgumentException::new);
-
-    if (!storedRefreshToken.equals(refreshToken)) {
-      refreshTokenRepository.removeByUserId(userId);
-      return false;
+    public TokenResponse generateToken(Long userId, Authentication authentication) {
+        String accessToken = generateAccessToken(userId, authentication);
+        String refreshToken = generateRefreshToken(userId);
+        return new TokenResponse(accessToken, refreshToken);
     }
-    return true;
-  }
 
-  public Authentication generateAuthentication(org.com.itpple.spot.server.entity.User user) {
+    private String generateAccessToken(Long userId, Authentication authentication) {
+        return Jwts.builder()
+                .signWith(accessTokenKey)
+                .subject(userId.toString())
+                .claim(AUTHORITIES_KEY,
+                        authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                                .collect(
+                                        Collectors.joining(",")))
+                .claim(USER_ID_KEY, userId)
+                .issuedAt(new Date())
+                .expiration(new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRED_SECONDS * 1000))
+                .header()
+                .type("JWT")
+                .and()
+                .compact();
+    }
 
-    var authorities = new HashSet<GrantedAuthority>();
-    authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+    private String generateRefreshToken(Long userId) {
+        var refreshToken = Jwts.builder()
+                .signWith(refreshTokenKey)
+                .claim(USER_ID_KEY, userId)
+                .issuedAt(new Date())
+                .expiration(new Date(new Date().getTime() + REFRESH_TOKEN_EXPIRED_SECONDS * 1000))
+                .header()
+                .type("JWT")
+                .and()
+                .compact();
 
-    var principal = new User(user.getId().toString(), "", authorities);
+        this.refreshTokenRepository.save(userId, refreshToken);
 
-    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-  }
+        return refreshToken;
+    }
 
-  public Authentication getAuthentication(String accessToken) {
-    var claims = this.getPayload(accessToken);
+    public boolean validateAccessToken(String accessToken) {
+        try {
+            Jwts.parser().verifyWith(accessTokenKey).build().parseSignedClaims(accessToken);
+            return true;
+        } catch (SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");//향후 custom 에러로 처리
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");//향후 custom 에러로 처리
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");//향후 custom 에러로 처리
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");//향후 custom 에러로 처리
+        } catch (SignatureException e) {
+            log.info("JWT 서명이 잘못되었습니다.");//향후 custom 에러로 처리
+        }
 
-    var authorities =
-        Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-            .map(SimpleGrantedAuthority::new)
-            .toList();
+        return false;
+    }
 
-    var principal = new User(claims.getSubject(), "", authorities);
+    public boolean validateRefreshToken(String refreshToken) {
+        var claims = Jwts.parser().verifyWith(refreshTokenKey).build()
+                .parseSignedClaims(refreshToken);
+        var userId = (Long) claims.getPayload().get(USER_ID_KEY);
 
-    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-  }
+        var storedRefreshToken = refreshTokenRepository.findRefreshTokenByUserId(userId)
+                .orElseThrow(IllegalArgumentException::new);
 
-  public Claims getPayload(String accessToken) {
-    return Jwts.parser().verifyWith(accessTokenKey).build()
-        .parseSignedClaims(accessToken).getPayload();
-  }
+        if (!storedRefreshToken.equals(refreshToken)) {
+            refreshTokenRepository.removeByUserId(userId);
+            return false;
+        }
+        return true;
+    }
 
-  public Long getUserIdFromRefreshToken(String refreshToken) {
-    return Jwts.parser().verifyWith(refreshTokenKey).build()
-        .parseSignedClaims(refreshToken).getPayload().get(USER_ID_KEY, Long.class);
-  }
+    public Authentication generateAuthentication(org.com.itpple.spot.server.entity.User user) {
+
+        var authorities = new HashSet<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+
+        var principal = new User(user.getId().toString(), "", authorities);
+
+        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+    }
+
+    public Authentication getAuthentication(String accessToken) {
+        var claims = this.getPayload(accessToken);
+
+        var authorities =
+                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
+
+        var principal = new User(claims.getSubject(), "", authorities);
+
+        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+    }
+
+    public Claims getPayload(String accessToken) {
+        return Jwts.parser().verifyWith(accessTokenKey).build()
+                .parseSignedClaims(accessToken).getPayload();
+    }
+
+    public Long getUserIdFromRefreshToken(String refreshToken) {
+        return Jwts.parser().verifyWith(refreshTokenKey).build()
+                .parseSignedClaims(refreshToken).getPayload().get(USER_ID_KEY, Long.class);
+    }
 }

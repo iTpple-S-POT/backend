@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @Component
 public interface KakaoClient {
 
-  @GetMapping(value = "/v2/user/me", consumes = MediaType.APPLICATION_JSON_VALUE)
-  KakaoInfo getInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken);
+    @GetMapping(value = "/v2/user/me", consumes = MediaType.APPLICATION_JSON_VALUE)
+    KakaoInfo getInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken);
 
-  @GetMapping(value = "/v1/user/access_token_info", consumes = MediaType.APPLICATION_JSON_VALUE)
-  KakaoTokenInfo getTokenInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken);
+    @GetMapping(value = "/v1/user/access_token_info", consumes = MediaType.APPLICATION_JSON_VALUE)
+    KakaoTokenInfo getTokenInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken);
 
 }

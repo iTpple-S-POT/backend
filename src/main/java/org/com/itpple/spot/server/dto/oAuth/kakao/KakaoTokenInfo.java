@@ -12,7 +12,7 @@ import lombok.ToString;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class KakaoTokenInfo {
 
-  private Long id;
-  private Integer expiresIn;
-  private Integer appId;
+    private Long id;
+    private Integer expiresIn;
+    private Integer appId;
 }

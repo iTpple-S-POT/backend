@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum OAuthType {
-  KAKAO("kakao"),
-  APPLE("apple");
+    KAKAO("kakao"),
+    APPLE("apple");
 
-  private final String name;
+    private final String name;
 
 }

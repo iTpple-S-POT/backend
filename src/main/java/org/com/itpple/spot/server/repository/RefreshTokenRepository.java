@@ -4,9 +4,9 @@ import java.util.Optional;
 
 public interface RefreshTokenRepository {
 
-  void save(Long userId, String refreshToken);
+    void save(Long userId, String refreshToken);
 
-  Optional<String> findRefreshTokenByUserId(Long userId);
+    Optional<String> findRefreshTokenByUserId(Long userId);
 
-  void removeByUserId(Long userId);
+    void removeByUserId(Long userId);
 }

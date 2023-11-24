@@ -7,5 +7,5 @@ import lombok.ToString;
 @ToString
 public class KakaoAccount {
 
-  private Profile profile;
+    private Profile profile;
 }

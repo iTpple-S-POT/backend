@@ -5,9 +5,9 @@ import org.com.itpple.spot.server.model.OAuthType;
 
 public interface OAuthService {
 
-  OAuthType getOAuthType();
+    OAuthType getOAuthType();
 
-  String getOAuthIdByToken(String accessToken, String refreshToken);
+    String getOAuthIdByToken(String accessToken, String refreshToken);
 
-  UserInfo getUserInfoByToken(String accessToken, String refreshToken);
+    UserInfo getUserInfoByToken(String accessToken, String refreshToken);
 }

@@ -5,9 +5,9 @@ import org.com.itpple.spot.server.model.OAuthType;
 
 public interface AuthService {
 
-  TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken, String refreshToken);
+    TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken, String refreshToken);
 
-  TokenResponse refresh(String refreshToken);
+    TokenResponse refresh(String refreshToken);
 
-  void logout(String accessToken);
+    void logout(String accessToken);
 }

@@ -11,15 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class OAuthServiceFactoryImpl implements OAuthServiceFactory {
 
-  private final Map<OAuthType, OAuthService> oAuthServiceMap = new HashMap<>();
+    private final Map<OAuthType, OAuthService> oAuthServiceMap = new HashMap<>();
 
-  public OAuthServiceFactoryImpl(List<OAuthService> oAuthServiceList) {
-    for (OAuthService oAuthService : oAuthServiceList) {
-      oAuthServiceMap.put(oAuthService.getOAuthType(), oAuthService);
+    public OAuthServiceFactoryImpl(List<OAuthService> oAuthServiceList) {
+        for (OAuthService oAuthService : oAuthServiceList) {
+            oAuthServiceMap.put(oAuthService.getOAuthType(), oAuthService);
+        }
     }
-  }
 
-  public OAuthService getOAuthService(OAuthType oAuthType) {
-    return oAuthServiceMap.get(oAuthType);
-  }
+    public OAuthService getOAuthService(OAuthType oAuthType) {
+        return oAuthServiceMap.get(oAuthType);
+    }
 }

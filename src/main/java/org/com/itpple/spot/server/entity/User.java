@@ -21,20 +21,20 @@ import org.com.itpple.spot.server.model.Role;
 @NoArgsConstructor
 public class User extends BasicDateEntity {
 
-  @Id
-  @GeneratedValue
-  private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-  @Column(name = "o_auth_id", nullable = false)
-  private String oAuthId;
+    @Column(name = "o_auth_id", nullable = false)
+    private String oAuthId;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "role", nullable = false)
-  private Role role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
-  @Column(name = "nickname")
-  private String nickname;
+    @Column(name = "nickname")
+    private String nickname;
 
-  @Column(name = "profile_image_url")
-  private String profileImageUrl;
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
 }

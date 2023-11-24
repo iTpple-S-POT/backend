@@ -15,36 +15,36 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-  public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
-  public final TokenProvider tokenProvider;
+    public final TokenProvider tokenProvider;
 
-  @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-      FilterChain chain) throws ServletException, IOException {
-    var accessToken = resolveAccessToken(request);
-    var requestURI = (request).getRequestURI();
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+            FilterChain chain) throws ServletException, IOException {
+        var accessToken = resolveAccessToken(request);
+        var requestURI = (request).getRequestURI();
 
-    if (StringUtils.hasText(accessToken) && tokenProvider.validateAccessToken(accessToken)) {
-      var authentication = tokenProvider.getAuthentication(accessToken);
+        if (StringUtils.hasText(accessToken) && tokenProvider.validateAccessToken(accessToken)) {
+            var authentication = tokenProvider.getAuthentication(accessToken);
 
-      request.setAttribute("authentication", authentication);
-      SecurityContextHolder.getContext().setAuthentication(authentication);
+            request.setAttribute("authentication", authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-      log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(),
-          requestURI);
-    } else {
-      log.info("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+            log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(),
+                    requestURI);
+        } else {
+            log.info("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+        }
+
+        chain.doFilter(request, response);
     }
 
-    chain.doFilter(request, response);
-  }
-
-  private String resolveAccessToken(HttpServletRequest request) {
-    var bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-      return bearerToken.substring(7);
+    private String resolveAccessToken(HttpServletRequest request) {
+        var bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
-    return null;
-  }
 }

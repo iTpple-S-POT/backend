@@ -23,28 +23,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-  private final AuthService authService;
+    private final AuthService authService;
 
-  @PreAuthorize("hasRole('USER')")
-  @GetMapping("/test")
-  public ResponseEntity<?> test() {
-    return ResponseEntity.ok("test");
-  }
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/test")
+    public ResponseEntity<?> test() {
+        return ResponseEntity.ok("test");
+    }
 
-  @PostMapping("/login/{providerType}")
-  public ResponseEntity<TokenResponse> login(@PathVariable("providerType") OAuthType providerType,
-      @RequestBody() LoginRequest loginRequest) {
+    @PostMapping("/login/{providerType}")
+    public ResponseEntity<TokenResponse> login(@PathVariable("providerType") OAuthType providerType,
+            @RequestBody() LoginRequest loginRequest) {
 
-    var tokenResponse = authService.loginWithOAuth(providerType, loginRequest.getAccessToken(),
-        loginRequest.getAccessToken());
+        var tokenResponse = authService.loginWithOAuth(providerType, loginRequest.getAccessToken(),
+                loginRequest.getAccessToken());
 
-    return ResponseEntity.ok(tokenResponse);
-  }
+        return ResponseEntity.ok(tokenResponse);
+    }
 
-  @PostMapping("/refresh")
-  public ResponseEntity<TokenResponse> refresh(
-      @Valid @RequestBody() RefreshTokenRequest refreshTokenRequest) {
-    var tokenResponse = authService.refresh(refreshTokenRequest.getRefreshToken());
-    return ResponseEntity.ok(tokenResponse);
-  }
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(
+            @Valid @RequestBody() RefreshTokenRequest refreshTokenRequest) {
+        var tokenResponse = authService.refresh(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity.ok(tokenResponse);
+    }
 }

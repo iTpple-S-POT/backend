@@ -21,63 +21,62 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-  private final OAuthServiceFactory oAuthServiceFactory;
-  private final UserRepository userRepository;
-  private final TokenProvider tokenProvider;
-  private final UserService userService;
+    private final OAuthServiceFactory oAuthServiceFactory;
+    private final UserRepository userRepository;
+    private final TokenProvider tokenProvider;
+    private final UserService userService;
 
-  @Override
-  @Transactional
-  public TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken,
-      String refreshToken) {
-    var oAuthService = oAuthServiceFactory.getOAuthService(oAuthType);
+    @Override
+    @Transactional
+    public TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken,
+            String refreshToken) {
+        var oAuthService = oAuthServiceFactory.getOAuthService(oAuthType);
 
-    var oAuthId = oAuthService.getOAuthIdByToken(accessToken, refreshToken);
+        var oAuthId = oAuthService.getOAuthIdByToken(accessToken, refreshToken);
 
-    var user = userRepository.findByoAuthId(oAuthId);
+        var user = userRepository.findByoAuthId(oAuthId);
 
-    if (user.isEmpty()) {
-      var userInfo = oAuthService.getUserInfoByToken(accessToken, refreshToken);
+        if (user.isEmpty()) {
+            var userInfo = oAuthService.getUserInfoByToken(accessToken, refreshToken);
 
-      var newUser = User.builder()
-          .oAuthId(oAuthId)
-          .role(Role.USER)
-          .nickname(userInfo.getNickname())
-          .profileImageUrl(userInfo.getProfileImage())
-          .build();
+            var newUser = User.builder()
+                    .oAuthId(oAuthId)
+                    .role(Role.USER)
+                    .nickname(userInfo.getNickname())
+                    .profileImageUrl(userInfo.getProfileImage())
+                    .build();
 
-      user = Optional.of(userRepository.save(newUser));
+            user = Optional.of(userRepository.save(newUser));
+        }
+
+        var authentication = this.generateAuthentication(user.get());
+
+        return tokenProvider.generateToken(user.get().getId(),
+                authentication);
+
     }
 
-    var authentication = this.generateAuthentication(user.get());
-
-    return tokenProvider.generateToken(user.get().getId(),
-        authentication);
-
-  }
-
-  private Authentication generateAuthentication(User user) {
-    return tokenProvider.generateAuthentication(user);
-  }
-
-  @Override
-  public TokenResponse refresh(String refreshToken) {
-    if (!this.tokenProvider.validateRefreshToken(refreshToken)) {
-      throw new RuntimeException("Refresh Token is not valid");
+    private Authentication generateAuthentication(User user) {
+        return tokenProvider.generateAuthentication(user);
     }
 
-    var userId = this.tokenProvider.getUserIdFromRefreshToken(refreshToken);
+    @Override
+    public TokenResponse refresh(String refreshToken) {
+        if (!this.tokenProvider.validateRefreshToken(refreshToken)) {
+            throw new RuntimeException("Refresh Token is not valid");
+        }
 
-    var user = userRepository.findById(userId);
-    var authentication = this.generateAuthentication(user.get());
+        var userId = this.tokenProvider.getUserIdFromRefreshToken(refreshToken);
 
+        var user = userRepository.findById(userId);
+        var authentication = this.generateAuthentication(user.get());
 
-    return tokenProvider.generateToken(userId, authentication);
-  }
+        return tokenProvider.generateToken(userId, authentication);
+    }
 
-  @Override
-  public void logout(String accessToken) {
-  }
+    @Override
+    public void logout(String accessToken) {
+    }
 
 
 }

@@ -10,10 +10,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 @MappedSuperclass
 public abstract class BasicDateEntity {
 
-  @Column(name = "created_at", nullable = false, updatable = false)
-  @CreationTimestamp
-  private LocalDateTime createdAt;
-  @Column(name = "updated_at", nullable = false)
-  @UpdateTimestamp
-  private LocalDateTime updatedAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
