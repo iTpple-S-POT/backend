@@ -1,6 +1,7 @@
 package org.com.itpple.spot.server.exception;
 
 import lombok.Getter;
+import org.com.itpple.spot.server.exception.code.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 @Getter
