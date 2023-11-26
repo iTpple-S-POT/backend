@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.core.jwt;
+package org.com.itpple.spot.server.common.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -15,7 +15,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
+import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -134,7 +134,7 @@ public class TokenProvider implements InitializingBean {
         return true;
     }
 
-    public Authentication generateAuthentication(org.com.itpple.spot.server.entity.User user) {
+    public Authentication generateAuthentication(org.com.itpple.spot.server.model.entity.User user) {
 
         var authorities = new HashSet<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));

@@ -2,8 +2,8 @@ package org.com.itpple.spot.server.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.dto.oAuth.UserInfo;
-import org.com.itpple.spot.server.dto.oAuth.kakao.KakaoInfo;
+import org.com.itpple.spot.server.model.dto.oAuth.UserInfo;
+import org.com.itpple.spot.server.model.dto.oAuth.kakao.KakaoInfo;
 import org.com.itpple.spot.server.external.KakaoClient;
 import org.com.itpple.spot.server.model.OAuthType;
 import org.com.itpple.spot.server.service.OAuthService;

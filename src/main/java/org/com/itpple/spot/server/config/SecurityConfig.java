@@ -2,10 +2,10 @@ package org.com.itpple.spot.server.config;
 
 
 import lombok.RequiredArgsConstructor;
-import org.com.itpple.spot.server.core.jwt.JwtAccessDeniedHandler;
-import org.com.itpple.spot.server.core.jwt.JwtAuthenticationEntryPoint;
-import org.com.itpple.spot.server.core.jwt.JwtFilter;
-import org.com.itpple.spot.server.core.jwt.TokenProvider;
+import org.com.itpple.spot.server.common.jwt.JwtAccessDeniedHandler;
+import org.com.itpple.spot.server.common.jwt.JwtAuthenticationEntryPoint;
+import org.com.itpple.spot.server.common.jwt.JwtFilter;
+import org.com.itpple.spot.server.common.jwt.TokenProvider;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

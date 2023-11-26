@@ -1,7 +1,7 @@
 package org.com.itpple.spot.server.service;
 
 import java.util.Optional;
-import org.com.itpple.spot.server.entity.User;
+import org.com.itpple.spot.server.model.entity.User;
 
 public interface UserService {
 

@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.dto.oAuth;
+package org.com.itpple.spot.server.model.dto.oAuth;
 
 import javax.validation.constraints.NotNull;
 import lombok.Getter;

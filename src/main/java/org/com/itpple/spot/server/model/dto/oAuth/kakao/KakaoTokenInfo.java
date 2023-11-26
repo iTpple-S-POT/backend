@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.dto.oAuth.kakao;
+package org.com.itpple.spot.server.model.dto.oAuth.kakao;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.core.jwt;
+package org.com.itpple.spot.server.common.jwt;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;
