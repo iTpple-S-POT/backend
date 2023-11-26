@@ -1,13 +1,13 @@
 package org.com.itpple.spot.server.service;
 
-import org.com.itpple.spot.server.model.dto.oAuth.UserInfo;
 import org.com.itpple.spot.server.model.OAuthType;
+import org.com.itpple.spot.server.model.dto.oAuth.UserInfo;
 
 public interface OAuthService {
 
     OAuthType getOAuthType();
 
-    String getOAuthIdByToken(String accessToken, String refreshToken);
+    String getSocialIdByToken(String accessToken, String refreshToken);
 
     UserInfo getUserInfoByToken(String accessToken, String refreshToken);
 }

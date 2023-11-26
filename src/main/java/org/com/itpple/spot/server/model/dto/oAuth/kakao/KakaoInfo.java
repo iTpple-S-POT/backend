@@ -17,9 +17,9 @@ public class KakaoInfo {
 
     private KakaoAccount kakaoAccount;
 
-    public static UserInfo newUserInfo(KakaoInfo kakaoInfo, String oAuthId) {
+    public static UserInfo newUserInfo(KakaoInfo kakaoInfo, String socialId) {
         return UserInfo.builder()
-                .oAuthId(oAuthId)
+                .socialId(socialId)
                 .nickname(kakaoInfo.getKakaoAccount().getProfile().getNickname())
                 .profileImage(kakaoInfo.getKakaoAccount().getProfile().getProfileImageUrl())
                 .build();

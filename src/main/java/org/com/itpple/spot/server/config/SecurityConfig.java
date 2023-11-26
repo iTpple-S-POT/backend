@@ -40,7 +40,9 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .anyRequest().permitAll()
+                .antMatchers("/auth/login/**").permitAll()
+                .antMatchers("/auth/refresh").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
                 .addFilterBefore(new JwtFilter(tokenProvider),

@@ -7,7 +7,7 @@ public interface UserService {
 
     User save(User user);
 
-    Optional<User> findByoAuthId(String oAuthId);
+    Optional<User> findBySocialId(String socialId);
 
     Optional<User> findById(Long id);
 }

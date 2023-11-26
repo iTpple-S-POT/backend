@@ -20,8 +20,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> findByoAuthId(String oAuthId) {
-        return userRepository.findByoAuthId(oAuthId);
+    public Optional<User> findBySocialId(String socialId) {
+        return userRepository.findBySocialId(socialId);
     }
 
     @Transactional(readOnly = true)

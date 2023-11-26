@@ -25,8 +25,8 @@ public class User extends BasicDateEntity {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "o_auth_id", nullable = false)
-    private String oAuthId;
+    @Column(name = "social_id", nullable = false)
+    private String socialId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)

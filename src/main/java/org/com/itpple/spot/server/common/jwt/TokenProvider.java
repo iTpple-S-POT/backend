@@ -11,13 +11,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.repository.RefreshTokenRepository;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TokenProvider implements InitializingBean {
+public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String USER_ID_KEY = "userId";
@@ -52,7 +52,7 @@ public class TokenProvider implements InitializingBean {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    @Override
+    @PostConstruct
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(ACCESS_TOKEN_SECRET_KEY);
         this.accessTokenKey = new SecretKeySpec(keyBytes, "HmacSHA256");
@@ -95,8 +95,6 @@ public class TokenProvider implements InitializingBean {
                 .and()
                 .compact();
 
-        this.refreshTokenRepository.save(userId, refreshToken);
-
         return refreshToken;
     }
 
@@ -120,21 +118,26 @@ public class TokenProvider implements InitializingBean {
     }
 
     public boolean validateRefreshToken(String refreshToken) {
-        var claims = Jwts.parser().verifyWith(refreshTokenKey).build()
-                .parseSignedClaims(refreshToken);
-        var userId = (Long) claims.getPayload().get(USER_ID_KEY);
-
-        var storedRefreshToken = refreshTokenRepository.findRefreshTokenByUserId(userId)
-                .orElseThrow(IllegalArgumentException::new);
-
-        if (!storedRefreshToken.equals(refreshToken)) {
-            refreshTokenRepository.removeByUserId(userId);
-            return false;
+        try {
+            Jwts.parser().verifyWith(refreshTokenKey).build().parseSignedClaims(refreshToken);
+            return true;
+        } catch (SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");//향후 custom 에러로 처리
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");//향후 custom 에러로 처리
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");//향후 custom 에러로 처리
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");//향후 custom 에러로 처리
+        } catch (SignatureException e) {
+            log.info("JWT 서명이 잘못되었습니다.");//향후 custom 에러로 처리
         }
-        return true;
+
+        return false;
     }
 
-    public Authentication generateAuthentication(org.com.itpple.spot.server.model.entity.User user) {
+    public Authentication generateAuthentication(
+            org.com.itpple.spot.server.model.entity.User user) {
 
         var authorities = new HashSet<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
