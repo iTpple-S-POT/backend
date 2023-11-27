@@ -32,8 +32,8 @@ public class User extends BasicDateEntity {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @Column(name = "nickname")
-    private String nickname;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
