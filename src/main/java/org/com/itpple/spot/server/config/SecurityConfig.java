@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/app/signup/**").permitAll()  //나중에 지우기
                 .antMatchers("/auth/login/**").permitAll()
                 .antMatchers("/auth/refresh").permitAll()
                 .anyRequest().authenticated()
