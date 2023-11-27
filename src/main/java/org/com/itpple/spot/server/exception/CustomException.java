@@ -7,19 +7,19 @@ import org.springframework.http.HttpStatus;
 @Getter
 public abstract class CustomException extends RuntimeException {
 
-    private final HttpStatus httpStatus;
     private final Integer code;
     private final String message;
+    private final HttpStatus httpStatus;
 
-    public CustomException(HttpStatus httpStatus, ErrorCode errorCode) {
-        this.httpStatus = httpStatus;
+    public CustomException(ErrorCode errorCode) {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
+        this.httpStatus = errorCode.getHttpStatus();
     }
 
-    public CustomException(HttpStatus httpStatus, ErrorCode errorCode, String optionalMessage) {
-        this.httpStatus = httpStatus;
+    public CustomException(ErrorCode errorCode, String optionalMessage) {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage() + " " + optionalMessage;
+        this.httpStatus = errorCode.getHttpStatus();
     }
 }
