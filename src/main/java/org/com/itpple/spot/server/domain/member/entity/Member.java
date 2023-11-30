@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Member {
 
-    @Column(name = "phonenNumber", length = 100)
+    @Column(name = "phonen_number", length = 100)
     private String phoneNumber;
 
     @Id
@@ -24,7 +24,7 @@ public class Member {
     private String name;
 
     //@NotNull //나중에 수정
-    @Column(name = "loginType", length = 100)
+    @Column(name = "login_type", length = 100)
     private String loginType;
 
     //@NotNull //나중에 수정
@@ -37,10 +37,10 @@ public class Member {
     @Column(name = "nickname", length = 100)
     private String nickname;
 
-    @Column(name = "profileImageUrl")
+    @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-    @Column(name = "birthDay")
+    @Column(name = "birth_day")
     private Date birthDay;
 
     @Column(name = "gender", length = 10)

@@ -13,7 +13,7 @@ import java.util.List;
 public class MemberRequestDto {
     private String nickname;
     private String phoneNumber;
-    private Date brithDay;
+    private Date birthDay;
     private String gender;
     private String mbti;
     private List<String> interests = new ArrayList<>();
@@ -22,7 +22,7 @@ public class MemberRequestDto {
         return Member.builder()
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
-                .birthDay(brithDay)
+                .birthDay(birthDay)
                 .gender(gender)
                 .mbti(mbti)
                 .interests(interests)
