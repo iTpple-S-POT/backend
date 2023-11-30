@@ -28,7 +28,7 @@ public class Member {
     private String loginType;
 
     //@NotNull //나중에 수정
-    @Column(name = "socialId", length = 100)
+    @Column(name = "social_id", length = 100)
     private String socialId;
 
     @Enumerated(EnumType.STRING)
