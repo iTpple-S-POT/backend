@@ -19,8 +19,7 @@ public class UserRequestDto {
     private Long memberId;
 
     @Pattern(regexp = "^[a-zA-Z0-9_]{1,15}$",
-            message = "공백없이 5자 이하로 작성해주세요\n"+"특수문자는 _만 사용 가능해요")
-
+            message = "공백없이 15자 이하로 작성해주세요 특수문자는 _만 사용 가능해요")
     @NotNull(message = "닉네임은 필수 입력값입니다.")
     private String nickname;
 
