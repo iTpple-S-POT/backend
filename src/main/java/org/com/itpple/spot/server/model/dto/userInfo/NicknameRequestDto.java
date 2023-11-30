@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.domain.signup.request;
+package org.com.itpple.spot.server.model.dto.userInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
