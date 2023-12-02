@@ -2,14 +2,10 @@ package org.com.itpple.spot.server.model.entity;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.model.Gender;
 import org.com.itpple.spot.server.model.Role;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,14 +18,14 @@ import java.util.List;
 @NoArgsConstructor
 public class User extends BasicDateEntity {
 
-    private Long memberId;
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
-
     @Id
-    @GeneratedValue
+    //@GeneratedValue
+    @Column(name="id")
     private Long id;
+
+    public void setId(Long id){
+        this.id=id;
+    }
 
     @Column(name = "login_type", length = 100) //나중에 nullable = false로 변경
     private String loginType;
@@ -67,8 +63,7 @@ public class User extends BasicDateEntity {
     private List<String> interests = new ArrayList<>();
 
     @Builder
-    public User(Long memberId,String phoneNumber,String nickname,Gender gender,Date birthDay,String mbti,List interests) {
-        this.memberId=memberId;
+    public User(String phoneNumber,String nickname,Gender gender,Date birthDay,String mbti,List interests) {
         this.role= Role.USER;
         this.phoneNumber=phoneNumber;
         this.nickname=nickname;
@@ -76,7 +71,5 @@ public class User extends BasicDateEntity {
         this.birthDay=birthDay;
         this.mbti=mbti;
         this.interests=interests;
-
     }
-
 }

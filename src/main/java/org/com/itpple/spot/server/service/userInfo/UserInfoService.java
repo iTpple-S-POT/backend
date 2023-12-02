@@ -19,14 +19,13 @@ public class UserInfoService {
 
     @Transactional
     public void fillUserInfo(Long memberId, UserRequestDto requestDto) {
-        Optional<User> existingMember = userRepository.findByMemberId(memberId);
+        Optional<User> existingMember = userRepository.findById(memberId);
 
         if (existingMember.isPresent()) {
             throw new RuntimeException("이미 존재하는 memberId입니다");
         }
-
         User newUser = requestDto.toUser();
-        newUser.setMemberId(memberId);
+        newUser.setId(memberId);
         userRepository.save(newUser);
     }
 

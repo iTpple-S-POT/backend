@@ -31,7 +31,7 @@ public class UserRequestDto {
 
     public User toUser() {
         return User.builder()
-                .memberId(memberId)
+                .id(memberId)
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
                 .birthDay(birthDay)
