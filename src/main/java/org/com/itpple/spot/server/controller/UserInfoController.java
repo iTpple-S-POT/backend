@@ -24,6 +24,7 @@ public class UserInfoController {
             @RequestBody @Valid UserRequestDto requestDto) {
         try {
             userInfoService.fillUserInfo(memberId, requestDto);
+            log.info("{}",requestDto.getNickname()); //랜덤으로 설정된 닉네임//문제없으면 추후 삭제
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             log.info(e.getMessage()); //향후 custom 에러로 처리
