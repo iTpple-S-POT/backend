@@ -18,8 +18,8 @@ public class UserInfoController {
     private final UserInfoService userInfoService;
 
     //유저 기본 정보 기입
-    @PostMapping("/fill-basic-userinfo/{memberId}")
-    public ResponseEntity<Void> fillBasicUserInfo(
+    @PostMapping("/basic-info/{memberId}")
+    public ResponseEntity<Void> basicInfo(
             @PathVariable Long memberId,
             @RequestBody @Valid UserRequestDto requestDto) {
         try {
@@ -33,8 +33,8 @@ public class UserInfoController {
     }
 
     //닉네임 중복 체크
-    @GetMapping("/fill-basic-userinfo/check-duplicate-nickname")
-    public ResponseEntity<Void> checkDuplicateNickname(@RequestParam("nickname") String nickname) {
+    @GetMapping("/nickname/check")
+    public ResponseEntity<Void> nicknameCheck(@RequestParam("nickname") String nickname) {
         try {
             if (userInfoService.isAlreadyExistNickname(nickname)) {
                 throw new Exception("중복된 닉네임입니다");
