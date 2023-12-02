@@ -2,7 +2,7 @@ name: Dev Server - CI / CD
 
 on:
   push:
-    branches: [ "feature/#16-ci-cd-env" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
