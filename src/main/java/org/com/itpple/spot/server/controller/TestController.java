@@ -13,6 +13,6 @@ public class TestController {
     public ResponseEntity test() {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body("test 확인");
+            .body("test 확인 - develop");
     }
 }
