@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/test").permitAll() // TODO: 프론트와 연결 확인 후 제거
                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .antMatchers("/auth/login/**").permitAll()
                 .antMatchers("/auth/refresh").permitAll()
