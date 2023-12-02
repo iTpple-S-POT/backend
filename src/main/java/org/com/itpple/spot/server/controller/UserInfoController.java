@@ -37,10 +37,10 @@ public class UserInfoController {
     public ResponseEntity<Void> nicknameCheck(@RequestParam("nickname") String nickname) {
         try {
             if (userInfoService.isAlreadyExistNickname(nickname)) {
-                throw new Exception("중복된 닉네임입니다");
+                throw new IllegalArgumentException("중복된 닉네임입니다");
             }
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             log.error(e.getMessage());    //향후 custom 에러로 처리
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
