@@ -17,14 +17,18 @@ public class LogRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+        var requestMethod = request.getMethod();
+        var requestURN = getRequestURN(request);
         var requestBody = getRequestBody(request);
 
-
-        var requestMethod = request.getMethod();
-        var requestURN = request.getRequestURI() + (request.getQueryString() != null ? "?"
-                + request.getQueryString() : "");
         log.info(requestMethod + " " + requestURN + ", requestBody: " + requestBody);
+
         filterChain.doFilter(request, response);
+    }
+
+    private String getRequestURN(HttpServletRequest request) {
+        return request.getRequestURI() + (request.getQueryString() != null ? "?"
+                + request.getQueryString() : "");
     }
 
     private String getRequestBody(HttpServletRequest request) throws IOException {
