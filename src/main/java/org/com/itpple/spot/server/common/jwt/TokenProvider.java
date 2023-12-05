@@ -86,7 +86,8 @@ public class TokenProvider {
     }
 
     private String generateRefreshToken(Long userId) {
-        var refreshToken = Jwts.builder()
+
+        return Jwts.builder()
                 .signWith(refreshTokenKey)
                 .claim(USER_ID_KEY, userId)
                 .issuedAt(new Date())
@@ -95,8 +96,6 @@ public class TokenProvider {
                 .type("JWT")
                 .and()
                 .compact();
-
-        return refreshToken;
     }
 
     public boolean validateAccessToken(String accessToken) {
