@@ -16,6 +16,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.dto.Payload;
 import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -148,7 +149,7 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String accessToken) {
-        var claims = this.getPayload(accessToken);
+        var claims = this.getClaims(accessToken);
 
         var authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
@@ -160,7 +161,11 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, null, authorities);
     }
 
-    public Claims getPayload(String accessToken) {
+    public Payload getPayload(String accessToken) {
+        return Payload.fromClaims(this.getClaims(accessToken));
+    }
+
+    public Claims getClaims(String accessToken) {
         return Jwts.parser().verifyWith(accessTokenKey).build()
                 .parseSignedClaims(accessToken).getPayload();
     }
