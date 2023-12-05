@@ -1,7 +1,7 @@
 package org.com.itpple.spot.server.service;
 
-import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.model.OAuthType;
+import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
 
 public interface AuthService {
 
@@ -9,5 +9,5 @@ public interface AuthService {
 
     TokenResponse refresh(String refreshToken);
 
-    void logout(String accessToken);
+    void logout(Long userId);
 }
