@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.model.dto.oAuth.kakao;
+package org.com.itpple.spot.server.dto.oAuth.kakao;
 
 import lombok.Getter;
 import lombok.ToString;

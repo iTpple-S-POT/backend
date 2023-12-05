@@ -16,7 +16,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
+import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

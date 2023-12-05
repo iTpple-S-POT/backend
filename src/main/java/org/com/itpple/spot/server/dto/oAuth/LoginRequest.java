@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.model.dto.oAuth;
+package org.com.itpple.spot.server.dto.oAuth;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.common.jwt.TokenProvider;
 import org.com.itpple.spot.server.model.OAuthType;
 import org.com.itpple.spot.server.model.Role;
-import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
+import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.model.entity.User;
 import org.com.itpple.spot.server.repository.UserRepository;
 import org.com.itpple.spot.server.service.AuthService;
