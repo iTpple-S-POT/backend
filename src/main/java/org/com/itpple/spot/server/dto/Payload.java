@@ -12,7 +12,7 @@ public class Payload {
 
     private Long userId;
 
-    public static Payload fromClaims(Claims claims) {
-        return new Payload(claims.get("userId", Long.class));
+    public static Payload of(Long userId) {
+        return new Payload(userId);
     }
 }

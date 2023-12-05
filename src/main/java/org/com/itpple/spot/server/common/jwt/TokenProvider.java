@@ -162,7 +162,10 @@ public class TokenProvider {
     }
 
     public Payload getPayload(String accessToken) {
-        return Payload.fromClaims(this.getClaims(accessToken));
+        var claims = this.getClaims(accessToken);
+        var userId = claims.get(USER_ID_KEY, Long.class);
+
+        return Payload.of(userId);
     }
 
     public Claims getClaims(String accessToken) {
