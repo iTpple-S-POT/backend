@@ -1,4 +1,4 @@
 [submodule "src/main/resources/config"]
 	path = src/main/resources/config
 	url = https://github.com/iTpple-S-POT/backend-privates.git
-  branch = main
+	branch = main
