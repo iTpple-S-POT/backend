@@ -1,0 +1,3 @@
+[submodule "backend-privates"]
+	path = backend-privates
+	url = https://github.com/iTpple-S-POT/backend-privates.git
