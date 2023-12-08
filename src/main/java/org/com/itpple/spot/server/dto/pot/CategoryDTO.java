@@ -1,7 +1,7 @@
 package org.com.itpple.spot.server.dto.pot;
 
 import lombok.Getter;
-import org.com.itpple.spot.server.model.entity.Category;
+import org.com.itpple.spot.server.entity.Category;
 
 @Getter
 public record CategoryDTO (Long id, String name, String description){

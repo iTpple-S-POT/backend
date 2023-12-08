@@ -137,7 +137,7 @@ public class TokenProvider {
     }
 
     public Authentication generateAuthentication(
-            org.com.itpple.spot.server.model.entity.User user) {
+            org.com.itpple.spot.server.entity.User user) {
 
         var authorities = new HashSet<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));

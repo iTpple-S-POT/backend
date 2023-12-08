@@ -1,6 +1,6 @@
 package org.com.itpple.spot.server.util;
 
-import static org.com.itpple.spot.server.model.constant.FileConstant.IMAGE_NAME_REGEX;
+import static org.com.itpple.spot.server.constant.Constant.IMAGE_NAME_REGEX;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;

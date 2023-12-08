@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.model;
+package org.com.itpple.spot.server.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

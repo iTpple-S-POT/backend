@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.model.entity;
+package org.com.itpple.spot.server.entity;
 
 
 import java.time.LocalDateTime;

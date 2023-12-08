@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import org.com.itpple.spot.server.dto.pot.CategoryDTO;
-import org.com.itpple.spot.server.model.entity.Category;
+import org.com.itpple.spot.server.entity.Category;
 
 
 @Getter

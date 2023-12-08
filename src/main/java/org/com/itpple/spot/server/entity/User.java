@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.model.entity;
+package org.com.itpple.spot.server.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.model.Role;
+import org.com.itpple.spot.server.constant.Role;
 
 @Slf4j
 @Entity(name = "sp_user")
