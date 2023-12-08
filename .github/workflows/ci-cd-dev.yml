@@ -2,7 +2,7 @@ name: Dev Server - CI / CD
 
 on:
   push:
-    branches: [ "feature/#27-git-submodule" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
