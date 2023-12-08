@@ -11,6 +11,7 @@ import org.com.itpple.spot.server.dto.pot.response.UploadImageResponse;
 import org.com.itpple.spot.server.repository.CategoryRepository;
 import org.com.itpple.spot.server.service.FileService;
 import org.com.itpple.spot.server.service.PotService;
+import org.com.itpple.spot.server.util.FileUtil;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -28,19 +29,12 @@ public class PotServiceImpl implements PotService {
 
     @Override
     public UploadImageResponse uploadImage(String fileName) {
-        var uniqueFileName = POT_IMAGE_PATH + this.generateUniqueFileName(fileName);
+        var uniqueFileName = POT_IMAGE_PATH + FileUtil.generateUniqueNameForImage(fileName);
         return UploadImageResponse.of(fileService.getPreSignedUrl(uniqueFileName), uniqueFileName);
     }
 
-    private String generateUniqueFileName(String fileName) {
-        if (!fileName.matches(IMAGE_NAME_REGEX)) {
-            throw new CustomException(ErrorCode.FILE_NAME_ILLEGAL);
-        }
-
-        var fileKey = fileName.substring(0, fileName.lastIndexOf("."));
-        ;
-        var fileExtension = fileName.substring(fileName.lastIndexOf("."));
-
-        return fileKey + "_" + UUID.randomUUID() + fileExtension;
+    @Override
+    public CreatePotResponse createPot(CreatePotRequest createPotRequest) {
+        return null;
     }
 }
