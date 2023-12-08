@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.dto.pot;
+package org.com.itpple.spot.server.dto.pot.response;
 
 public record UploadImageResponse(String preSignedUrl, String fileKey) {
 

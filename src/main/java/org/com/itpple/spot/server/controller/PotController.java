@@ -3,9 +3,11 @@ package org.com.itpple.spot.server.controller;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.dto.pot.GetCategoryResponse;
-import org.com.itpple.spot.server.dto.pot.UploadImageRequest;
-import org.com.itpple.spot.server.dto.pot.UploadImageResponse;
+import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
+import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
+import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
+import org.com.itpple.spot.server.dto.pot.request.UploadImageRequest;
+import org.com.itpple.spot.server.dto.pot.response.UploadImageResponse;
 import org.com.itpple.spot.server.service.PotService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +30,14 @@ public class PotController {
         return ResponseEntity.ok(potService.getCategory());
     }
 
-    @PostMapping(value = "/upload-image", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UploadImageResponse> uploadImage(
+    @PostMapping(value = "/upload-image/pre-signed-url", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UploadImageResponse> uploadImageUsingPreSignedUrl(
             @Valid @RequestBody UploadImageRequest uploadImageRequest) {
         return ResponseEntity.ok(potService.uploadImage(uploadImageRequest.fileName()));
+    }
+    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CreatePotResponse> createPot(
+            @Valid @RequestBody CreatePotRequest createPotRequest) {
+        return ResponseEntity.ok(potService.createPot(createPotRequest));
     }
 }

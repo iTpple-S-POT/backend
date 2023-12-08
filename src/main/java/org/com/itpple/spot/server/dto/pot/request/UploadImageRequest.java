@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.dto.pot;
+package org.com.itpple.spot.server.dto.pot.request;
 
 import static org.com.itpple.spot.server.model.constant.FileConstant.IMAGE_NAME_REGEX;
 

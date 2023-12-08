@@ -1,15 +1,13 @@
 package org.com.itpple.spot.server.service.impl;
 
-import static org.com.itpple.spot.server.model.constant.FileConstant.IMAGE_NAME_REGEX;
 import static org.com.itpple.spot.server.model.constant.FileConstant.POT_IMAGE_PATH;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.dto.pot.GetCategoryResponse;
-import org.com.itpple.spot.server.dto.pot.UploadImageResponse;
-import org.com.itpple.spot.server.exception.CustomException;
-import org.com.itpple.spot.server.exception.code.ErrorCode;
+import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
+import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
+import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
+import org.com.itpple.spot.server.dto.pot.response.UploadImageResponse;
 import org.com.itpple.spot.server.repository.CategoryRepository;
 import org.com.itpple.spot.server.service.FileService;
 import org.com.itpple.spot.server.service.PotService;
