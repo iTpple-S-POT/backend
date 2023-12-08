@@ -17,7 +17,7 @@ public class S3FileServiceImpl implements FileService {
 
     private final S3Presigner s3Presigner;
 
-    @Value("${aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     @Override

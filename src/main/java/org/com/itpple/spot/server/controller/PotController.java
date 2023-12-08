@@ -1,5 +1,6 @@
 package org.com.itpple.spot.server.controller;
 
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.dto.pot.GetCategoryResponse;
@@ -27,9 +28,9 @@ public class PotController {
         return ResponseEntity.ok(potService.getCategory());
     }
 
-    @PostMapping(value = "/upload-image", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/upload-image", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UploadImageResponse> uploadImage(
-            @RequestBody UploadImageRequest uploadImageRequest) {
+            @Valid @RequestBody UploadImageRequest uploadImageRequest) {
         return ResponseEntity.ok(potService.uploadImage(uploadImageRequest.fileName()));
     }
 }

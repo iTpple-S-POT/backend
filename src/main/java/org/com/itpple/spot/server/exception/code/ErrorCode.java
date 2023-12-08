@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ErrorCode {
 
+    FILE_NAME_ILLEGAL(1301, "파일 이름이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
     ;
 
     private final Integer code;
