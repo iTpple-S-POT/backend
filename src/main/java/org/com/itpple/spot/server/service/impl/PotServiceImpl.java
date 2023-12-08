@@ -1,6 +1,6 @@
 package org.com.itpple.spot.server.service.impl;
 
-import static org.com.itpple.spot.server.model.constant.FileConstant.POT_IMAGE_PATH;
+import static org.com.itpple.spot.server.constant.Constant.POT_IMAGE_PATH;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +9,12 @@ import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
 import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
 import org.com.itpple.spot.server.dto.pot.response.UploadImageResponse;
 import org.com.itpple.spot.server.repository.CategoryRepository;
+import org.com.itpple.spot.server.repository.PotRepository;
 import org.com.itpple.spot.server.service.FileService;
 import org.com.itpple.spot.server.service.PotService;
 import org.com.itpple.spot.server.util.FileUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class PotServiceImpl implements PotService {
 
     private final FileService fileService;
+    private final PotRepository potRepository;
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -33,8 +36,9 @@ public class PotServiceImpl implements PotService {
         return UploadImageResponse.of(fileService.getPreSignedUrl(uniqueFileName), uniqueFileName);
     }
 
+    @Transactional
     @Override
     public CreatePotResponse createPot(CreatePotRequest createPotRequest) {
-        return null;
+        return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest)));
     }
 }
