@@ -27,6 +27,8 @@ dependencies {
 
     // Spring Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // hibernate-spatial, spring data JPA 내부의 hibernate-core와 버전 일치시킴
+    implementation 'org.hibernate:hibernate-spatial:5.6.1.Final'
 
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
