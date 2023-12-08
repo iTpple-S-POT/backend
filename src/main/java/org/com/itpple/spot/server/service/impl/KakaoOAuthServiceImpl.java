@@ -20,7 +20,7 @@ public class KakaoOAuthServiceImpl implements OAuthService {
     private static final String HEADER_PREFIX = "Bearer ";
 
 
-    @Value("${oauth2.client.kakao.app-id}")
+    @Value("${oauth2.client.kakao.appId}")
     private Integer APP_ID;
 
     @Override

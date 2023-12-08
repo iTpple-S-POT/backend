@@ -6,4 +6,4 @@ jwt:
 oauth2:
   client:
     kakao:
-      app-id: 997482
+      appId: 997505
