@@ -29,6 +29,7 @@ public class TokenProviderTest {
                 1L,
                 "testKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKey",
                 1L);
+        tokenProvider.afterPropertiesSet();
     }
 
     @Test
