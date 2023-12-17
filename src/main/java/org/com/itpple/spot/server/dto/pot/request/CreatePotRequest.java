@@ -18,7 +18,6 @@ public record CreatePotRequest(
         @NotNull PointDTO location,
         String content
 ) {
-
     public static Pot toPot(CreatePotRequest createPotRequest) {
         return Pot.builder()
                 .categoryId(createPotRequest.categoryId())
