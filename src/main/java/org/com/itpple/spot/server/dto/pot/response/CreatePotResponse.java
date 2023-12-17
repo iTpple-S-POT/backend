@@ -19,17 +19,17 @@ public record CreatePotResponse(
         LocalDateTime createdAt
 ) {
 
-    public static CreatePotResponse from(Pot Pot) {
+    public static CreatePotResponse from(Pot pot) {
         return CreatePotResponse.builder()
-                .id(Pot.getId())
-                .userId(Pot.getUser().getId())
-                .categoryId(Pot.getCategoryId())
-                .type(Pot.getPotType())
-                .content(Pot.getContent())
-                .imageKey(Pot.getImageKey())
-                .location(new PointDTO(Pot.getLocation().getX(), Pot.getLocation().getY()))
-                .expiredAt(Pot.getExpiredAt())
-                .createdAt(Pot.getCreatedAt())
+                .id(pot.getId())
+                .userId(pot.getUser().getId())
+                .categoryId(pot.getCategoryId())
+                .type(pot.getPotType())
+                .content(pot.getContent())
+                .imageKey(pot.getImageKey())
+                .location(new PointDTO(pot.getLocation().getX(), pot.getLocation().getY()))
+                .expiredAt(pot.getExpiredAt())
+                .createdAt(pot.getCreatedAt())
                 .build();
     }
 }

@@ -25,8 +25,8 @@ import org.locationtech.jts.geom.Point;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE category_id = ?")
-@SQLDeleteAll(sql = "UPDATE category SET is_deleted = true WHERE category_id in ?")
+@SQLDelete(sql = "UPDATE pot SET is_deleted = true WHERE pot_id = ?")
+@SQLDeleteAll(sql = "UPDATE pot SET is_deleted = true WHERE pot_id in ?")
 @Where(clause = "is_deleted = false")
 public class Pot extends BasicDateEntity {
 
@@ -38,6 +38,9 @@ public class Pot extends BasicDateEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private Long userId;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
