@@ -50,10 +50,10 @@ public class Pot extends BasicDateEntity {
     @Enumerated(value = EnumType.STRING)
     private PotType potType;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 500)
     private String content;
 
-    @Column(name = "image_key", nullable = false)
+    @Column(name = "image_key", nullable = false, length = 100)
     private String imageKey;
 
     @Column(name = "location", nullable = false)

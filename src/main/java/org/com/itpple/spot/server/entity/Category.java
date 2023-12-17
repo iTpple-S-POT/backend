@@ -28,10 +28,10 @@ public class Category extends BasicDateEntity {
     @GeneratedValue
     private Long id;
 
-    @Column
+    @Column(length = 50, nullable = false)
     private String name;
 
-    @Column
+    @Column(length = 200)
     private String description;
 
     @Column(name = "is_deleted")
