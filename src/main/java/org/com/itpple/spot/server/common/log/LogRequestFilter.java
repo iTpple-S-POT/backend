@@ -7,8 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 
 @Slf4j
@@ -35,7 +35,10 @@ public class LogRequestFilter extends OncePerRequestFilter {
         if(request.getContentType() == null || !request.getContentType().contains("application/json")) {
             return "not json";
         }
-        var requestBodyBytes = StreamUtils.copyToByteArray(request.getInputStream());
+
+        var cachedRequest = (ContentCachingRequestWrapper) request;
+        var requestBodyBytes = cachedRequest.getContentAsByteArray();
+
         return new String(requestBodyBytes, StandardCharsets.UTF_8).replaceAll("\\s+",
                 "");
     }

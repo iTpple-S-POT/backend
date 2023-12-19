@@ -1,5 +1,6 @@
 package org.com.itpple.spot.server.config;
 
+import org.com.itpple.spot.server.common.log.ContentCacheFilter;
 import org.com.itpple.spot.server.common.log.LogFilter;
 import org.com.itpple.spot.server.common.log.LogRequestFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -20,11 +21,20 @@ public class LogConfig {
     }
 
     @Bean
+    public FilterRegistrationBean<ContentCacheFilter> ContentCacheFilter() {
+        FilterRegistrationBean<ContentCacheFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new ContentCacheFilter());
+        registrationBean.addUrlPatterns("*");
+        registrationBean.setOrder(1);
+        registrationBean.setName("ContentCacheFilter");
+        return registrationBean;
+    }
+    @Bean
     public FilterRegistrationBean<LogRequestFilter> LogRequestFilter() {
         FilterRegistrationBean<LogRequestFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new LogRequestFilter());
         registrationBean.addUrlPatterns("*");
-        registrationBean.setOrder(2);
+        registrationBean.setOrder(3);
         registrationBean.setName("LogRequestFilter");
         return registrationBean;
     }
