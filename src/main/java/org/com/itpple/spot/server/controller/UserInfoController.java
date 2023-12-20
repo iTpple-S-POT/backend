@@ -2,9 +2,9 @@ package org.com.itpple.spot.server.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.exception.MemberIdAlreadyExistsException;
 import org.com.itpple.spot.server.model.dto.userInfo.UserRequestDto;
 import org.com.itpple.spot.server.service.userInfo.UserInfoService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +18,15 @@ public class UserInfoController {
     private final UserInfoService userInfoService;
 
     //유저 기본 정보 기입
-    @PostMapping("/basic-info/{memberId}")
-    public ResponseEntity<Void> basicInfo(
+    @PostMapping("/{memberId}")
+    public ResponseEntity<UserRequestDto> basicInfo(
             @PathVariable Long memberId,
             @RequestBody @Valid UserRequestDto requestDto) {
         try {
             userInfoService.fillUserInfo(memberId, requestDto);
-            log.info("{}",requestDto.getNickname()); //랜덤으로 설정된 닉네임//문제없으면 추후 삭제
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(requestDto);
         } catch (RuntimeException e) {
-            log.info(e.getMessage()); //향후 custom 에러로 처리
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw new MemberIdAlreadyExistsException();
         }
     }
 
