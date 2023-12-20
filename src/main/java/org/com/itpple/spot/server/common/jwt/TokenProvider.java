@@ -17,6 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,6 +46,7 @@ public class TokenProvider {
     private SecretKey accessTokenKey;
     private SecretKey refreshTokenKey;
 
+    @Autowired
     public TokenProvider(
             @Value("${jwt.accessTokenSecret}")
             String accessTokenSecretKey,
