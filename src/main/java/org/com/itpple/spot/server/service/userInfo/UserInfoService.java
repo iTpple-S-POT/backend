@@ -2,6 +2,9 @@ package org.com.itpple.spot.server.service.userInfo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.exception.NicknameDuplicateException;
+import org.com.itpple.spot.server.exception.MemberIdAlreadyExistsException;
+import org.com.itpple.spot.server.exception.NicknameValidationException;
 import org.com.itpple.spot.server.model.dto.userInfo.UserRequestDto;
 import org.com.itpple.spot.server.model.entity.User;
 import org.com.itpple.spot.server.repository.UserRepository;
@@ -22,15 +25,24 @@ public class UserInfoService {
         Optional<User> existingMember = userRepository.findById(memberId);
 
         if (existingMember.isPresent()) {
-            throw new RuntimeException("이미 존재하는 memberId입니다");
+            throw new MemberIdAlreadyExistsException();
         }
         User newUser = requestDto.toUser();
-        newUser.setId(memberId);
         userRepository.save(newUser);
     }
 
-    public boolean isAlreadyExistNickname(String nickname) {
-        return userRepository.existsByNickname(nickname);
+    public void isAlreadyExistNickname(String nickname) {
+        if(userRepository.existsByNickname(nickname))
+            throw new NicknameDuplicateException();
+    }
+
+    public void validateNickname(String nickname) {
+        if (nickname == null || nickname.trim().isEmpty()) {
+            throw new NicknameValidationException();
+        }
+        if (!nickname.matches("^[a-zA-Z0-9가-힣_]{1,15}$")) {
+            throw new NicknameValidationException();
+        }
     }
 
 }
