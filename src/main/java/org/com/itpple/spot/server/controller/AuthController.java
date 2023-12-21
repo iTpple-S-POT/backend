@@ -30,7 +30,7 @@ public class AuthController {
             @RequestBody() LoginRequest loginRequest) {
 
         var tokenResponse = authService.loginWithOAuth(providerType, loginRequest.getAccessToken(),
-                loginRequest.getAccessToken());
+                loginRequest.getRefreshToken());
 
         return ResponseEntity.ok(tokenResponse);
     }

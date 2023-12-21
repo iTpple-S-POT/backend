@@ -1,9 +1,0 @@
-jwt:
-  accessTokenSecret: "testKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKey"
-  accessTokenExpiredSeconds: 86400
-  refreshTokenSecret: "testKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeytestKeyt"
-  refreshTokenExpiredSeconds: 2592000
-oauth2:
-  client:
-    kakao:
-      appId: 997505
