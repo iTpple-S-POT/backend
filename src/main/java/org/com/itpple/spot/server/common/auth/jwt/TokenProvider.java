@@ -72,7 +72,7 @@ public class TokenProvider {
     }
 
     private String generateAccessToken(UserDetailsCustom userDetailsCustom) {
-        var userId = userDetailsCustom.getUser().getId().toString();
+        var userId = userDetailsCustom.getUserId().toString();
         var authorities = userDetailsCustom.getAuthorities();
         return Jwts.builder()
                 .signWith(accessTokenKey)
@@ -88,7 +88,7 @@ public class TokenProvider {
     }
 
     private String generateRefreshToken(UserDetailsCustom userDetailsCustom) {
-        var userId = userDetailsCustom.getUser().getId().toString();
+        var userId = userDetailsCustom.getUserId().toString();
 
         return Jwts.builder()
                 .signWith(refreshTokenKey)
