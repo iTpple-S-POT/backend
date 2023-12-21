@@ -43,7 +43,7 @@ public class TokenProviderTest {
         var authentication = new UsernamePasswordAuthenticationToken(id, null, authorities);
 
         var generatedToken = tokenProvider.generateToken(id, authentication);
-        var payload = tokenProvider.getPayload(generatedToken.getAccessToken());
+        var payload = tokenProvider.getClaims(generatedToken.getAccessToken());
 
         assertAll(() -> assertEquals("1", payload.getSubject()),
                 () -> assertTrue(payload.getExpiration().getTime() > System.currentTimeMillis()),
