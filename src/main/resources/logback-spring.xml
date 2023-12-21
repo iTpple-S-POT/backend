@@ -20,7 +20,6 @@
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
       <fileNamePattern>./log/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <maxFileSize>10MB</maxFileSize>
-      <maxHistory>${MAX_HISTORY}</maxHistory>
     </rollingPolicy>
   </appender>
 
@@ -31,14 +30,12 @@
   </springProfile>
   <springProfile name="dev">
     <root level="INFO">
-      <property name="MAX_HISTORY" value="7" />
       <appender-ref ref="CONSOLE" />
       <appender-ref ref="FILE" />
     </root>
   </springProfile>
   <springProfile name="prod">
     <root level="INFO">
-      <property name="MAX_HISTORY" value="30" />
       <appender-ref ref="CONSOLE" />
       <appender-ref ref="FILE" />
     </root>
