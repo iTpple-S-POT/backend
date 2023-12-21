@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.common.jwt;
+package org.com.itpple.spot.server.common.auth.jwt;
 
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;

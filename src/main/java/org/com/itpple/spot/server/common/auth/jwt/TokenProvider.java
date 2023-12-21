@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.common.jwt;
+package org.com.itpple.spot.server.common.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustom;
 import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

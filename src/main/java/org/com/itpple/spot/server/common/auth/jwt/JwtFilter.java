@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.common.jwt;
+package org.com.itpple.spot.server.common.auth.jwt;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustomService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;

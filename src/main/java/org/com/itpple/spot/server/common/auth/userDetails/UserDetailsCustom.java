@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.common.jwt;
+package org.com.itpple.spot.server.common.auth.userDetails;
 
 import java.util.Collection;
 import java.util.Collections;
