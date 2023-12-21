@@ -16,6 +16,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.dto.Payload;
 import org.com.itpple.spot.server.model.dto.oAuth.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -96,7 +97,8 @@ public class TokenProvider {
     }
 
     private String generateRefreshToken(Long userId) {
-        var refreshToken = Jwts.builder()
+
+        return Jwts.builder()
                 .signWith(refreshTokenKey)
                 .claim(USER_ID_KEY, userId)
                 .issuedAt(new Date())
@@ -105,8 +107,6 @@ public class TokenProvider {
                 .type("JWT")
                 .and()
                 .compact();
-
-        return refreshToken;
     }
 
     public boolean validateAccessToken(String accessToken) {
@@ -159,7 +159,7 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String accessToken) {
-        var claims = this.getPayload(accessToken);
+        var claims = this.getClaims(accessToken);
 
         var authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
@@ -171,7 +171,14 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, null, authorities);
     }
 
-    public Claims getPayload(String accessToken) {
+    public Payload getPayload(String accessToken) {
+        var claims = this.getClaims(accessToken);
+        var userId = claims.get(USER_ID_KEY, Long.class);
+
+        return Payload.of(userId);
+    }
+
+    public Claims getClaims(String accessToken) {
         return Jwts.parser().verifyWith(accessTokenKey).build()
                 .parseSignedClaims(accessToken).getPayload();
     }
