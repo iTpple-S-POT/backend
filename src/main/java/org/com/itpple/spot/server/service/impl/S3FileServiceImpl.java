@@ -34,10 +34,6 @@ public class S3FileServiceImpl implements FileService {
 
         var preSignedRequest = s3Presigner.presignPutObject(preSignRequest);
 
-        log.info("PreSigned URL: {}", preSignedRequest.url());
-        log.info("Which HTTP method needs to be used when uploading: [{}]",
-                preSignedRequest.httpRequest().method());
-
         return preSignedRequest.url().toString();
     }
 

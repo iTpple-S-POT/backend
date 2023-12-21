@@ -12,5 +12,4 @@ public record GetCategoryResponse(List<CategoryDTO> categoryList) {
         return new GetCategoryResponse(categoryList.stream().map(CategoryDTO::fromEntity).toList());
     }
 
-
 }
