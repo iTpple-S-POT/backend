@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.repository.RefreshTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,23 +35,34 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String USER_ID_KEY = "userId";
 
-    @Value("${jwt.accessTokenSecret}")
     private String ACCESS_TOKEN_SECRET_KEY;
 
-    @Value("${jwt.accessTokenExpiredSeconds}")
     private Long ACCESS_TOKEN_EXPIRED_SECONDS;
 
-    @Value("${jwt.refreshTokenSecret}")
     private String REFRESH_TOKEN_SECRET_KEY;
 
-    @Value("${jwt.refreshTokenExpiredSeconds}")
+
     private Long REFRESH_TOKEN_EXPIRED_SECONDS;
 
     private SecretKey accessTokenKey;
     private SecretKey refreshTokenKey;
 
-
-    private final RefreshTokenRepository refreshTokenRepository;
+    @Autowired
+    public TokenProvider(
+            @Value("${jwt.accessTokenSecret}")
+            String accessTokenSecretKey,
+            @Value("${jwt.accessTokenExpiredSeconds}")
+            Long accessTokenExpiredSeconds,
+            @Value("${jwt.refreshTokenSecret}")
+            String refreshTokenSecretKey,
+            @Value("${jwt.refreshTokenExpiredSeconds}")
+            Long refreshTokenExpiredSeconds
+    ) {
+        this.ACCESS_TOKEN_SECRET_KEY = accessTokenSecretKey;
+        this.ACCESS_TOKEN_EXPIRED_SECONDS = accessTokenExpiredSeconds;
+        this.REFRESH_TOKEN_SECRET_KEY = refreshTokenSecretKey;
+        this.REFRESH_TOKEN_EXPIRED_SECONDS = refreshTokenExpiredSeconds;
+    }
 
     @PostConstruct
     public void afterPropertiesSet() {
@@ -85,7 +97,8 @@ public class TokenProvider {
     }
 
     private String generateRefreshToken(Long userId) {
-        var refreshToken = Jwts.builder()
+
+        return Jwts.builder()
                 .signWith(refreshTokenKey)
                 .claim(USER_ID_KEY, userId)
                 .issuedAt(new Date())
@@ -94,8 +107,6 @@ public class TokenProvider {
                 .type("JWT")
                 .and()
                 .compact();
-
-        return refreshToken;
     }
 
     public boolean validateAccessToken(String accessToken) {
@@ -148,7 +159,7 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String accessToken) {
-        var claims = this.getPayload(accessToken);
+        var claims = this.getClaims(accessToken);
 
         var authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
@@ -160,7 +171,14 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, null, authorities);
     }
 
-    public Claims getPayload(String accessToken) {
+    public Payload getPayload(String accessToken) {
+        var claims = this.getClaims(accessToken);
+        var userId = claims.get(USER_ID_KEY, Long.class);
+
+        return Payload.of(userId);
+    }
+
+    public Claims getClaims(String accessToken) {
         return Jwts.parser().verifyWith(accessTokenKey).build()
                 .parseSignedClaims(accessToken).getPayload();
     }
