@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.com.itpple.spot.server.common.jwt.TokenProvider;
-import org.com.itpple.spot.server.common.jwt.UserDetailsCustom;
+import org.com.itpple.spot.server.common.auth.jwt.TokenProvider;
+import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustom;
 import org.com.itpple.spot.server.constant.Role;
 import org.com.itpple.spot.server.entity.User;
 import org.junit.jupiter.api.BeforeEach;

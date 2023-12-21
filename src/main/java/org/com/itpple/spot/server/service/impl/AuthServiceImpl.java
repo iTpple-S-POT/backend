@@ -2,8 +2,8 @@ package org.com.itpple.spot.server.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.common.jwt.TokenProvider;
-import org.com.itpple.spot.server.common.jwt.UserDetailsCustom;
+import org.com.itpple.spot.server.common.auth.jwt.TokenProvider;
+import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustom;
 import org.com.itpple.spot.server.constant.OAuthType;
 import org.com.itpple.spot.server.constant.Role;
 import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
