@@ -2,18 +2,20 @@ package org.com.itpple.spot.server.common.auth.userDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.com.itpple.spot.server.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Getter
 @RequiredArgsConstructor(staticName = "from")
 public class UserDetailsCustom implements UserDetails {
 
     private final User user;
+
+    public Long getUserId() {
+        return this.user.getId();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -27,7 +29,7 @@ public class UserDetailsCustom implements UserDetails {
 
     @Override
     public String getUsername() {
-        return String.valueOf(this.user.getId());
+        return String.valueOf(this.getUserId());
     }
 
     @Override

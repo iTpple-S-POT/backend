@@ -40,7 +40,7 @@ public class PotController {
     public ResponseEntity<UploadImageResponse> uploadImageUsingPreSignedUrl(
             @AuthenticationPrincipal UserDetailsCustom userDetailsCustom,
             @Valid @RequestBody UploadImageRequest uploadImageRequest) {
-        var userId = userDetailsCustom.getUser().getId();
+        var userId = userDetailsCustom.getUserId();
         return ResponseEntity.ok(potService.uploadImage(userId, uploadImageRequest.fileName()));
     }
 
@@ -55,7 +55,7 @@ public class PotController {
     public ResponseEntity<CreatePotResponse> createPot(
             @AuthenticationPrincipal UserDetailsCustom userDetailsCustom,
             @Valid @RequestBody CreatePotRequest createPotRequest) {
-        var userId = userDetailsCustom.getUser().getId();
+        var userId = userDetailsCustom.getUserId();
         return ResponseEntity.ok(potService.createPot(userId, createPotRequest));
     }
 }
