@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.constant.OAuthType;
 import org.com.itpple.spot.server.dto.oAuth.UserInfo;
 import org.com.itpple.spot.server.dto.oAuth.kakao.KakaoInfo;
+import org.com.itpple.spot.server.exception.CustomException;
+import org.com.itpple.spot.server.exception.code.ErrorCode;
 import org.com.itpple.spot.server.external.KakaoClient;
 import org.com.itpple.spot.server.service.OAuthService;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +33,7 @@ public class KakaoOAuthServiceImpl implements OAuthService {
     public String getSocialIdByToken(String accessToken, String refreshToken) {
         var tokenInfo = kakaoClient.getTokenInfo(HEADER_PREFIX + accessToken);
         if (!APP_ID.equals(tokenInfo.getAppId())) {
-            throw new RuntimeException("appId is not matched");
+            throw new CustomException(ErrorCode.NOT_MATCH_APP_ID);
         }
         return this.generateSocialId(tokenInfo.getId());
     }
