@@ -8,6 +8,8 @@ import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
 import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
 import org.com.itpple.spot.server.dto.pot.response.UploadImageResponse;
+import org.com.itpple.spot.server.exception.CustomException;
+import org.com.itpple.spot.server.exception.code.ErrorCode;
 import org.com.itpple.spot.server.repository.CategoryRepository;
 import org.com.itpple.spot.server.repository.PotRepository;
 import org.com.itpple.spot.server.service.FileService;
@@ -31,14 +33,20 @@ public class PotServiceImpl implements PotService {
     }
 
     @Override
-    public UploadImageResponse uploadImage(String fileName) {
+    public UploadImageResponse uploadImage(Long userId, String fileName) {
         var uniqueFileName = POT_IMAGE_PATH + FileUtil.generateUniqueNameForImage(fileName);
         return UploadImageResponse.of(fileService.getPreSignedUrl(uniqueFileName), uniqueFileName);
     }
 
     @Transactional
     @Override
-    public CreatePotResponse createPot(CreatePotRequest createPotRequest) {
+    public CreatePotResponse createPot(Long userId, CreatePotRequest createPotRequest) {
+
+        var isUploadedImage = fileService.isUploaded(createPotRequest.imageKey());
+        if (!isUploadedImage) {
+            throw new CustomException(ErrorCode.INVALID_FILE_KEY);
+        }
+
         return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest)));
     }
 }

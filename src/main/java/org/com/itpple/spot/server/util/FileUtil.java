@@ -9,13 +9,13 @@ import org.com.itpple.spot.server.exception.code.ErrorCode;
 
 @AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class FileUtil {
+
     public static String generateUniqueNameForImage(String imageName) {
         if (!imageName.matches(IMAGE_NAME_REGEX)) {
-            throw new CustomException(ErrorCode.FILE_NAME_ILLEGAL);
+            throw new CustomException(ErrorCode.ILLEGAL_FILE_NAME);
         }
 
         var fileKey = imageName.substring(0, imageName.lastIndexOf("."));
-        ;
         var fileExtension = imageName.substring(imageName.lastIndexOf("."));
 
         return fileKey + "_" + UUID.randomUUID() + fileExtension;

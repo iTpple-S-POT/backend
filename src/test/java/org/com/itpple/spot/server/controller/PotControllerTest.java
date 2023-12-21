@@ -1,6 +1,7 @@
 package org.com.itpple.spot.server.controller;
 
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class})
 class PotControllerTest {
 
     private MockMvc mockMvc;
@@ -37,6 +38,7 @@ class PotControllerTest {
     private PotService potService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
 
     @BeforeEach
     void setUp() {
@@ -61,7 +63,8 @@ class PotControllerTest {
         final var url = "/pot/upload-image/pre-signed-url";
         final var uploadImageRequest = new UploadImageRequest("test.jpg");
 
-        doReturn(UploadImageResponse.of(null, null)).when(potService).uploadImage(anyString());
+        doReturn(UploadImageResponse.of(null, null)).when(potService)
+                .uploadImage(any(), anyString());
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(uploadImageRequest)));
@@ -75,8 +78,6 @@ class PotControllerTest {
         final var createPotRequest = new CreatePotRequest(
                 1L, "test.txt", PotType.IMAGE, new PointDTO(0.0, 0.0), null);
 
-//        doReturn(CreatePotResponse.builder()
-//                .build()).when(potService).createPot(createPotRequest);
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createPotRequest)));
@@ -91,15 +92,12 @@ class PotControllerTest {
                 1L, "test.jpg", PotType.IMAGE, new PointDTO(0.0, 0.0), null);
 
         doReturn(CreatePotResponse.builder()
-                .build()).when(potService).createPot(createPotRequest);
+                .build()).when(potService).createPot(any(), any(CreatePotRequest.class));
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createPotRequest)));
+                .content(objectMapper.writeValueAsString(createPotRequest))
+        );
 
         resultActions.andExpect(status().isOk());
-    }
-
-    @Test
-    void createPot() {
     }
 }

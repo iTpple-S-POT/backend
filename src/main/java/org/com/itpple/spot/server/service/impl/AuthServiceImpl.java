@@ -3,15 +3,17 @@ package org.com.itpple.spot.server.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.common.jwt.TokenProvider;
+import org.com.itpple.spot.server.common.jwt.UserDetailsCustom;
 import org.com.itpple.spot.server.constant.OAuthType;
 import org.com.itpple.spot.server.constant.Role;
 import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.com.itpple.spot.server.entity.User;
+import org.com.itpple.spot.server.exception.CustomException;
+import org.com.itpple.spot.server.exception.code.ErrorCode;
 import org.com.itpple.spot.server.repository.UserRepository;
 import org.com.itpple.spot.server.service.AuthService;
 import org.com.itpple.spot.server.service.OAuthServiceFactory;
 import org.com.itpple.spot.server.service.TokenService;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,11 +48,9 @@ public class AuthServiceImpl implements AuthService {
 
                     return userRepository.save(newUser);
                 });
+        var userDetailsCustom = UserDetailsCustom.from(user);
 
-        var authentication = this.generateAuthentication(user);
-
-        var tokenResponse = tokenProvider.generateToken(user.getId(),
-                authentication);
+        var tokenResponse = tokenProvider.generateToken(userDetailsCustom);
         var newRefreshToken = tokenResponse.getRefreshToken();
 
         this.tokenService.saveRefreshToken(user.getId(), newRefreshToken);
@@ -62,28 +62,25 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenResponse refresh(String refreshToken) {
         if (!this.tokenProvider.validateRefreshToken(refreshToken)) {
-            throw new RuntimeException("Refresh Token is not valid");
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         var userId = this.tokenProvider.getUserIdFromRefreshToken(refreshToken);
 
-        if (this.tokenService.isRefreshTokenExist(userId, refreshToken)) {
-            throw new RuntimeException("Refresh Token is not valid");
+        if (!this.tokenService.isRefreshTokenExist(userId, refreshToken)) {
+            throw new CustomException(ErrorCode.NOT_FOUND_REFRESH_TOKEN);
         }
 
-        var user = userRepository.findById(userId);
-        var authentication = this.generateAuthentication(user.get());
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        var userDetailsCustom = UserDetailsCustom.from(user);
 
-        var tokenResponse = tokenProvider.generateToken(userId, authentication);
+        var tokenResponse = tokenProvider.generateToken(userDetailsCustom);
         var newRefreshToken = tokenResponse.getRefreshToken();
 
         this.tokenService.saveRefreshToken(userId, newRefreshToken);
 
         return tokenResponse;
-    }
-
-    private Authentication generateAuthentication(User user) {
-        return tokenProvider.generateAuthentication(user);
     }
 
     @Override

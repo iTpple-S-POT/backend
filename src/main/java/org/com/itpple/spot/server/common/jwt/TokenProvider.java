@@ -7,24 +7,15 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.SignatureException;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.dto.Payload;
 import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -73,20 +64,19 @@ public class TokenProvider {
         this.refreshTokenKey = new SecretKeySpec(refreshKeyBytes, "HmacSHA256");
     }
 
-    public TokenResponse generateToken(Long userId, Authentication authentication) {
-        String accessToken = generateAccessToken(userId, authentication);
-        String refreshToken = generateRefreshToken(userId);
+    public TokenResponse generateToken(UserDetailsCustom userDetailsCustom) {
+        String accessToken = generateAccessToken(userDetailsCustom);
+        String refreshToken = generateRefreshToken(userDetailsCustom);
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    private String generateAccessToken(Long userId, Authentication authentication) {
+    private String generateAccessToken(UserDetailsCustom userDetailsCustom) {
+        var userId = userDetailsCustom.getUser().getId().toString();
+        var authorities = userDetailsCustom.getAuthorities();
         return Jwts.builder()
                 .signWith(accessTokenKey)
-                .subject(userId.toString())
-                .claim(AUTHORITIES_KEY,
-                        authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-                                .collect(
-                                        Collectors.joining(",")))
+                .subject(userId)
+                .claim(AUTHORITIES_KEY, authorities)
                 .claim(USER_ID_KEY, userId)
                 .issuedAt(new Date())
                 .expiration(new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRED_SECONDS * 1000))
@@ -96,7 +86,8 @@ public class TokenProvider {
                 .compact();
     }
 
-    private String generateRefreshToken(Long userId) {
+    private String generateRefreshToken(UserDetailsCustom userDetailsCustom) {
+        var userId = userDetailsCustom.getUser().getId().toString();
 
         return Jwts.builder()
                 .signWith(refreshTokenKey)
@@ -147,44 +138,18 @@ public class TokenProvider {
         return false;
     }
 
-    public Authentication generateAuthentication(
-            org.com.itpple.spot.server.entity.User user) {
-
-        var authorities = new HashSet<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
-
-        var principal = new User(user.getId().toString(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-    }
-
-    public Authentication getAuthentication(String accessToken) {
-        var claims = this.getClaims(accessToken);
-
-        var authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .toList();
-
-        var principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-    }
-
-    public Payload getPayload(String accessToken) {
-        var claims = this.getClaims(accessToken);
-        var userId = claims.get(USER_ID_KEY, Long.class);
-
-        return Payload.of(userId);
-    }
-
     public Claims getClaims(String accessToken) {
         return Jwts.parser().verifyWith(accessTokenKey).build()
                 .parseSignedClaims(accessToken).getPayload();
     }
 
+    public Long getUserIdFromAccessToken(String accessToken) {
+        return Long.parseLong(Jwts.parser().verifyWith(accessTokenKey).build()
+                .parseSignedClaims(accessToken).getPayload().get(USER_ID_KEY).toString());
+    }
+
     public Long getUserIdFromRefreshToken(String refreshToken) {
-        return Jwts.parser().verifyWith(refreshTokenKey).build()
-                .parseSignedClaims(refreshToken).getPayload().get(USER_ID_KEY, Long.class);
+        return Long.parseLong(Jwts.parser().verifyWith(refreshTokenKey).build()
+                .parseSignedClaims(refreshToken).getPayload().get(USER_ID_KEY).toString());
     }
 }
