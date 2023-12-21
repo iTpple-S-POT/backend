@@ -87,13 +87,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(String accessToken) {
-        if (!this.tokenProvider.validateAccessToken(accessToken)) {
-            throw new RuntimeException("Access Token is not valid");
-        }
-
-        var userId = this.tokenProvider.getPayload(accessToken).get("userId", Long.class);
-
+    public void logout(Long userId) {
         this.tokenService.removeRefreshToken(userId);
     }
 
