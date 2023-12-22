@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.constant.Role;
 
 @Slf4j
-@Entity(name = "sp_user")
+@Entity(name = "user")
 @Builder
 @Getter
 @AllArgsConstructor
