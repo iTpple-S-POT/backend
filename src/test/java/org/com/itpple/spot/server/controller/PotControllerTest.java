@@ -4,6 +4,8 @@ package org.com.itpple.spot.server.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -15,44 +17,36 @@ import org.com.itpple.spot.server.dto.pot.request.UploadImageRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
 import org.com.itpple.spot.server.dto.pot.response.UploadImageResponse;
 import org.com.itpple.spot.server.service.PotService;
-import org.junit.jupiter.api.BeforeEach;
+import org.com.itpple.spot.server.util.AuthUserUtil;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@ExtendWith({MockitoExtension.class})
+@WebMvcTest(controllers = PotController.class)
 class PotControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
-    @InjectMocks
-    private PotController potController;
-
-    @Mock
+    @MockBean
     private PotService potService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(potController).build();
-    }
-
-
     @Test
     void uploadImageUsingPreSignedUrl_Invalid_Image_Extension() throws Exception {
-        final var url = "/pot/upload-image/pre-signed-url";
+        final var url = "/pot/image/pre-signed-url";
         final var uploadImageRequest = new UploadImageRequest("test.txt");
 
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(user(AuthUserUtil.getUserDetailsCustom()))
+                .with(csrf())
                 .content(objectMapper.writeValueAsString(uploadImageRequest)));
 
         resultActions.andExpect(status().isBadRequest());
@@ -60,13 +54,16 @@ class PotControllerTest {
 
     @Test
     void uploadImageUsingPreSignedUrl_Success() throws Exception {
-        final var url = "/pot/upload-image/pre-signed-url";
+        final var url = "/pot/image/pre-signed-url";
         final var uploadImageRequest = new UploadImageRequest("test.jpg");
+        final var userDetailsCustom = AuthUserUtil.getUserDetailsCustom();
 
         doReturn(UploadImageResponse.of(null, null)).when(potService)
                 .uploadImage(any(), anyString());
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(user(userDetailsCustom))
+                .with(csrf())
                 .content(objectMapper.writeValueAsString(uploadImageRequest)));
 
         resultActions.andExpect(status().isOk());
@@ -80,6 +77,8 @@ class PotControllerTest {
 
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(user(AuthUserUtil.getUserDetailsCustom()))
+                .with(csrf())
                 .content(objectMapper.writeValueAsString(createPotRequest)));
 
         resultActions.andExpect(status().isBadRequest());
@@ -95,6 +94,8 @@ class PotControllerTest {
                 .build()).when(potService).createPot(any(), any(CreatePotRequest.class));
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(user(AuthUserUtil.getUserDetailsCustom()))
+                .with(csrf())
                 .content(objectMapper.writeValueAsString(createPotRequest))
         );
 
