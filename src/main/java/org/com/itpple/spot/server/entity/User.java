@@ -12,11 +12,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.constant.Role;
+import org.hibernate.annotations.DynamicInsert;
 
 @Slf4j
-@Entity(name = "user")
+@Entity(name = "\"user\"")
 @Builder
 @Getter
+@DynamicInsert
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BasicDateEntity {

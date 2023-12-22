@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,7 +56,7 @@ public class Pot extends BasicDateEntity {
     @Enumerated(value = EnumType.STRING)
     private PotType potType;
 
-    @Column(name = "content", nullable = false, length = 500)
+    @Column(name = "content", length = 500)
     private String content;
 
     @Column(name = "image_key", nullable = false, length = 100)
@@ -69,6 +70,11 @@ public class Pot extends BasicDateEntity {
 
     @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
     private boolean isDeleted;
+
+    @PrePersist
+    public void prePersist() {
+        this.expiredAt = LocalDateTime.now().plusDays(1);
+    }
 
     //TODO: 해시태그 기획이 확정되면 추가
 }
