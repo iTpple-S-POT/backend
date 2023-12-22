@@ -6,7 +6,7 @@ import org.com.itpple.spot.server.common.auth.jwt.JwtAccessDeniedHandler;
 import org.com.itpple.spot.server.common.auth.jwt.JwtAuthenticationEntryPoint;
 import org.com.itpple.spot.server.common.auth.jwt.JwtFilter;
 import org.com.itpple.spot.server.common.auth.jwt.TokenProvider;
-import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustomService;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
-    private final UserDetailsCustomService userDetailsCustomService;
+    private final CustomUserDetailsService customUserDetailsService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
-                .addFilterBefore(new JwtFilter(tokenProvider, userDetailsCustomService),
+                .addFilterBefore(new JwtFilter(tokenProvider, customUserDetailsService),
                         UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)

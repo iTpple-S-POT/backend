@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailsCustomService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     public UserDetails loadUserByUserId(Long userId) throws UsernameNotFoundException {
         return userRepository.findById(userId)
-                .map(UserDetailsCustom::from)
+                .map(CustomUserDetails::from)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findById(Long.valueOf(username))
-                .map(UserDetailsCustom::from)
+                .map(CustomUserDetails::from)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
     }
 

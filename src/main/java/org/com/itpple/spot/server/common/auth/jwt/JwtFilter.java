@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustomService;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -21,7 +21,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
     private final TokenProvider tokenProvider;
-    private final UserDetailsCustomService userDetailsCustomService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(accessToken) && tokenProvider.validateAccessToken(accessToken)) {
             var userId = tokenProvider.getUserIdFromAccessToken(accessToken);
-            var userDetails = userDetailsCustomService.loadUserByUserId(userId);
+            var userDetails = customUserDetailsService.loadUserByUserId(userId);
             var authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                     userDetails.getAuthorities());
 

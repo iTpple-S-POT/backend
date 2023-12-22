@@ -1,24 +1,24 @@
 package org.com.itpple.spot.server.util;
 
-import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustom;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.constant.Role;
 import org.com.itpple.spot.server.entity.User;
 
 public class AuthUserUtil {
 
-    public static UserDetailsCustom getUserDetailsCustom() {
+    public static CustomUserDetails getCustomUserDetails() {
 
-        return getUserDetailsCustom(1L);
+        return getCustomUserDetails(1L);
     }
 
-    public static UserDetailsCustom getUserDetailsCustom(Long id) {
+    public static CustomUserDetails getCustomUserDetails(Long id) {
 
-        return getUserDetailsCustom(id, Role.USER);
+        return getCustomUserDetails(id, Role.USER);
     }
 
-    public static UserDetailsCustom getUserDetailsCustom(Long id, Role role) {
+    public static CustomUserDetails getCustomUserDetails(Long id, Role role) {
 
-        return UserDetailsCustom.from(User.builder().id(id).role(Role.USER).build());
+        return CustomUserDetails.from(User.builder().id(id).role(Role.USER).build());
     }
 
 }

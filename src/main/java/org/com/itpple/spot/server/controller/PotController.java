@@ -4,7 +4,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.common.auth.Auth;
-import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustom;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
 import org.com.itpple.spot.server.dto.pot.request.UploadImageRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
@@ -35,18 +35,18 @@ public class PotController {
 
     @PostMapping(value = "/image/pre-signed-url", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UploadImageResponse> uploadImageUsingPreSignedUrl(
-            @Auth UserDetailsCustom userDetailsCustom,
+            @Auth CustomUserDetails customUserDetails,
             @Valid @RequestBody UploadImageRequest uploadImageRequest) {
-        var userId = userDetailsCustom.getUserId();
+        var userId = customUserDetails.getUserId();
 //        var userId = 1L;
         return ResponseEntity.ok(potService.uploadImage(userId, uploadImageRequest.fileName()));
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreatePotResponse> createPot(
-            @Auth UserDetailsCustom userDetailsCustom,
+            @Auth CustomUserDetails customUserDetails,
             @Valid @RequestBody CreatePotRequest createPotRequest) {
-        var userId = userDetailsCustom.getUserId();
+        var userId = customUserDetails.getUserId();
         return ResponseEntity.ok(potService.createPot(userId, createPotRequest));
     }
 }

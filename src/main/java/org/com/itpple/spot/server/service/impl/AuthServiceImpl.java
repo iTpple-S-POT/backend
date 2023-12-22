@@ -3,7 +3,7 @@ package org.com.itpple.spot.server.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.common.auth.jwt.TokenProvider;
-import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustom;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.constant.OAuthType;
 import org.com.itpple.spot.server.constant.Role;
 import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
@@ -48,9 +48,9 @@ public class AuthServiceImpl implements AuthService {
 
                     return userRepository.save(newUser);
                 });
-        var userDetailsCustom = UserDetailsCustom.from(user);
+        var customUserDetails = CustomUserDetails.from(user);
 
-        var tokenResponse = tokenProvider.generateToken(userDetailsCustom);
+        var tokenResponse = tokenProvider.generateToken(customUserDetails);
         var newRefreshToken = tokenResponse.getRefreshToken();
 
         this.tokenService.saveRefreshToken(user.getId(), newRefreshToken);
@@ -73,9 +73,9 @@ public class AuthServiceImpl implements AuthService {
 
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-        var userDetailsCustom = UserDetailsCustom.from(user);
+        var customUserDetails = CustomUserDetails.from(user);
 
-        var tokenResponse = tokenProvider.generateToken(userDetailsCustom);
+        var tokenResponse = tokenProvider.generateToken(customUserDetails);
         var newRefreshToken = tokenResponse.getRefreshToken();
 
         this.tokenService.saveRefreshToken(userId, newRefreshToken);

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.com.itpple.spot.server.common.auth.jwt.TokenProvider;
-import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustom;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.constant.Role;
 import org.com.itpple.spot.server.entity.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ public class TokenProviderTest {
                 .role(role)
                 .build();
 
-        var generatedToken = tokenProvider.generateToken(UserDetailsCustom.from(user));
+        var generatedToken = tokenProvider.generateToken(CustomUserDetails.from(user));
         var payload = tokenProvider.getClaims(generatedToken.getAccessToken());
 
         assertAll(() -> assertEquals("1", payload.getSubject()),
@@ -61,7 +61,7 @@ public class TokenProviderTest {
                 .build();
 
         var accessToken =
-                tokenProvider.generateToken(UserDetailsCustom.from(user)).getAccessToken() + "a";
+                tokenProvider.generateToken(CustomUserDetails.from(user)).getAccessToken() + "a";
 
         assertThrows(RuntimeException.class, () -> tokenProvider.getClaims(accessToken));
     }
@@ -76,7 +76,7 @@ public class TokenProviderTest {
                 .role(role)
                 .build();
 
-        var accessToken = tokenProvider.generateToken(UserDetailsCustom.from(user))
+        var accessToken = tokenProvider.generateToken(CustomUserDetails.from(user))
                 .getAccessToken();
 
         try {

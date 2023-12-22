@@ -13,7 +13,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.common.auth.userDetails.UserDetailsCustom;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.dto.oAuth.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,15 +65,15 @@ public class TokenProvider {
         this.refreshTokenKey = new SecretKeySpec(refreshKeyBytes, "HmacSHA256");
     }
 
-    public TokenResponse generateToken(UserDetailsCustom userDetailsCustom) {
-        String accessToken = generateAccessToken(userDetailsCustom);
-        String refreshToken = generateRefreshToken(userDetailsCustom);
+    public TokenResponse generateToken(CustomUserDetails customUserDetails) {
+        String accessToken = generateAccessToken(customUserDetails);
+        String refreshToken = generateRefreshToken(customUserDetails);
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    private String generateAccessToken(UserDetailsCustom userDetailsCustom) {
-        var userId = userDetailsCustom.getUserId().toString();
-        var authorities = userDetailsCustom.getAuthorities();
+    private String generateAccessToken(CustomUserDetails customUserDetails) {
+        var userId = customUserDetails.getUserId().toString();
+        var authorities = customUserDetails.getAuthorities();
         return Jwts.builder()
                 .signWith(accessTokenKey)
                 .subject(userId)
@@ -87,8 +87,8 @@ public class TokenProvider {
                 .compact();
     }
 
-    private String generateRefreshToken(UserDetailsCustom userDetailsCustom) {
-        var userId = userDetailsCustom.getUserId().toString();
+    private String generateRefreshToken(CustomUserDetails customUserDetails) {
+        var userId = customUserDetails.getUserId().toString();
 
         return Jwts.builder()
                 .signWith(refreshTokenKey)

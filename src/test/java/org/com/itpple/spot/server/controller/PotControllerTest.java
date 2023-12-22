@@ -45,7 +45,7 @@ class PotControllerTest {
 
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user(AuthUserUtil.getUserDetailsCustom()))
+                .with(user(AuthUserUtil.getCustomUserDetails()))
                 .with(csrf())
                 .content(objectMapper.writeValueAsString(uploadImageRequest)));
 
@@ -56,13 +56,13 @@ class PotControllerTest {
     void uploadImageUsingPreSignedUrl_Success() throws Exception {
         final var url = "/pot/image/pre-signed-url";
         final var uploadImageRequest = new UploadImageRequest("test.jpg");
-        final var userDetailsCustom = AuthUserUtil.getUserDetailsCustom();
+        final var customUserDetails = AuthUserUtil.getCustomUserDetails();
 
         doReturn(UploadImageResponse.of(null, null)).when(potService)
                 .uploadImage(any(), anyString());
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user(userDetailsCustom))
+                .with(user(customUserDetails))
                 .with(csrf())
                 .content(objectMapper.writeValueAsString(uploadImageRequest)));
 
@@ -77,7 +77,7 @@ class PotControllerTest {
 
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user(AuthUserUtil.getUserDetailsCustom()))
+                .with(user(AuthUserUtil.getCustomUserDetails()))
                 .with(csrf())
                 .content(objectMapper.writeValueAsString(createPotRequest)));
 
@@ -94,7 +94,7 @@ class PotControllerTest {
                 .build()).when(potService).createPot(any(), any(CreatePotRequest.class));
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user(AuthUserUtil.getUserDetailsCustom()))
+                .with(user(AuthUserUtil.getCustomUserDetails()))
                 .with(csrf())
                 .content(objectMapper.writeValueAsString(createPotRequest))
         );
