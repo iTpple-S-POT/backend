@@ -1,6 +1,6 @@
 package org.com.itpple.spot.server.service;
 
-import org.com.itpple.spot.server.model.OAuthType;
+import org.com.itpple.spot.server.constant.OAuthType;
 
 public interface OAuthServiceFactory {
 

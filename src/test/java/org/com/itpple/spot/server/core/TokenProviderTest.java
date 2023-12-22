@@ -6,15 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashSet;
-import org.com.itpple.spot.server.common.jwt.TokenProvider;
+import org.com.itpple.spot.server.common.auth.jwt.TokenProvider;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
+import org.com.itpple.spot.server.constant.Role;
+import org.com.itpple.spot.server.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 
 @ExtendWith({MockitoExtension.class})
 public class TokenProviderTest {
@@ -35,14 +35,14 @@ public class TokenProviderTest {
     @Test
     public void testIssueAccessToken() {
         var id = 1L;
-        var role = "ROLE_USER";
-        //role to authentication
-        var authorities = new HashSet<GrantedAuthority>();
-        authorities.add((GrantedAuthority) () -> role);
+        var role = Role.USER;
 
-        var authentication = new UsernamePasswordAuthenticationToken(id, null, authorities);
+        User user = User.builder()
+                .id(id)
+                .role(role)
+                .build();
 
-        var generatedToken = tokenProvider.generateToken(id, authentication);
+        var generatedToken = tokenProvider.generateToken(CustomUserDetails.from(user));
         var payload = tokenProvider.getClaims(generatedToken.getAccessToken());
 
         assertAll(() -> assertEquals("1", payload.getSubject()),
@@ -53,27 +53,31 @@ public class TokenProviderTest {
     @Test
     public void TestExceptionAccessTokenIsModified() {
         var id = 1L;
-        var role = "ROLE_USER";
-        var authorities = new HashSet<GrantedAuthority>();
-        authorities.add((GrantedAuthority) () -> role);
+        var role = Role.USER;
 
-        var authentication = new UsernamePasswordAuthenticationToken(id, null, authorities);
+        User user = User.builder()
+                .id(id)
+                .role(role)
+                .build();
 
-        var accessToken = tokenProvider.generateToken(id, authentication).getAccessToken() + "a";
+        var accessToken =
+                tokenProvider.generateToken(CustomUserDetails.from(user)).getAccessToken() + "a";
 
-        assertThrows(RuntimeException.class, () -> tokenProvider.getPayload(accessToken));
+        assertThrows(RuntimeException.class, () -> tokenProvider.getClaims(accessToken));
     }
 
     @Test
     public void TestExceptionAccessTokenIsExpired() {
         var id = 1L;
-        var role = "ROLE_USER";
-        var authorities = new HashSet<GrantedAuthority>();
-        authorities.add((GrantedAuthority) () -> role);
+        var role = Role.USER;
 
-        var authentication = new UsernamePasswordAuthenticationToken(id, null, authorities);
+        User user = User.builder()
+                .id(id)
+                .role(role)
+                .build();
 
-        var accessToken = tokenProvider.generateToken(id, authentication).getAccessToken();
+        var accessToken = tokenProvider.generateToken(CustomUserDetails.from(user))
+                .getAccessToken();
 
         try {
             Thread.sleep(2000L);
@@ -81,6 +85,6 @@ public class TokenProviderTest {
             e.printStackTrace();
         }
 
-        assertThrows(RuntimeException.class, () -> tokenProvider.getPayload(accessToken));
+        assertThrows(RuntimeException.class, () -> tokenProvider.getClaims(accessToken));
     }
 }

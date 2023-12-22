@@ -2,7 +2,7 @@ package org.com.itpple.spot.server.service.impl;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.com.itpple.spot.server.model.entity.User;
+import org.com.itpple.spot.server.entity.User;
 import org.com.itpple.spot.server.repository.UserRepository;
 import org.com.itpple.spot.server.service.UserService;
 import org.springframework.stereotype.Service;

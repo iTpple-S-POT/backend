@@ -2,10 +2,11 @@ package org.com.itpple.spot.server.config;
 
 
 import lombok.RequiredArgsConstructor;
-import org.com.itpple.spot.server.common.jwt.JwtAccessDeniedHandler;
-import org.com.itpple.spot.server.common.jwt.JwtAuthenticationEntryPoint;
-import org.com.itpple.spot.server.common.jwt.JwtFilter;
-import org.com.itpple.spot.server.common.jwt.TokenProvider;
+import org.com.itpple.spot.server.common.auth.jwt.JwtAccessDeniedHandler;
+import org.com.itpple.spot.server.common.auth.jwt.JwtAuthenticationEntryPoint;
+import org.com.itpple.spot.server.common.auth.jwt.JwtFilter;
+import org.com.itpple.spot.server.common.auth.jwt.TokenProvider;
+import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
+    private final CustomUserDetailsService customUserDetailsService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -42,12 +44,13 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/test").permitAll() // TODO: 프론트와 연결 확인 후 제거
                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/auth/login/**").permitAll()
                 .antMatchers("/auth/refresh").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
-                .addFilterBefore(new JwtFilter(tokenProvider),
+                .addFilterBefore(new JwtFilter(tokenProvider, customUserDetailsService),
                         UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)

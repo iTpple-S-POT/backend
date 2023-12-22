@@ -3,7 +3,7 @@ package org.com.itpple.spot.server.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.com.itpple.spot.server.model.OAuthType;
+import org.com.itpple.spot.server.constant.OAuthType;
 import org.com.itpple.spot.server.service.OAuthService;
 import org.com.itpple.spot.server.service.OAuthServiceFactory;
 import org.springframework.stereotype.Service;

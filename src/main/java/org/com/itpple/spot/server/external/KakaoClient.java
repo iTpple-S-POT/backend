@@ -1,7 +1,7 @@
 package org.com.itpple.spot.server.external;
 
-import org.com.itpple.spot.server.model.dto.oAuth.kakao.KakaoInfo;
-import org.com.itpple.spot.server.model.dto.oAuth.kakao.KakaoTokenInfo;
+import org.com.itpple.spot.server.dto.oAuth.kakao.KakaoInfo;
+import org.com.itpple.spot.server.dto.oAuth.kakao.KakaoTokenInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

@@ -28,20 +28,26 @@ dependencies {
     // Spring Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    implementation 'org.hibernate:hibernate-core'
+    implementation 'org.hibernate:hibernate-spatial'
+
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
 
     // DB - H2, PostgreSQL
     implementation 'com.h2database:h2'
-    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.orbisgis:h2gis:2.2.0'
+    implementation 'org.postgresql:postgresql'
 
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // Lombok
-    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
 
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -57,6 +63,9 @@ dependencies {
 
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
+
+    // AWS SDK
+    implementation 'software.amazon.awssdk:s3:2.21.22'
 }
 
 tasks.named('bootBuildImage') {

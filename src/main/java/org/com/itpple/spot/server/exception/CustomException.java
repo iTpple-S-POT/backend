@@ -5,7 +5,7 @@ import org.com.itpple.spot.server.exception.code.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public abstract class CustomException extends RuntimeException {
+public class CustomException extends RuntimeException {
 
     private final Integer code;
     private final String message;

@@ -1,7 +1,7 @@
 package org.com.itpple.spot.server.service;
 
-import org.com.itpple.spot.server.model.OAuthType;
-import org.com.itpple.spot.server.model.dto.oAuth.UserInfo;
+import org.com.itpple.spot.server.constant.OAuthType;
+import org.com.itpple.spot.server.dto.oAuth.UserInfo;
 
 public interface OAuthService {
 
