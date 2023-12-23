@@ -25,7 +25,7 @@ public record CreatePotRequest(
                 .potType(createPotRequest.type())
                 .content(createPotRequest.type() == PotType.TEXT ? createPotRequest.content() : null)
                 .expiredAt(LocalDateTime.now().plusDays(POT_EXPIRED_DAYS))
-                .location(convertToPoint(createPotRequest.location().lat(), createPotRequest.location().lon()))
+                .location(convertToPoint(createPotRequest.location()))
                 .build();
     }
 }
