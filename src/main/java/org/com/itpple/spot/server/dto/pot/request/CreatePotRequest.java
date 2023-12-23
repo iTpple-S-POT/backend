@@ -2,7 +2,7 @@ package org.com.itpple.spot.server.dto.pot.request;
 
 import static org.com.itpple.spot.server.constant.Constant.IMAGE_NAME_REGEX;
 import static org.com.itpple.spot.server.constant.Constant.POT_EXPIRED_DAYS;
-import static org.com.itpple.spot.server.util.GeometryUtil.convertToPoint;
+import static org.com.itpple.spot.server.util.GeometryUtil.createPoint;
 
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
@@ -25,7 +25,7 @@ public record CreatePotRequest(
                 .potType(createPotRequest.type())
                 .content(createPotRequest.type() == PotType.TEXT ? createPotRequest.content() : null)
                 .expiredAt(LocalDateTime.now().plusDays(POT_EXPIRED_DAYS))
-                .location(convertToPoint(createPotRequest.location()))
+                .location(createPoint(createPotRequest.location()))
                 .build();
     }
 }

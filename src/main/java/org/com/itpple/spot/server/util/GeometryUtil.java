@@ -18,7 +18,7 @@ public class GeometryUtil {
     private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
     private static final GeometricShapeFactory shapeFactory = new GeometricShapeFactory(geometryFactory);
 
-    public static Point convertToPoint(PointDTO pointDTO) {
+    public static Point createPoint(PointDTO pointDTO) {
         Coordinate coordinate = new Coordinate(pointDTO.lat(), pointDTO.lon());
 
         return geometryFactory.createPoint(coordinate);
@@ -32,7 +32,7 @@ public class GeometryUtil {
     }
 
 
-    public static Polygon convertToPolygon(PointDTO[] pointDTOs) {
+    public static Polygon createPolygon(PointDTO[] pointDTOs) {
         if(pointDTOs.length < 3) {
             throw new RuntimeException("pointDTOs length must be greater than 3");
         }
@@ -79,7 +79,7 @@ public class GeometryUtil {
         return copy;
     }
 
-    public static PointDTO convertToPointDTO(Point point) {
+    public static PointDTO toPointDTO(Point point) {
         return new PointDTO(point.getX(), point.getY());
     }
 
