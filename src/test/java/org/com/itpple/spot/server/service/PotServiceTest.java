@@ -43,7 +43,6 @@ public class PotServiceTest {
 
     User user = User.builder().socialId("test_1234").role(Role.USER).build();
     Category category = Category.builder().id(1L).name("test").build();
-    Category category2 = Category.builder().id(2L).name("test2").build();
 
     @BeforeEach
     public void setUp() {
@@ -55,11 +54,11 @@ public class PotServiceTest {
     public void POT_리스트_조회하기() {
         //given
         when(potRepository.findAll()).thenReturn(List.of(
-                Pot.builder().id(1L).user(user).category(category).imageKey("test.jpg").potType(
+                Pot.builder().id(1L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
                         PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build(),
-                Pot.builder().id(2L).user(user).category(category).imageKey("test.jpg").potType(
+                Pot.builder().id(2L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
                         PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build(),
-                Pot.builder().id(3L).user(user).category(category).imageKey("test.jpg").potType(
+                Pot.builder().id(3L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
                         PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build()
         ));
         SearchRange searchRange = new CircleSearchRange(1.0, new Location(2.0, 2.0));
@@ -77,7 +76,7 @@ public class PotServiceTest {
         //given
         when(potRepository.findByLocationAndCategory(any(Polygon.class), anyLong())).thenReturn(
                 List.of(
-                        Pot.builder().id(1L).user(user).category(category).imageKey("test.jpg")
+                        Pot.builder().id(1L).user(user).category(category).categoryId(1L).imageKey("test.jpg")
                                 .potType(
                                         PotType.IMAGE).location(createPoint(new Location(1.0, 2.0)))
                                 .build()

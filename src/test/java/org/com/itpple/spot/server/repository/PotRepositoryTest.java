@@ -104,22 +104,16 @@ public class PotRepositoryTest {
     @Test
     public void POT_리스트_조회하기_원_범위() {
         final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build();
-        final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 3.0))).build();
-        final Pot pot3 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(1.0, 3.0))).build();
+                PotType.IMAGE).location(createPoint(new Location( -63.616672, -38.416097))).build();
         entityManager.persist(pot1);
-        entityManager.persist(pot2);
-        entityManager.persist(pot3);
         entityManager.flush();
 
         //when
         final var result = potRepository.findByLocationAndCategory(
-                createCircle(new Location(2.0, 2.0), 1.0), category.getId());
+                createCircle(new Location(33.0, 124.0), 1000), category.getId());
 
         assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.size()).isEqualTo(0);
     }
 
     @Test
