@@ -16,6 +16,7 @@ import org.com.itpple.spot.server.dto.pot.response.UploadImageResponse;
 import org.com.itpple.spot.server.service.PotService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,15 @@ public class PotController {
             @Valid @RequestBody CreatePotRequest createPotRequest) {
         var userId = customUserDetails.getUserId();
         return ResponseEntity.ok(potService.createPot(userId, createPotRequest));
+    }
+
+    @GetMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<PotDto>> getPotListWithoutExpired(
+            @ModelAttribute("searchCondition") @Valid SearchCondition searchCondition
+    ) {
+        return ResponseEntity.ok(potService.getPotListWithoutExpired(
+                searchCondition.getSearchRange(), searchCondition.getCategoryId()));
     }
 
 

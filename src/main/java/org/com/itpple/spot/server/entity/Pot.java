@@ -19,7 +19,6 @@ import org.com.itpple.spot.server.constant.PotType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLDeleteAll;
-import org.hibernate.annotations.Where;
 import org.locationtech.jts.geom.Point;
 
 @Entity
@@ -30,7 +29,6 @@ import org.locationtech.jts.geom.Point;
 @SQLDelete(sql = "UPDATE pot SET is_deleted = true WHERE pot_id = ?")
 @SQLDeleteAll(sql = "UPDATE pot SET is_deleted = true WHERE pot_id in ?")
 @DynamicInsert
-@Where(clause = "is_deleted = false")
 public class Pot extends BasicDateEntity {
 
     @Id

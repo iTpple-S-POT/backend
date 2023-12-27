@@ -9,7 +9,18 @@ import org.springframework.data.repository.query.Param;
 
 public interface PotRepository extends JpaRepository<Pot, Long> {
 
-    @Query(value = "SELECT p FROM Pot p WHERE st_intersects(p.location,:polygon) = true AND p.expiredAt > now() AND p.category.id = :categoryId AND p.isDeleted = false")
-    List<Pot> findAllByLocationWithin(@Param("polygon") Polygon polygon,
+    @Query(value = "SELECT p FROM Pot p "
+            + "WHERE st_intersects(p.location,:polygon) = true "
+            + "AND p.expiredAt > now() "
+            + "AND (:categoryId is null or p.category.id = :categoryId) "
+            + "AND p.isDeleted = false ")
+    List<Pot> findByLocationAndCategory(@Param("polygon") Polygon polygon,
             @Param("categoryId") Long categoryId);
+
+    @Query(value = "SELECT p FROM Pot p "
+            + "WHERE (:polygon is null or st_intersects(p.location,:polygon) = true) "
+            + "AND (:categoryId is null or p.category.id = :categoryId) ")
+    List<Pot> findByLocationAndCategoryForAdmin(@Param("polygon") Polygon polygon,
+            @Param("categoryId") Long categoryId);
+
 }

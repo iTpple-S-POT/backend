@@ -90,7 +90,7 @@ public class PotRepositoryTest {
         entityManager.flush();
 
         //when
-        final var result = potRepository.findAllByLocationWithin(createPolygon(new Location[]{
+        final var result = potRepository.findByLocationAndCategory(createPolygon(new Location[]{
                 new Location(1.0, 1.0),
                 new Location(1.0, 3.0),
                 new Location(3.0, 1.0),
@@ -115,11 +115,28 @@ public class PotRepositoryTest {
         entityManager.flush();
 
         //when
-        final var result = potRepository.findAllByLocationWithin(
+        final var result = potRepository.findByLocationAndCategory(
                 createCircle(new Location(2.0, 2.0), 1.0), category.getId());
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
     }
 
+    @Test
+    public void POT_리스트_조회하기_조건_무시() {
+        final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
+                PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).isDeleted(true).build();
+        final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
+                PotType.IMAGE).location(createPoint(new Location(2.0, 3.0))).build();
+        entityManager.persist(pot1);
+        entityManager.persist(pot2);
+        entityManager.flush();
+
+        //when
+        final var result = potRepository.findByLocationAndCategoryForAdmin(
+                null, null);
+
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(2);
+    }
 }

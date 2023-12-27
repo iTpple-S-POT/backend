@@ -62,9 +62,11 @@ public class PotServiceTest {
                 Pot.builder().id(3L).user(user).category(category).imageKey("test.jpg").potType(
                         PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build()
         ));
+        SearchRange searchRange = new CircleSearchRange(1.0, new Location(2.0, 2.0));
+        Long categoryId = 1L;
 
         //when
-        final var result = target.getPotListWithoutExpired();
+        final var result = target.getPotListWithoutExpired(searchRange, categoryId);
 
         //then
         assertThat(result).hasSize(3);
@@ -73,7 +75,7 @@ public class PotServiceTest {
     @Test
     public void POT_리스트_조회하기_범위() {
         //given
-        when(potRepository.findAllByLocationWithin(any(Polygon.class), anyLong())).thenReturn(
+        when(potRepository.findByLocationAndCategory(any(Polygon.class), anyLong())).thenReturn(
                 List.of(
                         Pot.builder().id(1L).user(user).category(category).imageKey("test.jpg")
                                 .potType(
