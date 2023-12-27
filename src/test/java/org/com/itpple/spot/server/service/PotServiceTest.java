@@ -53,7 +53,9 @@ public class PotServiceTest {
     @Test
     public void POT_리스트_조회하기() {
         //given
-        when(potRepository.findAll()).thenReturn(List.of(
+        SearchRange searchRange = new CircleSearchRange(1.0, new Location(2.0, 2.0));
+        Long categoryId = 1L;
+        when(potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(),1L)).thenReturn(List.of(
                 Pot.builder().id(1L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
                         PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build(),
                 Pot.builder().id(2L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
@@ -61,8 +63,6 @@ public class PotServiceTest {
                 Pot.builder().id(3L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
                         PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build()
         ));
-        SearchRange searchRange = new CircleSearchRange(1.0, new Location(2.0, 2.0));
-        Long categoryId = 1L;
 
         //when
         final var result = target.getPotListForAdmin(searchRange, categoryId);
