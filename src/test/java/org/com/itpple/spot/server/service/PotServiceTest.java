@@ -66,7 +66,7 @@ public class PotServiceTest {
         Long categoryId = 1L;
 
         //when
-        final var result = target.getPotListWithoutExpired(searchRange, categoryId);
+        final var result = target.getPotListForAdmin(searchRange, categoryId);
 
         //then
         assertThat(result).hasSize(3);

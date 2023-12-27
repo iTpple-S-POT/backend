@@ -49,10 +49,10 @@ public class PotController {
 
     @GetMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<PotDTO>> getPotListWithoutExpired(
+    public ResponseEntity<List<PotDTO>> getPotListForAdmin(
             @ModelAttribute("searchCondition") @Valid SearchCondition searchCondition
     ) {
-        return ResponseEntity.ok(potService.getPotListWithoutExpired(
+        return ResponseEntity.ok(potService.getPotListForAdmin(
                 searchCondition.getSearchRange(), searchCondition.getCategoryId()));
     }
 

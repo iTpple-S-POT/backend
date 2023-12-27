@@ -16,7 +16,7 @@ public interface PotService {
 
     CreatePotResponse createPot(Long userId, CreatePotRequest createPotRequest);
 
-    List<PotDTO> getPotListWithoutExpired(SearchRange searchRange, Long categoryId);
+    List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId);
 
     List<PotDTO> getPotList(SearchRange searchRange, Long categoryId);
 }

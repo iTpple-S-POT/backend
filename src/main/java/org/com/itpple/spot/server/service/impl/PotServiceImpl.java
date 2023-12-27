@@ -54,16 +54,15 @@ public class PotServiceImpl implements PotService {
     }
 
     @Override
-    public List<PotDTO> getPotListWithoutExpired(SearchRange searchRange, Long categoryId) {
-        return potRepository.findByLocationAndCategory(searchRange.polygon(),
-                categoryId).stream().map(PotDTO::from).toList();
-    }
-
-
-    @Override
     public List<PotDTO> getPotList(SearchRange searchRange, Long categoryId) {
         return potRepository.findByLocationAndCategory(searchRange.polygon(), categoryId)
                 .stream()
                 .map(PotDTO::from).toList();
+    }
+
+    @Override
+    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId) {
+        return potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(),
+                categoryId).stream().map(PotDTO::from).toList();
     }
 }
