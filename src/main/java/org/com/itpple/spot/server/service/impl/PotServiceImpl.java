@@ -2,8 +2,11 @@ package org.com.itpple.spot.server.service.impl;
 
 import static org.com.itpple.spot.server.constant.Constant.POT_IMAGE_PATH;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.dto.PotDto;
+import org.com.itpple.spot.server.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
 import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
@@ -48,5 +51,17 @@ public class PotServiceImpl implements PotService {
         }
 
         return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest)));
+    }
+
+    @Override
+    public List<PotDto> getPotListWithoutExpired() {
+        return potRepository.findAll().stream().map(PotDto::from).toList();
+    }
+
+
+    @Override
+    public List<PotDto> getPotList(SearchRange searchRange, Long categoryId) {
+        return potRepository.findAllByLocationWithin(searchRange.polygon(), categoryId).stream()
+                .map(PotDto::from).toList();
     }
 }
