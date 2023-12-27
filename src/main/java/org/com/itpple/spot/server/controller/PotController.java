@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.common.auth.Auth;
 import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
-import org.com.itpple.spot.server.dto.PotDto;
-import org.com.itpple.spot.server.dto.SearchCondition;
+import org.com.itpple.spot.server.dto.pot.PotDTO;
+import org.com.itpple.spot.server.dto.pot.SearchCondition;
 import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
 import org.com.itpple.spot.server.dto.pot.request.UploadImageRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
@@ -33,7 +33,7 @@ public class PotController {
     private final PotService potService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PotDto>> getPotList(
+    public ResponseEntity<List<PotDTO>> getPotList(
             @ModelAttribute("searchCondition") @Valid SearchCondition searchCondition) {
         return ResponseEntity.ok(potService.getPotList(searchCondition.getSearchRange(),
                 searchCondition.getCategoryId()));
@@ -49,7 +49,7 @@ public class PotController {
 
     @GetMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<PotDto>> getPotListWithoutExpired(
+    public ResponseEntity<List<PotDTO>> getPotListWithoutExpired(
             @ModelAttribute("searchCondition") @Valid SearchCondition searchCondition
     ) {
         return ResponseEntity.ok(potService.getPotListWithoutExpired(

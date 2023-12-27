@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.dto;
+package org.com.itpple.spot.server.dto.pot;
 
 import static org.com.itpple.spot.server.util.GeometryUtil.createCircle;
 import static org.com.itpple.spot.server.util.GeometryUtil.createPolygon;
@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.com.itpple.spot.server.dto.Location;
 import org.locationtech.jts.geom.Polygon;
 
 @AllArgsConstructor

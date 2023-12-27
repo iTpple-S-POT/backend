@@ -5,8 +5,8 @@ import static org.com.itpple.spot.server.constant.Constant.POT_IMAGE_PATH;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.dto.PotDto;
-import org.com.itpple.spot.server.dto.SearchCondition.SearchRange;
+import org.com.itpple.spot.server.dto.pot.PotDTO;
+import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
 import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
@@ -54,16 +54,16 @@ public class PotServiceImpl implements PotService {
     }
 
     @Override
-    public List<PotDto> getPotListWithoutExpired(SearchRange searchRange, Long categoryId) {
+    public List<PotDTO> getPotListWithoutExpired(SearchRange searchRange, Long categoryId) {
         return potRepository.findByLocationAndCategory(searchRange.polygon(),
-                categoryId).stream().map(PotDto::from).toList();
+                categoryId).stream().map(PotDTO::from).toList();
     }
 
 
     @Override
-    public List<PotDto> getPotList(SearchRange searchRange, Long categoryId) {
+    public List<PotDTO> getPotList(SearchRange searchRange, Long categoryId) {
         return potRepository.findByLocationAndCategory(searchRange.polygon(), categoryId)
                 .stream()
-                .map(PotDto::from).toList();
+                .map(PotDTO::from).toList();
     }
 }

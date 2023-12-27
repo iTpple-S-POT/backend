@@ -1,8 +1,8 @@
 package org.com.itpple.spot.server.service;
 
 import java.util.List;
-import org.com.itpple.spot.server.dto.PotDto;
-import org.com.itpple.spot.server.dto.SearchCondition.SearchRange;
+import org.com.itpple.spot.server.dto.pot.PotDTO;
+import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
 import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
@@ -16,7 +16,7 @@ public interface PotService {
 
     CreatePotResponse createPot(Long userId, CreatePotRequest createPotRequest);
 
-    List<PotDto> getPotListWithoutExpired(SearchRange searchRange, Long categoryId);
+    List<PotDTO> getPotListWithoutExpired(SearchRange searchRange, Long categoryId);
 
-    List<PotDto> getPotList(SearchRange searchRange, Long categoryId);
+    List<PotDTO> getPotList(SearchRange searchRange, Long categoryId);
 }

@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.dto;
+package org.com.itpple.spot.server.dto.pot;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -6,13 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.com.itpple.spot.server.constant.PotType;
+import org.com.itpple.spot.server.dto.Location;
 import org.com.itpple.spot.server.entity.Pot;
 
-
+/**
+ * response 반환용 뿐 아니라 다른 서비스에서 사용할 수 있도록 DTO로 분리
+ */
 @AllArgsConstructor
 @Builder
 @Getter
-public class PotDto {
+public class PotDTO {
 
     private final Long id;
     private final Long userId;
@@ -23,8 +26,8 @@ public class PotDto {
     private final String imageKey;
     private final LocalDateTime expiredAt;
 
-    public static PotDto from(Pot pot) {
-        return PotDto.builder()
+    public static PotDTO from(Pot pot) {
+        return PotDTO.builder()
                 .id(pot.getId())
                 .userId(pot.getUserId())
                 .categoryId(List.of(pot.getCategoryId()))

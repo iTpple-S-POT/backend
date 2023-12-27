@@ -2,11 +2,11 @@ package org.com.itpple.spot.server.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import org.com.itpple.spot.server.dto.Location;
-import org.com.itpple.spot.server.dto.SearchCondition;
-import org.com.itpple.spot.server.dto.SearchCondition.CircleSearchRange;
-import org.com.itpple.spot.server.dto.SearchCondition.RectangleSearchRange;
-import org.com.itpple.spot.server.dto.SearchCondition.SearchRange;
-import org.com.itpple.spot.server.dto.SearchCondition.SearchType;
+import org.com.itpple.spot.server.dto.pot.SearchCondition;
+import org.com.itpple.spot.server.dto.pot.SearchCondition.CircleSearchRange;
+import org.com.itpple.spot.server.dto.pot.SearchCondition.RectangleSearchRange;
+import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchRange;
+import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchType;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

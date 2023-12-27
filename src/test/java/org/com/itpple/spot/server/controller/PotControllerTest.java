@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.com.itpple.spot.server.constant.PotType;
 import org.com.itpple.spot.server.dto.Location;
-import org.com.itpple.spot.server.dto.PotDto;
-import org.com.itpple.spot.server.dto.SearchCondition.SearchRange;
+import org.com.itpple.spot.server.dto.pot.PotDTO;
+import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
 import org.com.itpple.spot.server.dto.pot.request.UploadImageRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
@@ -106,12 +106,12 @@ class PotControllerTest {
         resultActions.andExpect(status().isOk());
     }
 
-    private final List<PotDto> potDtoList = (List.of(
-            new PotDto(1L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
+    private final List<PotDTO> potDTOList = (List.of(
+            new PotDTO(1L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
                     LocalDateTime.now().plusDays(1)),
-            new PotDto(2L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
+            new PotDTO(2L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
                     LocalDateTime.now().plusDays(1)),
-            new PotDto(3L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
+            new PotDTO(3L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
                     LocalDateTime.now().plusDays(1))
     ));
 
@@ -119,7 +119,7 @@ class PotControllerTest {
     void getPotList_Success_no_type() throws Exception {
         final var url = "/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDtoList);
+        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -137,7 +137,7 @@ class PotControllerTest {
     void getPotList_Success_circle() throws Exception {
         final var url = "/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDtoList);
+        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -156,7 +156,7 @@ class PotControllerTest {
     void getPotList_Fail_Rectangle_Min_Size() throws Exception {
         final var url = "/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDtoList);
+        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -175,7 +175,7 @@ class PotControllerTest {
     void getPotList_Success_Rectangle() throws Exception {
         final var url = "/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDtoList);
+        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
