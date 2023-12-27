@@ -1,0 +1,50 @@
+package org.com.itpple.spot.server.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import org.com.itpple.spot.server.dto.Location;
+import org.com.itpple.spot.server.dto.SearchCondition;
+import org.com.itpple.spot.server.dto.SearchCondition.CircleSearchRange;
+import org.com.itpple.spot.server.dto.SearchCondition.RectangleSearchRange;
+import org.com.itpple.spot.server.dto.SearchCondition.SearchRange;
+import org.com.itpple.spot.server.dto.SearchCondition.SearchType;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice(assignableTypes = PotController.class)
+public class PotControllerAdvice {
+
+    @ModelAttribute("searchCondition")
+    public SearchCondition getSearchCondition(HttpServletRequest request) {
+        var type = request.getParameter("type");
+        if (type == null) {
+            return SearchCondition.builder().build();
+        }
+        var searchType = SearchType.valueOf(type);
+        var searchRange = getSearchRange(searchType, request);
+        var categoryId = Long.parseLong(request.getParameter("categoryId"));
+
+        return SearchCondition.builder().searchRange(searchRange).searchType(searchType)
+                .categoryId(categoryId).build();
+    }
+
+    private SearchRange getSearchRange(SearchType searchType, HttpServletRequest request) {
+        switch (searchType) {
+            case CIRCLE:
+                var radius = Double.parseDouble(request.getParameter("radius"));
+                var lat = Double.parseDouble(request.getParameter("lat"));
+                var lng = Double.parseDouble(request.getParameter("lon"));
+                return new CircleSearchRange(radius, new Location(lat, lng));
+            case RECTANGLE:
+                var locations = request.getParameterValues("locations");
+                var locationArray = new Location[locations.length];
+                for (int i = 0; i < locations.length; i++) {
+                    var location = locations[i].split(",");
+                    locationArray[i] = new Location(Double.parseDouble(location[0]),
+                            Double.parseDouble(location[1]));
+                }
+                return new RectangleSearchRange(locationArray);
+            default:
+                return null;
+        }
+    }
+}
