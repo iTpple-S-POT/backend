@@ -26,6 +26,12 @@ public enum ErrorCode {
 
     // OAuth 관련
     NOT_MATCH_APP_ID(1601, "앱 아이디가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+
+    // Pot 관련
+    NOT_FOUND_POT(1701, "팟을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+    // Reaction 관련
+    NOT_ADD_MULTIPLE_REACTION(1801, "팟에 여러 개의 반응을 추가할 수 없습니다.", HttpStatus.BAD_REQUEST),
     ;
 
     private final Integer code;
