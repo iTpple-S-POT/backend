@@ -1,13 +1,12 @@
 package org.com.itpple.spot.server.common.auth;
 
+import java.util.Collection;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
-import org.com.itpple.spot.server.model.entity.User;
+import org.com.itpple.spot.server.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.Collections;
 
 @RequiredArgsConstructor(staticName = "from")
 public class CustomUserDetails implements UserDetails {

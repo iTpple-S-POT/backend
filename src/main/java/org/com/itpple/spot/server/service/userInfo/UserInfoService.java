@@ -1,17 +1,16 @@
 package org.com.itpple.spot.server.service.userInfo;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.exception.NicknameDuplicateException;
+import org.com.itpple.spot.server.dto.userInfo.UserRequestDto;
+import org.com.itpple.spot.server.entity.User;
 import org.com.itpple.spot.server.exception.MemberIdAlreadyExistsException;
+import org.com.itpple.spot.server.exception.NicknameDuplicateException;
 import org.com.itpple.spot.server.exception.NicknameValidationException;
-import org.com.itpple.spot.server.model.dto.userInfo.UserRequestDto;
-import org.com.itpple.spot.server.model.entity.User;
 import org.com.itpple.spot.server.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service

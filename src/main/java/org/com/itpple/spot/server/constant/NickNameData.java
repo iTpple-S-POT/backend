@@ -1,8 +1,4 @@
-package org.com.itpple.spot.server.model.entity;
-
-import org.springframework.scheduling.support.SimpleTriggerContext;
-
-import java.util.Random;
+package org.com.itpple.spot.server.constant;
 
 public class NickNameData {
     public static String[] determiners = {

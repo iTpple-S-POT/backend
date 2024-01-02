@@ -15,10 +15,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.constant.Gender;
+import org.com.itpple.spot.server.constant.Interest;
+import org.com.itpple.spot.server.constant.Mbti;
 import org.com.itpple.spot.server.constant.Role;
-import org.com.itpple.spot.server.model.Gender;
-import org.com.itpple.spot.server.model.Interest;
-import org.com.itpple.spot.server.model.Mbti;
 import org.hibernate.annotations.DynamicInsert;
 
 @Slf4j

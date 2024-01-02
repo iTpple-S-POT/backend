@@ -1,16 +1,19 @@
-package org.com.itpple.spot.server.model.dto.userInfo;
+package org.com.itpple.spot.server.dto.userInfo;
 
-import lombok.*;
-import org.com.itpple.spot.server.model.Gender;
-import org.com.itpple.spot.server.model.Interest;
-import org.com.itpple.spot.server.model.Mbti;
-import org.com.itpple.spot.server.model.entity.NickNameData;
-import org.com.itpple.spot.server.model.entity.User;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javax.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.com.itpple.spot.server.constant.Gender;
+import org.com.itpple.spot.server.constant.Interest;
+import org.com.itpple.spot.server.constant.Mbti;
+import org.com.itpple.spot.server.constant.NickNameData;
+import org.com.itpple.spot.server.entity.User;
 
 @Getter
 @AllArgsConstructor
@@ -26,17 +29,19 @@ public class UserRequestDto {
     private Gender gender;
     private Mbti mbti;
     private List<Interest> interests = new ArrayList<>();
+
     private String generateDefaultNickname() {
         Random random = new Random();
         int randomNumbers = random.nextInt(100000);
         return NickNameData.determiners[
                 (int) Math.floor(Math.random() * NickNameData.determiners.length)
-                ]  +
+                ] +
                 NickNameData.animals[
                         (int) Math.floor(Math.random() * NickNameData.animals.length)
                         ] +
                 randomNumbers;
     }
+
     public User toUser() {
         if (nickname == null || nickname.isEmpty()) {
             String defaultNickname = generateDefaultNickname();
