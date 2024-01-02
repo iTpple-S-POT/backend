@@ -15,7 +15,7 @@ import org.com.itpple.spot.server.constant.Role;
 import org.hibernate.annotations.DynamicInsert;
 
 @Slf4j
-@Entity(name = "\"user\"")
+@Entity(name = "user_")
 @Builder
 @Getter
 @DynamicInsert
