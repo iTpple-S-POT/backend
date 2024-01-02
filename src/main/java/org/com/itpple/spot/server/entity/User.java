@@ -1,18 +1,25 @@
 package org.com.itpple.spot.server.entity;
 
-import javax.persistence.*;
-
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.model.Gender;
-import org.com.itpple.spot.server.model.Interest;
-import org.com.itpple.spot.server.model.Mbti;
-import org.com.itpple.spot.server.model.Role;
-import org.hibernate.annotations.DynamicInsert;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.constant.Role;
+import org.com.itpple.spot.server.model.Gender;
+import org.com.itpple.spot.server.model.Interest;
+import org.com.itpple.spot.server.model.Mbti;
+import org.hibernate.annotations.DynamicInsert;
 
 @Slf4j
 @Entity(name = "user_")
