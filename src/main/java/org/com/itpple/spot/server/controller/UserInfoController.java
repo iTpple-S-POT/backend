@@ -2,6 +2,8 @@ package org.com.itpple.spot.server.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.common.auth.Auth;
+import org.com.itpple.spot.server.common.auth.CustomUserDetails;
 import org.com.itpple.spot.server.exception.MemberIdAlreadyExistsException;
 import org.com.itpple.spot.server.model.dto.userInfo.UserRequestDto;
 import org.com.itpple.spot.server.service.userInfo.UserInfoService;
@@ -17,12 +19,13 @@ public class UserInfoController {
     private final UserInfoService userInfoService;
 
     //유저 기본 정보 기입
-    @PostMapping("/{memberId}")
+    @PostMapping("")
     public ResponseEntity<UserRequestDto> basicInfo(
-            @PathVariable Long memberId,
+            @Auth CustomUserDetails customUserDetails,
             @RequestBody @Valid UserRequestDto requestDto) {
         try {
-            userInfoService.fillUserInfo(memberId, requestDto);
+            Long userId = customUserDetails.getUserId();
+            userInfoService.fillUserInfo(userId, requestDto);
             return ResponseEntity.ok().body(requestDto);
         } catch (RuntimeException e) {
             throw new MemberIdAlreadyExistsException();
