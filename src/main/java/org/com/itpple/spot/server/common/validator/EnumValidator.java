@@ -1,5 +1,6 @@
 package org.com.itpple.spot.server.common.validator;
 
+import java.util.Arrays;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -14,20 +15,13 @@ public class EnumValidator implements ConstraintValidator<EnumValid, String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        boolean result = false;
         Object[] enumValues = this.annotation.enumClass().getEnumConstants();
 
         if (enumValues == null) {
             return false;
         }
 
-        for (Object enumValue : enumValues) {
-            if (value.equals(String.valueOf(enumValue))) {
-                result = true;
-                break;
-            }
-        }
-
-        return result;
+        return Arrays.stream(enumValues)
+            .anyMatch(enumValue -> value.equals(String.valueOf(enumValue)));
     }
 }
