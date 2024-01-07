@@ -2,8 +2,12 @@ package org.com.itpple.spot.server.service.impl;
 
 import static org.com.itpple.spot.server.constant.Constant.POT_IMAGE_PATH;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.dto.pot.PotDTO;
+import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
 import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
 import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
@@ -16,7 +20,6 @@ import org.com.itpple.spot.server.service.FileService;
 import org.com.itpple.spot.server.service.PotService;
 import org.com.itpple.spot.server.util.FileUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -38,7 +41,6 @@ public class PotServiceImpl implements PotService {
         return UploadImageResponse.of(fileService.getPreSignedUrl(uniqueFileName), uniqueFileName);
     }
 
-    @Transactional
     @Override
     public CreatePotResponse createPot(Long userId, CreatePotRequest createPotRequest) {
 
@@ -48,5 +50,38 @@ public class PotServiceImpl implements PotService {
         }
 
         return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest)));
+    }
+
+    @Override
+    public List<PotDTO> getPotList(SearchRange searchRange, Long categoryId) {
+        return potRepository.findByLocationAndCategoryId(searchRange.polygon(), categoryId)
+                .stream()
+                .map(PotDTO::from)
+                .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
+                .toList();
+    }
+
+    @Override
+    public List<PotDTO> getPotListForMy(Long userId) {
+        return potRepository.findByUserId(userId).stream()
+                .map(PotDTO::from)
+                .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
+                .toList();
+    }
+
+    @Override
+    public PotDTO getPot(Long potId, Long userId) {
+        return PotDTO.from(potRepository.findById(potId)
+                .filter(pot -> pot.getUserId().equals(userId) || pot.getExpiredAt().isAfter(LocalDateTime.now()))
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POT)));
+    }
+
+    @Override
+    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId) {
+        return potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(),
+                        categoryId).stream()
+                .map(PotDTO::from)
+                .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
+                .toList();
     }
 }
