@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 /**
  * 사용자 정의 에러 목록
- * <p>
+ *
  * 1300 ~
  */
 @Getter
@@ -26,6 +26,16 @@ public enum ErrorCode {
 
     // OAuth 관련
     NOT_MATCH_APP_ID(1601, "앱 아이디가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+
+    // Pot 관련
+    NOT_FOUND_POT(1701, "팟을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+    // Reaction 관련
+    NOT_ADD_MULTIPLE_REACTION(1801, "팟에 여러 개의 반응을 추가할 수 없습니다.", HttpStatus.BAD_REQUEST),
+
+    MEMBER_ID_ALREADY_EXISTS(1901,"이미 존재하는 meberId 입니다", HttpStatus.BAD_REQUEST),
+    NICKNAME_DUPLICATE(1902,"이미 존재하는 닉네임 입니다",HttpStatus.INTERNAL_SERVER_ERROR),
+    NICKNAME_VALIDATION(1903,"공백없이 15자 이하로 작성해주세요 특수문자는 _만 사용 가능해요",HttpStatus.BAD_REQUEST),
     ;
 
     private final Integer code;
