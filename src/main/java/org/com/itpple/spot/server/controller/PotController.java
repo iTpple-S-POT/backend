@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +48,21 @@ public class PotController {
         return ResponseEntity.ok(potService.createPot(userId, createPotRequest));
     }
 
+    @GetMapping(value = "/my", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PotDTO>> getPotListForMy(
+            @Auth CustomUserDetails customUserDetails) {
+        var userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(potService.getPotListForMy(userId));
+    }
+
+    @GetMapping(value = "/{potId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PotDTO> getPot(
+            @Auth CustomUserDetails customUserDetails,
+            @PathVariable("potId") Long potId) {
+        var userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(potService.getPot(potId, userId));
+    }
+
     @GetMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<PotDTO>> getPotListForAdmin(
@@ -67,7 +83,6 @@ public class PotController {
             @Auth CustomUserDetails customUserDetails,
             @Valid @RequestBody UploadImageRequest uploadImageRequest) {
         var userId = customUserDetails.getUserId();
-//        var userId = 1L;
         return ResponseEntity.ok(potService.uploadImage(userId, uploadImageRequest.fileName()));
     }
 }

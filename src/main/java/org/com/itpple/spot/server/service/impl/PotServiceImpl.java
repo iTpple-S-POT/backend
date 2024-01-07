@@ -2,6 +2,7 @@ package org.com.itpple.spot.server.service.impl;
 
 import static org.com.itpple.spot.server.constant.Constant.POT_IMAGE_PATH;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,21 @@ public class PotServiceImpl implements PotService {
                 .map(PotDTO::from)
                 .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
                 .toList();
+    }
+
+    @Override
+    public List<PotDTO> getPotListForMy(Long userId) {
+        return potRepository.findByUserId(userId).stream()
+                .map(PotDTO::from)
+                .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
+                .toList();
+    }
+
+    @Override
+    public PotDTO getPot(Long potId, Long userId) {
+        return PotDTO.from(potRepository.findById(potId)
+                .filter(pot -> pot.getUserId().equals(userId) || pot.getExpiredAt().isAfter(LocalDateTime.now()))
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POT)));
     }
 
     @Override
