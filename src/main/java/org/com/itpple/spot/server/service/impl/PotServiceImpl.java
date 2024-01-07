@@ -19,7 +19,6 @@ import org.com.itpple.spot.server.service.FileService;
 import org.com.itpple.spot.server.service.PotService;
 import org.com.itpple.spot.server.util.FileUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -41,7 +40,6 @@ public class PotServiceImpl implements PotService {
         return UploadImageResponse.of(fileService.getPreSignedUrl(uniqueFileName), uniqueFileName);
     }
 
-    @Transactional
     @Override
     public CreatePotResponse createPot(Long userId, CreatePotRequest createPotRequest) {
 
@@ -55,14 +53,19 @@ public class PotServiceImpl implements PotService {
 
     @Override
     public List<PotDTO> getPotList(SearchRange searchRange, Long categoryId) {
-        return potRepository.findByLocationAndCategory(searchRange.polygon(), categoryId)
+        return potRepository.findByLocationAndCategoryId(searchRange.polygon(), categoryId)
                 .stream()
-                .map(PotDTO::from).toList();
+                .map(PotDTO::from)
+                .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
+                .toList();
     }
 
     @Override
     public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId) {
         return potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(),
-                categoryId).stream().map(PotDTO::from).toList();
+                        categoryId).stream()
+                .map(PotDTO::from)
+                .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
+                .toList();
     }
 }

@@ -14,7 +14,7 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
             + "AND p.expiredAt > now() "
             + "AND (:categoryId is null or p.category.id = :categoryId) "
             + "AND p.isDeleted = false ")
-    List<Pot> findByLocationAndCategory(@Param("polygon") Polygon polygon,
+    List<Pot> findByLocationAndCategoryId(@Param("polygon") Polygon polygon,
             @Param("categoryId") Long categoryId);
 
     @Query(value = "SELECT p FROM Pot p "
@@ -22,5 +22,7 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
             + "AND (:categoryId is null or p.category.id = :categoryId) ")
     List<Pot> findByLocationAndCategoryForAdmin(@Param("polygon") Polygon polygon,
             @Param("categoryId") Long categoryId);
+
+    List<Pot> findByUserId(Long userId);
 
 }

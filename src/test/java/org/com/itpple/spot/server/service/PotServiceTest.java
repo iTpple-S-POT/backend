@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.com.itpple.spot.server.constant.PotType;
 import org.com.itpple.spot.server.constant.Role;
@@ -55,14 +56,22 @@ public class PotServiceTest {
         //given
         SearchRange searchRange = new CircleSearchRange(1.0, new Location(2.0, 2.0));
         Long categoryId = 1L;
-        when(potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(),1L)).thenReturn(List.of(
-                Pot.builder().id(1L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
-                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build(),
-                Pot.builder().id(2L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
-                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build(),
-                Pot.builder().id(3L).user(user).category(category).categoryId(1L).imageKey("test.jpg").potType(
-                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build()
-        ));
+        when(potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(), 1L)).thenReturn(
+                List.of(
+                        Pot.builder().id(1L).user(user).category(category).categoryId(1L)
+                                .imageKey("test.jpg").potType(
+                                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0)))
+                                .expiredAt(
+                                        LocalDateTime.now().plusDays(1)).build(),
+                        Pot.builder().id(2L).user(user).category(category).categoryId(1L)
+                                .imageKey("test.jpg").potType(
+                                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0)))
+                                .expiredAt(LocalDateTime.now().plusDays(1)).build(),
+                        Pot.builder().id(3L).user(user).category(category).categoryId(1L)
+                                .imageKey("test.jpg").potType(
+                                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0)))
+                                .expiredAt(LocalDateTime.now().plusDays(1)).build()
+                ));
 
         //when
         final var result = target.getPotListForAdmin(searchRange, categoryId);
@@ -74,9 +83,10 @@ public class PotServiceTest {
     @Test
     public void POT_리스트_조회하기_범위() {
         //given
-        when(potRepository.findByLocationAndCategory(any(Polygon.class), anyLong())).thenReturn(
+        when(potRepository.findByLocationAndCategoryId(any(Polygon.class), anyLong())).thenReturn(
                 List.of(
-                        Pot.builder().id(1L).user(user).category(category).categoryId(1L).imageKey("test.jpg")
+                        Pot.builder().id(1L).user(user).category(category).categoryId(1L)
+                                .imageKey("test.jpg")
                                 .potType(
                                         PotType.IMAGE).location(createPoint(new Location(1.0, 2.0)))
                                 .build()

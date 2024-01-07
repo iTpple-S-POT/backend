@@ -26,11 +26,20 @@ public class GeometryUtil {
         return geometryFactory.createPoint(coordinate);
     }
 
-    public static Polygon createCircle(Location location, double radius) {
+    /**
+     * 주의해야 할 점
+     * shapeFactory.setSize()는 meter 단위가 아니다. degree 단위이다.
+     * 목적에 맞게 미터단위반경을 위해 아래의 공식을 사용한다.
+     * Length in meters of 1° of latitude = always 111.32 km
+     * Length in meters of 1° of longitude = 40075 km * cos( latitude ) / 360
+     * https://gis.stackexchange.com/questions/268639/jts-geometricshapefactory-generate-an-ellipse-properly
+     * */
+    public static Polygon createCircle(Location location, double diameterInMeters) {
         shapeFactory.setNumPoints(32);
         shapeFactory.setCentre(new Coordinate(location.lat(), location.lon()));
-        shapeFactory.setSize(radius * 2);
-        return shapeFactory.createCircle();
+        shapeFactory.setWidth(diameterInMeters / (40075000 * Math.cos(Math.toRadians(location.lat())) / 360));
+        shapeFactory.setHeight(diameterInMeters/111320d);
+        return shapeFactory.createEllipse();
     }
 
 

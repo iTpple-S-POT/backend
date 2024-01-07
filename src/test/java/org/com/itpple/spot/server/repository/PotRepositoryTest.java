@@ -90,7 +90,7 @@ public class PotRepositoryTest {
         entityManager.flush();
 
         //when
-        final var result = potRepository.findByLocationAndCategory(createPolygon(new Location[]{
+        final var result = potRepository.findByLocationAndCategoryId(createPolygon(new Location[]{
                 new Location(1.0, 1.0),
                 new Location(1.0, 3.0),
                 new Location(3.0, 1.0),
@@ -103,20 +103,23 @@ public class PotRepositoryTest {
 
     @Test
     public void POT_리스트_조회하기_원_범위() {
+        var location1 = new Location(37.53181382825802, 126.91438309995776);//국회의사당
+        var location2 = new Location(37.531077388272465, 126.91773278201156);//국회도서관(1km 이내)
+        var location3 = new Location( 37.52258059969025, 126.90525326032581);//여의도시장역(1km 밖)
         final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build();
+                PotType.IMAGE).location(createPoint(location1)).build();
         final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 3.0))).build();
+                PotType.IMAGE).location(createPoint(location2)).build();
         final Pot pot3 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(1.0, 3.0))).build();
+                PotType.IMAGE).location(createPoint(location3)).build();
         entityManager.persist(pot1);
         entityManager.persist(pot2);
         entityManager.persist(pot3);
         entityManager.flush();
 
         //when
-        final var result = potRepository.findByLocationAndCategory(
-                createCircle(new Location(2.0, 2.0), 1.0), category.getId());
+        final var result = potRepository.findByLocationAndCategoryId(
+                createCircle(location1, 1000), category.getId());
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
