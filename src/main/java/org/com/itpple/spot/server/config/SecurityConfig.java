@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").permitAll()  //나중에 지우기
+                .antMatchers("/location").permitAll()
                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/auth/login/**").permitAll()
