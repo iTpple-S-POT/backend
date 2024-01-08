@@ -65,6 +65,12 @@ public class User extends BasicDateEntity {
     @Column(name = "interest", length = 10)
     private List<Interest> interests = new ArrayList<>();
 
+    @Column(name = "status")
+    private Status status;
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
