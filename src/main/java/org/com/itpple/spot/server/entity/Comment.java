@@ -44,7 +44,7 @@ public class Comment extends BasicDateEntity {
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
-    @OneToMany(mappedBy = "parentComment", orphanRemoval = true)
+    @OneToMany(mappedBy = "parentComment")
     private List<Comment> childrenComments = new ArrayList<>();
 
     @Column(nullable = false)

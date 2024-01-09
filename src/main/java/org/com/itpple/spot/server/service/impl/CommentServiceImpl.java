@@ -1,6 +1,11 @@
 package org.com.itpple.spot.server.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.com.itpple.spot.server.dto.comment.CommentDto;
 import org.com.itpple.spot.server.dto.comment.request.CreateCommentRequest;
 import org.com.itpple.spot.server.dto.comment.response.CreateCommentResponse;
 import org.com.itpple.spot.server.entity.Comment;
@@ -47,6 +52,21 @@ public class CommentServiceImpl implements CommentService {
         return CreateCommentResponse.from(writer, savedComment);
     }
 
+    @Override
+    public List<CommentDto> getCommentList(Long userId, Long potId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserIdNotFoundException("PK = " + userId);
+        }
+
+        if (!potRepository.existsById(potId)) {
+            throw new PotIdNotFoundException("PK = " + userId);
+        }
+
+        List<Comment> commentList = commentRepository.findAllComment(potId);
+
+        return convertToHierarchy(commentList);
+    }
+
     private Comment getParentComment(Long potId, Long parentCommentId) {
         Comment parentComment = null;
 
@@ -59,5 +79,27 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return parentComment;
+    }
+
+    private List<CommentDto> convertToHierarchy(List<Comment> commentList) {
+        List<CommentDto> result = new ArrayList<>();
+        Map<Long, CommentDto> commentDtoHashMap = new HashMap<>();
+
+        for (Comment comment : commentList) {
+            CommentDto commentDto = CommentDto.from(comment);
+            commentDtoHashMap.put(commentDto.getCommentId(), commentDto);
+
+            Comment parentComment = comment.getParentComment();
+
+            if (parentComment != null) {
+                commentDtoHashMap.get(parentComment.getId())
+                    .getChildrenComments()
+                    .add(commentDto);
+            } else {
+                result.add(commentDto);
+            }
+        }
+
+        return result;
     }
 }
