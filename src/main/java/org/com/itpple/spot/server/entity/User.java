@@ -55,9 +55,11 @@ public class User extends BasicDateEntity {
     @Column(name = "birth_day")
     private LocalDate birthDay;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 10)
     private Gender gender;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "mbti", length = 10)
     private Mbti mbti;
 
@@ -65,6 +67,7 @@ public class User extends BasicDateEntity {
     @Column(name = "interest", length = 10)
     private List<Interest> interests = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
