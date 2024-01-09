@@ -14,10 +14,10 @@ import java.util.List;
 public record UserInfoResponse(
         Long id,
         String loginType,
-        String socialId,
         String role,
         String name,
         String nickname,
+        String phoneNumber,
         LocalDate birthDay,
         Gender gender,
         Mbti mbti,
@@ -28,9 +28,9 @@ public record UserInfoResponse(
         return UserInfoResponse.builder()
                 .id(user.getId())
                 .loginType(user.getLoginType())
-                .socialId(user.getSocialId())
                 .name(user.getName())
                 .nickname(user.getNickname())
+                .phoneNumber(user.getPhoneNumber())
                 .birthDay(user.getBirthDay())
                 .gender(user.getGender())
                 .mbti(user.getMbti())
