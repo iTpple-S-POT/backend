@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment savedComment = commentRepository.save(comment);
 
-        return CreateCommentResponse.from(writer, savedComment);
+        return CreateCommentResponse.from(savedComment);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CommentServiceImpl implements CommentService {
         Comment parentComment = null;
 
         if (parentCommentId != null) {
-            parentComment = commentRepository.findByIdWithPot(parentCommentId)
+            parentComment = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new ParentCommentNotFoundException("PK = " + parentCommentId));
             if (parentComment.getPot().getId() != potId) {
                 throw new CommentPotNotMatchException();

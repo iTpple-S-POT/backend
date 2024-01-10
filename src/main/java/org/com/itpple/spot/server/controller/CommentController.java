@@ -8,7 +8,7 @@ import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.dto.comment.CommentDto;
 import org.com.itpple.spot.server.dto.comment.request.CreateCommentRequest;
 import org.com.itpple.spot.server.dto.comment.response.CreateCommentResponse;
-import org.com.itpple.spot.server.service.impl.CommentServiceImpl;
+import org.com.itpple.spot.server.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CommentController {
 
-    private final CommentServiceImpl commentServiceImpl;
+    private final CommentService commentService;
 
     @PostMapping("/{potId}")
     public ResponseEntity<CreateCommentResponse> addComment(
@@ -34,7 +34,7 @@ public class CommentController {
         Long userId = customUserDetails.getUserId();
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(commentServiceImpl.addComment(userId, potId, createCommentRequest));
+            .body(commentService.addComment(userId, potId, createCommentRequest));
     }
 
     @GetMapping("/{potId}")
@@ -45,6 +45,6 @@ public class CommentController {
         Long userId = customUserDetails.getUserId();
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(commentServiceImpl.getCommentList(userId, potId));
+            .body(commentService.getCommentList(userId, potId));
     }
 }

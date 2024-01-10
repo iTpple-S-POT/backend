@@ -13,10 +13,10 @@ public record CreateCommentResponse(
     String content
 ) {
 
-    public static CreateCommentResponse from(User user, Comment comment) {
+    public static CreateCommentResponse from(Comment comment) {
         return CreateCommentResponse.builder()
-            .writerProfileImageUrl(user.getProfileImageUrl())
-            .writerName(user.getName())
+            .writerProfileImageUrl(comment.getWriter().getProfileImageUrl())
+            .writerName(comment.getWriter().getName())
             .commentUpdatedAt(comment.getUpdatedAt())
             .content(comment.getContent())
             .build();

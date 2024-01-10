@@ -12,7 +12,7 @@ import org.com.itpple.spot.server.entity.Comment;
 
 @Builder
 @Getter
-public class CommentDto{
+public class CommentDto {
 
     private Long commentId;
     private String content;
@@ -25,7 +25,7 @@ public class CommentDto{
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     static class UserDto {
         private Long userId;
-        private String ProfileImageUrl;
+        private String profileImageUrl;
         private String name;
     }
 
