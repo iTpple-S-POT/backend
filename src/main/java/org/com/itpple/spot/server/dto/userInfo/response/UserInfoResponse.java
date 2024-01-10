@@ -15,6 +15,7 @@ public record UserInfoResponse(
         Long id,
         String loginType,
         String role,
+        String profileImageUrl,
         String name,
         String nickname,
         String phoneNumber,
@@ -28,6 +29,7 @@ public record UserInfoResponse(
         return UserInfoResponse.builder()
                 .id(user.getId())
                 .loginType(user.getLoginType())
+                .profileImageUrl(user.getProfileImageUrl())
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .phoneNumber(user.getPhoneNumber())

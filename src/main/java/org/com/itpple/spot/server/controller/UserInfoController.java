@@ -10,12 +10,7 @@ import org.com.itpple.spot.server.dto.userInfo.response.UserInfoResponse;
 import org.com.itpple.spot.server.service.impl.UserInfoServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -42,5 +37,27 @@ public class UserInfoController {
         userInfoService.isAlreadyExistNickname(nickname);
         return ResponseEntity.ok().build();
     }
+
+    //유저 조회
+    @GetMapping("/info")
+    public ResponseEntity<UserInfoResponse> getUserInfo(@Auth CustomUserDetails customUserDetails) {
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userInfoService.getUserInfo(userId));
+    }
+
+    //유저 정보 수정
+    @PutMapping("/update")
+    public ResponseEntity<UserInfoResponse> updateUserInfo(
+            @Auth CustomUserDetails customUserDetails,
+            @Valid @RequestBody UserInfoRequest userInfoRequest
+    ) {
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userInfoService.updateUserInfo(userId, userInfoRequest));
+    }
+
 
 }
