@@ -10,15 +10,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.constant.Gender;
-import org.com.itpple.spot.server.constant.Interest;
-import org.com.itpple.spot.server.constant.Mbti;
-import org.com.itpple.spot.server.constant.Role;
+import org.com.itpple.spot.server.constant.*;
 import org.hibernate.annotations.DynamicInsert;
 
 @Slf4j
@@ -35,14 +30,14 @@ public class User extends BasicDateEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "login_type", length = 100) //나중에 nullable = false로 변경
+    @Column(name = "login_type", length = 100)
     private String loginType;
 
-    @Column(name = "social_id") //나중에 nullable = false로 변경
+    @Column(name = "social_id")
     private String socialId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role") //나중에 nullable = false로 변경
+    @Column(name = "role")
     private Role role;
 
     @Column(name = "name")
@@ -60,9 +55,11 @@ public class User extends BasicDateEntity {
     @Column(name = "birth_day")
     private LocalDate birthDay;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 10)
     private Gender gender;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "mbti", length = 10)
     private Mbti mbti;
 
@@ -70,6 +67,31 @@ public class User extends BasicDateEntity {
     @Column(name = "interest", length = 10)
     private List<Interest> interests = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    public void setBirthDay(LocalDate birthDay) {
+        this.birthDay = birthDay;
+    }
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+    public void setMbti(Mbti mbti) {
+        this.mbti = mbti;
+    }
+    public void setInterests(List<Interest> interests) {
+        this.interests = interests;
+    }
     @Builder
     public User(String phoneNumber, String nickname, Gender gender, LocalDate birthDay, Mbti mbti, List interests) {
         this.role = Role.USER;
@@ -79,5 +101,6 @@ public class User extends BasicDateEntity {
         this.birthDay = birthDay;
         this.mbti = mbti;
         this.interests = interests;
+        this.status = Status.PROGRESS;
     }
 }

@@ -19,6 +19,9 @@ public enum ErrorCode {
 
     // User 관련
     NOT_FOUND_USER(1401, "사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    MEMBER_ID_ALREADY_EXISTS(1402,"이미 존재하는 meberId 입니다", HttpStatus.BAD_REQUEST),
+    NICKNAME_DUPLICATE(1403,"이미 존재하는 닉네임 입니다",HttpStatus.INTERNAL_SERVER_ERROR),
+    NICKNAME_VALIDATION(1404,"공백없이 15자 이하로 작성해주세요 특수문자는 _만 사용 가능해요",HttpStatus.BAD_REQUEST),
 
     // File 관련
     ILLEGAL_FILE_NAME(1501, "파일 이름이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
@@ -33,9 +36,9 @@ public enum ErrorCode {
     // Reaction 관련
     NOT_ADD_MULTIPLE_REACTION(1801, "팟에 여러 개의 반응을 추가할 수 없습니다.", HttpStatus.BAD_REQUEST),
 
-    MEMBER_ID_ALREADY_EXISTS(1901,"이미 존재하는 meberId 입니다", HttpStatus.BAD_REQUEST),
-    NICKNAME_DUPLICATE(1902,"이미 존재하는 닉네임 입니다",HttpStatus.INTERNAL_SERVER_ERROR),
-    NICKNAME_VALIDATION(1903,"공백없이 15자 이하로 작성해주세요 특수문자는 _만 사용 가능해요",HttpStatus.BAD_REQUEST),
+    // Comment 관련
+    NOT_FOUND_PARENT_COMMENT(1901, "답글 추가하기 위한 댓글이 없습니다.", HttpStatus.NOT_FOUND),
+    COMMENT_POT_NOT_MATCH(1902, "추가하려는 답글과 댓글의 POT이 다릅니다.", HttpStatus.BAD_REQUEST),
     ;
 
     private final Integer code;

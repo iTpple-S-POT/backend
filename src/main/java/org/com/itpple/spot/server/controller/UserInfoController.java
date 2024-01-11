@@ -5,9 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.common.auth.Auth;
 import org.com.itpple.spot.server.common.auth.CustomUserDetails;
-import org.com.itpple.spot.server.dto.userInfo.UserRequestDto;
-import org.com.itpple.spot.server.exception.MemberIdAlreadyExistsException;
-import org.com.itpple.spot.server.service.userInfo.UserInfoService;
+import org.com.itpple.spot.server.dto.userInfo.request.UserInfoRequest;
+import org.com.itpple.spot.server.dto.userInfo.response.UserInfoResponse;
+import org.com.itpple.spot.server.service.impl.UserInfoServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,20 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserInfoController {
-    private final UserInfoService userInfoService;
+    private final UserInfoServiceImpl userInfoService;
 
     //유저 기본 정보 기입
     @PostMapping("")
-    public ResponseEntity<UserRequestDto> basicInfo(
+    public ResponseEntity<UserInfoResponse> basicInfo(
             @Auth CustomUserDetails customUserDetails,
-            @RequestBody @Valid UserRequestDto requestDto) {
-        try {
-            Long userId = customUserDetails.getUserId();
-            userInfoService.fillUserInfo(userId, requestDto);
-            return ResponseEntity.ok().body(requestDto);
-        } catch (RuntimeException e) {
-            throw new MemberIdAlreadyExistsException();
-        }
+            @RequestBody @Valid UserInfoRequest userInfoRequest) {
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userInfoService.fillUserInfo(userId, userInfoRequest));
     }
 
     //닉네임 체크
