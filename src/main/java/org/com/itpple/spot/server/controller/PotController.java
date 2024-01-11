@@ -14,6 +14,7 @@ import org.com.itpple.spot.server.dto.pot.response.CreatePotResponse;
 import org.com.itpple.spot.server.dto.pot.response.GetCategoryResponse;
 import org.com.itpple.spot.server.dto.pot.response.UploadImageResponse;
 import org.com.itpple.spot.server.service.PotService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,7 +46,9 @@ public class PotController {
             @Auth CustomUserDetails customUserDetails,
             @Valid @RequestBody CreatePotRequest createPotRequest) {
         var userId = customUserDetails.getUserId();
-        return ResponseEntity.ok(potService.createPot(userId, createPotRequest));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(potService.createPot(userId, createPotRequest));
     }
 
     @GetMapping(value = "/my", produces = MediaType.APPLICATION_JSON_VALUE)

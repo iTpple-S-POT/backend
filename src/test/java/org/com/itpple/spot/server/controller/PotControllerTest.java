@@ -103,7 +103,7 @@ class PotControllerTest {
                 .content(objectMapper.writeValueAsString(createPotRequest))
         );
 
-        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(status().isCreated());
     }
 
     private final List<PotDTO> potDTOList = (List.of(
