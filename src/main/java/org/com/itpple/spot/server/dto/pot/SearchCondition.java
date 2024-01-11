@@ -4,6 +4,7 @@ import static org.com.itpple.spot.server.util.GeometryUtil.createCircle;
 import static org.com.itpple.spot.server.util.GeometryUtil.createPolygon;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -57,7 +58,8 @@ public class SearchCondition {
     public static class CircleSearchRange implements SearchRange {
 
         @Min(1)
-        private double radius;
+        @Max(3001)
+        private double diameterInMeters;
         @NotNull
         private PointDTO center;
 
@@ -66,7 +68,7 @@ public class SearchCondition {
         }
 
         public Polygon polygon() {
-            return createCircle(center, radius);
+            return createCircle(center, diameterInMeters);
         }
     }
 

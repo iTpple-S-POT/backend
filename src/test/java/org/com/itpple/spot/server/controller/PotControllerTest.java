@@ -144,7 +144,7 @@ class PotControllerTest {
                 .with(csrf())
                 .queryParam("type", "CIRCLE")
                 .queryParam("categoryId", String.valueOf(1L))
-                .queryParam("radius", String.valueOf(1.0))
+                .queryParam("diameterInMeters", String.valueOf(1.0))
                 .queryParam("lat", String.valueOf(2.0))
                 .queryParam("lon", String.valueOf(2.0))
         );
@@ -189,5 +189,23 @@ class PotControllerTest {
         );
 
         resultActions.andExpect(status().isOk());
+    }
+    @Test
+    void getPotList_Failed_Rectangle_distance_max() throws Exception {
+        final var url = "/api/v1/pot";
+
+        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
+        final ResultActions resultActions = mockMvc.perform(get(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user(AuthUserUtil.getCustomUserDetails()))
+                .with(csrf())
+                .queryParam("type", "CIRCLE")
+                .queryParam("categoryId", String.valueOf(1L))
+                .queryParam("diameterInMeters", String.valueOf(3002))
+                .queryParam("lat", String.valueOf(2.0))
+                .queryParam("lon", String.valueOf(2.0))
+        );
+
+        resultActions.andExpect(status().isBadRequest());
     }
 }

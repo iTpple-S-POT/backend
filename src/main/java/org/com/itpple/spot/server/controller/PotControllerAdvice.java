@@ -30,7 +30,7 @@ public class PotControllerAdvice {
     private SearchRange getSearchRange(SearchType searchType, HttpServletRequest request) {
         switch (searchType) {
             case CIRCLE:
-                var radius = Double.parseDouble(request.getParameter("radius"));
+                var radius = Double.parseDouble(request.getParameter("diameterInMeters"));
                 var lat = Double.parseDouble(request.getParameter("lat"));
                 var lng = Double.parseDouble(request.getParameter("lon"));
                 return new CircleSearchRange(radius, new PointDTO(lat, lng));
