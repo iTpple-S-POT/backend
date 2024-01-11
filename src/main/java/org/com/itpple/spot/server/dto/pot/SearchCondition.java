@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.com.itpple.spot.server.dto.PointDTO;
 import org.locationtech.jts.geom.Polygon;
 
@@ -20,7 +19,6 @@ import org.locationtech.jts.geom.Polygon;
 @RequiredArgsConstructor
 @Builder
 @Getter
-@Setter
 public class SearchCondition {
     @NotNull
     private SearchType searchType;
@@ -56,7 +54,6 @@ public class SearchCondition {
     @AllArgsConstructor
     @RequiredArgsConstructor
     @Getter
-    @Setter
     public static class CircleSearchRange implements SearchRange {
 
         @Min(1)
@@ -77,7 +74,6 @@ public class SearchCondition {
     @AllArgsConstructor
     @RequiredArgsConstructor
     @Getter
-    @Setter
     public static class RectangleSearchRange implements SearchRange {
 
         @NotEmpty
