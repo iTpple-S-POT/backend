@@ -56,33 +56,34 @@ public class GeometryUtil {
     }
 
     /**
-     * polygon을 만들기 위해서는 반드시 시계방향으로 정렬된 좌표가 필요하다. 또한 polygon의 마지막 점은 첫번째 점과 같아야 한다. 입력에서는 중복되지 않은 점만
-     * 사용을 권장한다.
+     * polygon을 만들기 위해서는 반드시 시계방향으로 정렬된 좌표가 필요하다.
+     * 또한 polygon의 마지막 점은 첫번째 점과 같아야 한다.
+     * 입력에서는 중복되지 않은 점만 사용을 권장한다.
      */
     private static Coordinate[] prepareToMakePolygon(Coordinate[] origin) {
         if (origin == null || origin.length < 3) {
             throw new IllegalArgumentException("Input array must contain at least three points.");
         }
 
-        var copy = Arrays.copyOf(origin, origin.length);
+        var coordinatesForPolygon = Arrays.copyOf(origin, origin.length);
 
         double cx = 0.0;
         double cy = 0.0;
 
-        for (var point : copy) {
+        for (var point : coordinatesForPolygon) {
             cx += point.getX();
             cy += point.getY();
         }
 
-        cx /= copy.length;
-        cy /= copy.length;
+        cx /= coordinatesForPolygon.length;
+        cy /= coordinatesForPolygon.length;
 
-        sortByArcTan2(copy, cx, cy);
+        sortByArcTan2(coordinatesForPolygon, cx, cy);
 
-        copy = Arrays.copyOf(copy, copy.length + 1);
-        copy[copy.length - 1] = copy[0];
+        coordinatesForPolygon = Arrays.copyOf(coordinatesForPolygon, coordinatesForPolygon.length + 1);
+        coordinatesForPolygon[coordinatesForPolygon.length - 1] = coordinatesForPolygon[0];
 
-        return copy;
+        return coordinatesForPolygon;
     }
 
 
