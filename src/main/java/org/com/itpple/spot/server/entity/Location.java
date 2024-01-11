@@ -1,15 +1,20 @@
 package org.com.itpple.spot.server.entity;
 
+import static org.com.itpple.spot.server.util.GeometryUtil.createPoint;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.com.itpple.spot.server.dto.PointDTO;
 import org.hibernate.annotations.DynamicInsert;
 import org.locationtech.jts.geom.Point;
-
-import javax.persistence.*;
-
-import static org.com.itpple.spot.server.util.GeometryUtil.convertToPoint;
 
 @Entity
 @Getter
@@ -31,6 +36,6 @@ public class Location {
     @Builder
     private Location(User user, PointDTO location) {
         this.user = user;
-        this.location=convertToPoint(location.lat(),location.lon());
+        this.location=createPoint(location);
     }
 }

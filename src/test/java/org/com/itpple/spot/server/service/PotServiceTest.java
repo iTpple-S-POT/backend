@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.com.itpple.spot.server.constant.PotType;
 import org.com.itpple.spot.server.constant.Role;
-import org.com.itpple.spot.server.dto.Location;
+import org.com.itpple.spot.server.dto.PointDTO;
 import org.com.itpple.spot.server.dto.pot.SearchCondition.CircleSearchRange;
 import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.entity.Category;
@@ -54,22 +54,22 @@ public class PotServiceTest {
     @Test
     public void POT_리스트_조회하기() {
         //given
-        SearchRange searchRange = new CircleSearchRange(1.0, new Location(2.0, 2.0));
+        SearchRange searchRange = new CircleSearchRange(1.0, new PointDTO(2.0, 2.0));
         Long categoryId = 1L;
         when(potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(), 1L)).thenReturn(
                 List.of(
                         Pot.builder().id(1L).user(user).category(category).categoryId(1L)
                                 .imageKey("test.jpg").potType(
-                                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0)))
+                                        PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0)))
                                 .expiredAt(
                                         LocalDateTime.now().plusDays(1)).build(),
                         Pot.builder().id(2L).user(user).category(category).categoryId(1L)
                                 .imageKey("test.jpg").potType(
-                                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0)))
+                                        PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0)))
                                 .expiredAt(LocalDateTime.now().plusDays(1)).build(),
                         Pot.builder().id(3L).user(user).category(category).categoryId(1L)
                                 .imageKey("test.jpg").potType(
-                                        PotType.IMAGE).location(createPoint(new Location(2.0, 2.0)))
+                                        PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0)))
                                 .expiredAt(LocalDateTime.now().plusDays(1)).build()
                 ));
 
@@ -88,10 +88,10 @@ public class PotServiceTest {
                         Pot.builder().id(1L).user(user).category(category).categoryId(1L)
                                 .imageKey("test.jpg")
                                 .potType(
-                                        PotType.IMAGE).location(createPoint(new Location(1.0, 2.0)))
+                                        PotType.IMAGE).location(createPoint(new PointDTO(1.0, 2.0)))
                                 .build()
                 ));
-        SearchRange searchRange = new CircleSearchRange(1.0, new Location(2.0, 2.0));
+        SearchRange searchRange = new CircleSearchRange(1.0, new PointDTO(2.0, 2.0));
         Long categoryId = 1L;
 
         //when
@@ -99,6 +99,21 @@ public class PotServiceTest {
 
         //then
         assertThat(result).hasSize(1);
+    }
+
+    @Test
+    public void test() {
+        List<String> list = List.of("1", "3");
+        List<String> list1 = list.stream().map(s -> "1".equals(s) ? null : s ).toList();
+        int call = 0;
+
+//        for(String s : list1) {
+//            if(s == null) {
+//                call++;
+//            }
+//        }
+
+        assertThat(call).isEqualTo(1);
     }
 
 }

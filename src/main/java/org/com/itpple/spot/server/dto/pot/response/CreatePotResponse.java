@@ -3,7 +3,7 @@ package org.com.itpple.spot.server.dto.pot.response;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import org.com.itpple.spot.server.constant.PotType;
-import org.com.itpple.spot.server.dto.Location;
+import org.com.itpple.spot.server.dto.PointDTO;
 import org.com.itpple.spot.server.entity.Pot;
 
 @Builder
@@ -14,7 +14,7 @@ public record CreatePotResponse(
         PotType type,
         String content,
         String imageKey,
-        Location location,
+        PointDTO location,
         LocalDateTime expiredAt,
         LocalDateTime createdAt
 ) {
@@ -27,7 +27,7 @@ public record CreatePotResponse(
                 .type(pot.getPotType())
                 .content(pot.getContent())
                 .imageKey(pot.getImageKey())
-                .location(new Location(pot.getLocation().getX(), pot.getLocation().getY()))
+                .location(new PointDTO(pot.getLocation().getX(), pot.getLocation().getY()))
                 .expiredAt(pot.getExpiredAt())
                 .createdAt(pot.getCreatedAt())
                 .build();

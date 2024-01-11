@@ -1,7 +1,7 @@
 package org.com.itpple.spot.server.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import org.com.itpple.spot.server.dto.Location;
+import org.com.itpple.spot.server.dto.PointDTO;
 import org.com.itpple.spot.server.dto.pot.SearchCondition;
 import org.com.itpple.spot.server.dto.pot.SearchCondition.CircleSearchRange;
 import org.com.itpple.spot.server.dto.pot.SearchCondition.RectangleSearchRange;
@@ -33,13 +33,13 @@ public class PotControllerAdvice {
                 var radius = Double.parseDouble(request.getParameter("radius"));
                 var lat = Double.parseDouble(request.getParameter("lat"));
                 var lng = Double.parseDouble(request.getParameter("lon"));
-                return new CircleSearchRange(radius, new Location(lat, lng));
+                return new CircleSearchRange(radius, new PointDTO(lat, lng));
             case RECTANGLE:
                 var locations = request.getParameterValues("locations");
-                var locationArray = new Location[locations.length];
+                var locationArray = new PointDTO[locations.length];
                 for (int i = 0; i < locations.length; i++) {
                     var location = locations[i].split(",");
-                    locationArray[i] = new Location(Double.parseDouble(location[0]),
+                    locationArray[i] = new PointDTO(Double.parseDouble(location[0]),
                             Double.parseDouble(location[1]));
                 }
                 return new RectangleSearchRange(locationArray);

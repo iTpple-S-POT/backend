@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.com.itpple.spot.server.constant.PotType;
-import org.com.itpple.spot.server.dto.Location;
+import org.com.itpple.spot.server.dto.PointDTO;
 import org.com.itpple.spot.server.dto.pot.PotDTO;
 import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.dto.pot.request.CreatePotRequest;
@@ -77,7 +77,7 @@ class PotControllerTest {
     void createPot_Invalid_Image_Extension() throws Exception {
         final var url = "/pot";
         final var createPotRequest = new CreatePotRequest(
-                1L, "test.txt", PotType.IMAGE, new Location(0.0, 0.0), null);
+                1L, "test.txt", PotType.IMAGE, new PointDTO(0.0, 0.0), null);
 
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +92,7 @@ class PotControllerTest {
     void createPot_Success() throws Exception {
         final var url = "/pot";
         final var createPotRequest = new CreatePotRequest(
-                1L, "test.jpg", PotType.IMAGE, new Location(0.0, 0.0), null);
+                1L, "test.jpg", PotType.IMAGE, new PointDTO(0.0, 0.0), null);
 
         doReturn(CreatePotResponse.builder()
                 .build()).when(potService).createPot(any(), any(CreatePotRequest.class));
@@ -107,11 +107,11 @@ class PotControllerTest {
     }
 
     private final List<PotDTO> potDTOList = (List.of(
-            new PotDTO(1L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
+            new PotDTO(1L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
                     LocalDateTime.now().plusDays(1)),
-            new PotDTO(2L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
+            new PotDTO(2L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
                     LocalDateTime.now().plusDays(1)),
-            new PotDTO(3L, 1L, List.of(1L), PotType.IMAGE, null, new Location(2.0, 2.0), "test.jpg",
+            new PotDTO(3L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
                     LocalDateTime.now().plusDays(1))
     ));
 

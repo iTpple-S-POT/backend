@@ -2,7 +2,7 @@ package org.com.itpple.spot.server.util;
 
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.dto.Location;
+import org.com.itpple.spot.server.dto.PointDTO;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -20,7 +20,7 @@ public class GeometryUtil {
     private static final GeometricShapeFactory shapeFactory = new GeometricShapeFactory(
             geometryFactory);
 
-    public static Point createPoint(Location location) {
+    public static Point createPoint(PointDTO location) {
         Coordinate coordinate = new Coordinate(location.lat(), location.lon());
 
         return geometryFactory.createPoint(coordinate);
@@ -34,7 +34,7 @@ public class GeometryUtil {
      * Length in meters of 1° of longitude = 40075 km * cos( latitude ) / 360
      * https://gis.stackexchange.com/questions/268639/jts-geometricshapefactory-generate-an-ellipse-properly
      * */
-    public static Polygon createCircle(Location location, double diameterInMeters) {
+    public static Polygon createCircle(PointDTO location, double diameterInMeters) {
         shapeFactory.setNumPoints(32);
         shapeFactory.setCentre(new Coordinate(location.lat(), location.lon()));
         shapeFactory.setWidth(diameterInMeters / (40075000 * Math.cos(Math.toRadians(location.lat())) / 360));
@@ -43,7 +43,7 @@ public class GeometryUtil {
     }
 
 
-    public static Polygon createPolygon(Location[] locations) {
+    public static Polygon createPolygon(PointDTO[] locations) {
         if (locations.length < 3) {
             throw new RuntimeException("pointDTOs length must be greater than 3");
         }
@@ -97,8 +97,8 @@ public class GeometryUtil {
         });
     }
 
-    public static Location toPointDTO(Point point) {
-        return new Location(point.getX(), point.getY());
+    public static PointDTO toPointDTO(Point point) {
+        return new PointDTO(point.getX(), point.getY());
     }
 
     //테스트 때 검증을 위해서만 사용하고, 그 외의 상황에서는 위의 method들을 사용할 것

@@ -8,7 +8,7 @@ import static org.com.itpple.spot.server.util.GeometryUtil.createPolygon;
 import lombok.RequiredArgsConstructor;
 import org.com.itpple.spot.server.constant.PotType;
 import org.com.itpple.spot.server.constant.Role;
-import org.com.itpple.spot.server.dto.Location;
+import org.com.itpple.spot.server.dto.PointDTO;
 import org.com.itpple.spot.server.entity.Category;
 import org.com.itpple.spot.server.entity.Pot;
 import org.com.itpple.spot.server.entity.User;
@@ -43,7 +43,7 @@ public class PotRepositoryTest {
     public void POT_저장하기() {
         //given
         final Pot pot = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build();
+                PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0))).build();
         // when
         final var result = potRepository.save(pot);
 
@@ -54,16 +54,16 @@ public class PotRepositoryTest {
         assertThat(result.getCategory()).isEqualTo(category);
         assertThat(result.getImageKey()).isEqualTo("test.jpg");
         assertThat(result.getPotType()).isEqualTo(PotType.IMAGE);
-        assertThat(result.getLocation()).isEqualTo(createPoint(new Location(2.0, 2.0)));
+        assertThat(result.getLocation()).isEqualTo(createPoint(new PointDTO(2.0, 2.0)));
     }
 
     @Test
     public void POT_리스트_조회하기() {
         //given
         final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build();
+                PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0))).build();
         final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build();
+                PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0))).build();
         entityManager.persist(pot1);
         entityManager.persist(pot2);
         entityManager.flush();
@@ -79,22 +79,22 @@ public class PotRepositoryTest {
     @Test
     public void POT_리스트_조회하기_직사각형_범위() {
         final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).build();
+                PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0))).build();
         final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(1.0, 3.0))).build();
+                PotType.IMAGE).location(createPoint(new PointDTO(1.0, 3.0))).build();
         final Pot pot3 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(1.0, 4.0))).build();
+                PotType.IMAGE).location(createPoint(new PointDTO(1.0, 4.0))).build();
         entityManager.persist(pot1);
         entityManager.persist(pot2);
         entityManager.persist(pot3);
         entityManager.flush();
 
         //when
-        final var result = potRepository.findByLocationAndCategoryId(createPolygon(new Location[]{
-                new Location(1.0, 1.0),
-                new Location(1.0, 3.0),
-                new Location(3.0, 1.0),
-                new Location(3.0, 3.0)
+        final var result = potRepository.findByLocationAndCategoryId(createPolygon(new PointDTO[]{
+                new PointDTO(1.0, 1.0),
+                new PointDTO(1.0, 3.0),
+                new PointDTO(3.0, 1.0),
+                new PointDTO(3.0, 3.0)
         }), category.getId());
 
         assertThat(result).isNotNull();
@@ -103,15 +103,15 @@ public class PotRepositoryTest {
 
     @Test
     public void POT_리스트_조회하기_원_범위() {
-        var location1 = new Location(37.53181382825802, 126.91438309995776);//국회의사당
-        var location2 = new Location(37.531077388272465, 126.91773278201156);//국회도서관(1km 이내)
-        var location3 = new Location( 37.52258059969025, 126.90525326032581);//여의도시장역(1km 밖)
+        var pointDTO1 = new PointDTO(37.53181382825802, 126.91438309995776);//국회의사당
+        var pointDTO2 = new PointDTO(37.531077388272465, 126.91773278201156);//국회도서관(1km 이내)
+        var pointDTO3 = new PointDTO( 37.52258059969025, 126.90525326032581);//여의도시장역(1km 밖)
         final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(location1)).build();
+                PotType.IMAGE).location(createPoint(pointDTO1)).build();
         final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(location2)).build();
+                PotType.IMAGE).location(createPoint(pointDTO2)).build();
         final Pot pot3 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(location3)).build();
+                PotType.IMAGE).location(createPoint(pointDTO3)).build();
         entityManager.persist(pot1);
         entityManager.persist(pot2);
         entityManager.persist(pot3);
@@ -119,7 +119,7 @@ public class PotRepositoryTest {
 
         //when
         final var result = potRepository.findByLocationAndCategoryId(
-                createCircle(location1, 1000), category.getId());
+                createCircle(pointDTO1, 1000), category.getId());
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
@@ -128,9 +128,9 @@ public class PotRepositoryTest {
     @Test
     public void POT_리스트_조회하기_조건_무시() {
         final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 2.0))).isDeleted(true).build();
+                PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0))).isDeleted(true).build();
         final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new Location(2.0, 3.0))).build();
+                PotType.IMAGE).location(createPoint(new PointDTO(2.0, 3.0))).build();
         entityManager.persist(pot1);
         entityManager.persist(pot2);
         entityManager.flush();

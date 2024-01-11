@@ -13,7 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.com.itpple.spot.server.dto.Location;
+import org.com.itpple.spot.server.dto.PointDTO;
 import org.locationtech.jts.geom.Polygon;
 
 @AllArgsConstructor
@@ -62,7 +62,7 @@ public class SearchCondition {
         @Min(1)
         private double radius;
         @NotNull
-        private Location center;
+        private PointDTO center;
 
         public SearchType searchType() {
             return SearchType.CIRCLE;
@@ -82,7 +82,7 @@ public class SearchCondition {
 
         @NotEmpty
         @Size(min = 4,max = 4)
-        private Location[] locations;
+        private PointDTO[] locations;
 
         public SearchType searchType() {
             return SearchType.RECTANGLE;

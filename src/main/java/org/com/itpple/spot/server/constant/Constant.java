@@ -3,7 +3,7 @@ package org.com.itpple.spot.server.constant;
 public class Constant {
 
     //image
-    public static final String IMAGE_NAME_REGEX = "^[\\w.-]+\\.(jpg|jpeg|png)$";
+    public static final String IMAGE_NAME_REGEX = "[\\w/.-]+\\.(jpg|jpeg|png)$";
     public static final String POT_IMAGE_PATH = "pot/";
 
     //pot

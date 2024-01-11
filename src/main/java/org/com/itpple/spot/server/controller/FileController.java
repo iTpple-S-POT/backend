@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/file")
+@RequestMapping("api/v1/file")
 @RequiredArgsConstructor
 public class FileController {
 

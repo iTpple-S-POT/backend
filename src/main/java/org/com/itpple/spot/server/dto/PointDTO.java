@@ -2,11 +2,11 @@ package org.com.itpple.spot.server.dto;
 
 import javax.validation.constraints.NotNull;
 
-public record Location(
+public record PointDTO(
         @NotNull Double lat,
         @NotNull Double lon) {
 
-    public static Location from(org.locationtech.jts.geom.Point point) {
-        return new Location(point.getY(), point.getX());
+    public static PointDTO from(org.locationtech.jts.geom.Point point) {
+        return new PointDTO(point.getY(), point.getX());
     }
 }

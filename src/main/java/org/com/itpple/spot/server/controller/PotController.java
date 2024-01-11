@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/pot")
+@RequestMapping("api/v1/pot")
 @RequiredArgsConstructor
 public class PotController {
 
