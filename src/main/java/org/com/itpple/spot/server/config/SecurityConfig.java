@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/test").permitAll()
                 .antMatchers("/user/**").permitAll()  //나중에 지우기
                 .antMatchers("/location").permitAll()
                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()

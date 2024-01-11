@@ -2,7 +2,7 @@ name: Dev Server - CI / CD
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "fix/ec2-error-git-module" ]
 
 jobs:
   build:
