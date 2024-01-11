@@ -101,19 +101,4 @@ public class PotServiceTest {
         assertThat(result).hasSize(1);
     }
 
-    @Test
-    public void test() {
-        List<String> list = List.of("1", "3");
-        List<String> list1 = list.stream().map(s -> "1".equals(s) ? null : s ).toList();
-        int call = 0;
-
-//        for(String s : list1) {
-//            if(s == null) {
-//                call++;
-//            }
-//        }
-
-        assertThat(call).isEqualTo(1);
-    }
-
 }
