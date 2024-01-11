@@ -44,7 +44,7 @@ class PotControllerTest {
 
     @Test
     void uploadImageUsingPreSignedUrl_Invalid_Image_Extension() throws Exception {
-        final var url = "/pot/image/pre-signed-url";
+        final var url = "/api/v1/pot/image/pre-signed-url";
         final var uploadImageRequest = new UploadImageRequest("test.txt");
 
         final ResultActions resultActions = mockMvc.perform(post(url)
@@ -58,7 +58,7 @@ class PotControllerTest {
 
     @Test
     void uploadImageUsingPreSignedUrl_Success() throws Exception {
-        final var url = "/pot/image/pre-signed-url";
+        final var url = "/api/v1/pot/image/pre-signed-url";
         final var uploadImageRequest = new UploadImageRequest("test.jpg");
         final var customUserDetails = AuthUserUtil.getCustomUserDetails();
 
@@ -75,7 +75,7 @@ class PotControllerTest {
 
     @Test
     void createPot_Invalid_Image_Extension() throws Exception {
-        final var url = "/pot";
+        final var url = "/api/v1/pot";
         final var createPotRequest = new CreatePotRequest(
                 1L, "test.txt", PotType.IMAGE, new PointDTO(0.0, 0.0), null);
 
@@ -90,7 +90,7 @@ class PotControllerTest {
 
     @Test
     void createPot_Success() throws Exception {
-        final var url = "/pot";
+        final var url = "/api/v1/pot";
         final var createPotRequest = new CreatePotRequest(
                 1L, "test.jpg", PotType.IMAGE, new PointDTO(0.0, 0.0), null);
 
@@ -117,7 +117,7 @@ class PotControllerTest {
 
     @Test
     void getPotList_Success_no_type() throws Exception {
-        final var url = "/pot";
+        final var url = "/api/v1/pot";
 
         when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
@@ -135,7 +135,7 @@ class PotControllerTest {
 
     @Test
     void getPotList_Success_circle() throws Exception {
-        final var url = "/pot";
+        final var url = "/api/v1/pot";
 
         when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
@@ -154,7 +154,7 @@ class PotControllerTest {
 
     @Test
     void getPotList_Fail_Rectangle_Min_Size() throws Exception {
-        final var url = "/pot";
+        final var url = "/api/v1/pot";
 
         when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
@@ -173,7 +173,7 @@ class PotControllerTest {
 
     @Test
     void getPotList_Success_Rectangle() throws Exception {
-        final var url = "/pot";
+        final var url = "/api/v1/pot";
 
         when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
