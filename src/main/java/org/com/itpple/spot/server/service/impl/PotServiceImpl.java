@@ -43,13 +43,16 @@ public class PotServiceImpl implements PotService {
 
     @Override
     public CreatePotResponse createPot(Long userId, CreatePotRequest createPotRequest) {
+        if(!categoryRepository.existsById(createPotRequest.categoryId())) {
+            throw new CustomException(ErrorCode.NOT_FOUND_CATEGORY);
+        }
 
         var isUploadedImage = fileService.isUploaded(createPotRequest.imageKey());
         if (!isUploadedImage) {
             throw new CustomException(ErrorCode.INVALID_FILE_KEY);
         }
 
-        return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest)));
+        return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest, userId)));
     }
 
     @Override

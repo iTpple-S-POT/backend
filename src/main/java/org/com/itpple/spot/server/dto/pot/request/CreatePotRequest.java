@@ -19,9 +19,10 @@ public record CreatePotRequest(
         String content
 ) {
 
-    public static Pot toPot(CreatePotRequest createPotRequest) {
+    public static Pot toPot(CreatePotRequest createPotRequest, Long userId) {
         return Pot.builder()
                 .categoryId(createPotRequest.categoryId())
+                .userId(userId)
                 .imageKey(createPotRequest.imageKey())
                 .potType(createPotRequest.type())
                 .content(
