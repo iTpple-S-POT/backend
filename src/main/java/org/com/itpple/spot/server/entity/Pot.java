@@ -41,15 +41,9 @@ public class Pot extends BasicDateEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "user_id", insertable = false, updatable = false)
-    private Long userId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
-    @Column(name = "category_id", insertable = false, updatable = false)
-    private Long categoryId;
 
     @Column(name = "pot_type", nullable = false)
     @Enumerated(value = EnumType.STRING)

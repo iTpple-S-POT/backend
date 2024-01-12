@@ -58,16 +58,16 @@ public class PotServiceTest {
         Long categoryId = 1L;
         when(potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(), 1L)).thenReturn(
                 List.of(
-                        Pot.builder().id(1L).user(user).category(category).categoryId(1L)
+                        Pot.builder().id(1L).user(user).category(category)
                                 .imageKey("test.jpg").potType(
                                         PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0)))
                                 .expiredAt(
                                         LocalDateTime.now().plusDays(1)).build(),
-                        Pot.builder().id(2L).user(user).category(category).categoryId(1L)
+                        Pot.builder().id(2L).user(user).category(category)
                                 .imageKey("test.jpg").potType(
                                         PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0)))
                                 .expiredAt(LocalDateTime.now().plusDays(1)).build(),
-                        Pot.builder().id(3L).user(user).category(category).categoryId(1L)
+                        Pot.builder().id(3L).user(user).category(category)
                                 .imageKey("test.jpg").potType(
                                         PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0)))
                                 .expiredAt(LocalDateTime.now().plusDays(1)).build()
@@ -85,7 +85,7 @@ public class PotServiceTest {
         //given
         when(potRepository.findByLocationAndCategoryId(any(Polygon.class), anyLong())).thenReturn(
                 List.of(
-                        Pot.builder().id(1L).user(user).category(category).categoryId(1L)
+                        Pot.builder().id(1L).user(user).category(category)
                                 .imageKey("test.jpg")
                                 .potType(
                                         PotType.IMAGE).location(createPoint(new PointDTO(1.0, 2.0)))

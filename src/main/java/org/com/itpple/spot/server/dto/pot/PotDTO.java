@@ -29,8 +29,8 @@ public class PotDTO {
     public static PotDTO from(Pot pot) {
         return PotDTO.builder()
                 .id(pot.getId())
-                .userId(pot.getUserId())
-                .categoryId(List.of(pot.getCategoryId()))
+                .userId(pot.getUser().getId())
+                .categoryId(List.of(pot.getCategory().getId()))
                 .potType(pot.getPotType())
                 .content(pot.getContent())
                 .location(PointDTO.from(pot.getLocation()))
