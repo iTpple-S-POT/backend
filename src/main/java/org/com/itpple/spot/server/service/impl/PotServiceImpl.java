@@ -16,6 +16,7 @@ import org.com.itpple.spot.server.exception.CustomException;
 import org.com.itpple.spot.server.exception.code.ErrorCode;
 import org.com.itpple.spot.server.repository.CategoryRepository;
 import org.com.itpple.spot.server.repository.PotRepository;
+import org.com.itpple.spot.server.repository.UserRepository;
 import org.com.itpple.spot.server.service.FileService;
 import org.com.itpple.spot.server.service.PotService;
 import org.com.itpple.spot.server.util.FileUtil;
@@ -29,6 +30,7 @@ public class PotServiceImpl implements PotService {
     private final FileService fileService;
     private final PotRepository potRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public GetCategoryResponse getCategory() {
@@ -43,16 +45,19 @@ public class PotServiceImpl implements PotService {
 
     @Override
     public CreatePotResponse createPot(Long userId, CreatePotRequest createPotRequest) {
-        if(!categoryRepository.existsById(createPotRequest.categoryId())) {
-            throw new CustomException(ErrorCode.NOT_FOUND_CATEGORY);
-        }
 
         var isUploadedImage = fileService.isUploaded(createPotRequest.imageKey());
         if (!isUploadedImage) {
             throw new CustomException(ErrorCode.INVALID_FILE_KEY);
         }
 
-        return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest, userId)));
+        var category = categoryRepository.findById(createPotRequest.categoryId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY));
+
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest, user, category)));
     }
 
     @Override
@@ -75,7 +80,7 @@ public class PotServiceImpl implements PotService {
     @Override
     public PotDTO getPot(Long potId, Long userId) {
         return PotDTO.from(potRepository.findById(potId)
-                .filter(pot -> pot.getUserId().equals(userId) || pot.getExpiredAt().isAfter(LocalDateTime.now()))
+                .filter(pot -> pot.getUser().getId().equals(userId) || pot.getExpiredAt().isAfter(LocalDateTime.now()))
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POT)));
     }
 

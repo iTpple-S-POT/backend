@@ -23,7 +23,7 @@ public record CreatePotResponse(
         return CreatePotResponse.builder()
                 .id(pot.getId())
                 .userId(pot.getUser().getId())
-                .categoryId(pot.getCategoryId())
+                .categoryId(pot.getCategory().getId())
                 .type(pot.getPotType())
                 .content(pot.getContent())
                 .imageKey(pot.getImageKey())

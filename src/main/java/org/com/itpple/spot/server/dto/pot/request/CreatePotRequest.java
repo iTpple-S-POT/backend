@@ -9,7 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import org.com.itpple.spot.server.constant.PotType;
 import org.com.itpple.spot.server.dto.PointDTO;
+import org.com.itpple.spot.server.entity.Category;
 import org.com.itpple.spot.server.entity.Pot;
+import org.com.itpple.spot.server.entity.User;
 
 public record CreatePotRequest(
         @NotNull Long categoryId,
@@ -19,10 +21,10 @@ public record CreatePotRequest(
         String content
 ) {
 
-    public static Pot toPot(CreatePotRequest createPotRequest, Long userId) {
+    public static Pot toPot(CreatePotRequest createPotRequest, User user, Category category) {
         return Pot.builder()
-                .categoryId(createPotRequest.categoryId())
-                .userId(userId)
+                .category(category)
+                .user(user)
                 .imageKey(createPotRequest.imageKey())
                 .potType(createPotRequest.type())
                 .content(
