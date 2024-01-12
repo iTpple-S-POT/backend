@@ -26,8 +26,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     public UserInfoResponse fillUserInfo(Long userId, UserInfoRequest userInfoRequest) {
-        User user = new User();//userRepository.findById(userId)
-                //.orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
         if (userInfoRequest.nickname() == null || userInfoRequest.nickname().isEmpty()) {
             String defaultNickname = generateDefaultNickname();
             user.setNickname(defaultNickname);
