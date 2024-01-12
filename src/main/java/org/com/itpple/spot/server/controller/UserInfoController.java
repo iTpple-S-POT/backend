@@ -7,17 +7,16 @@ import org.com.itpple.spot.server.common.auth.Auth;
 import org.com.itpple.spot.server.common.auth.CustomUserDetails;
 import org.com.itpple.spot.server.dto.userInfo.request.UserInfoRequest;
 import org.com.itpple.spot.server.dto.userInfo.response.UserInfoResponse;
-import org.com.itpple.spot.server.service.impl.UserInfoServiceImpl;
-import org.springframework.http.HttpStatus;
+import org.com.itpple.spot.server.service.UserInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserInfoController {
-    private final UserInfoServiceImpl userInfoService;
+    private final UserInfoService userInfoService;
 
     //유저 기본 정보 기입
     @PostMapping("")
@@ -25,9 +24,7 @@ public class UserInfoController {
             @Auth CustomUserDetails customUserDetails,
             @RequestBody @Valid UserInfoRequest userInfoRequest) {
         Long userId = customUserDetails.getUserId();
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(userInfoService.fillUserInfo(userId, userInfoRequest));
+        return ResponseEntity.ok(userInfoService.fillUserInfo(userId, userInfoRequest));
     }
 
     //닉네임 체크
@@ -39,25 +36,19 @@ public class UserInfoController {
     }
 
     //유저 조회
-    @GetMapping("/info")
+    @GetMapping("")
     public ResponseEntity<UserInfoResponse> getUserInfo(@Auth CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(userInfoService.getUserInfo(userId));
+        return ResponseEntity.ok(userInfoService.getUserInfo(userId));
     }
 
     //유저 정보 수정
-    @PutMapping("/update")
+    @PutMapping("")
     public ResponseEntity<UserInfoResponse> updateUserInfo(
             @Auth CustomUserDetails customUserDetails,
             @Valid @RequestBody UserInfoRequest userInfoRequest
     ) {
         Long userId = customUserDetails.getUserId();
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(userInfoService.updateUserInfo(userId, userInfoRequest));
+        return ResponseEntity.ok(userInfoService.updateUserInfo(userId, userInfoRequest));
     }
-
-
 }
