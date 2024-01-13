@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.domain.category.entity;
+package org.com.itpple.spot.server.domain.pot.category.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import org.com.itpple.spot.server.global.common.entity.BasicDateEntity;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLDeleteAll;
