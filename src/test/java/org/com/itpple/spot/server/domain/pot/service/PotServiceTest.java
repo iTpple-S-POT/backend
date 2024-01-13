@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.service;
+package org.com.itpple.spot.server.domain.pot.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,17 +9,17 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.com.itpple.spot.server.global.common.constant.PotType;
-import org.com.itpple.spot.server.global.common.constant.Role;
+import org.com.itpple.spot.server.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.CircleSearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
-import org.com.itpple.spot.server.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
-import org.com.itpple.spot.server.domain.user.entity.User;
-import org.com.itpple.spot.server.global.exception.GlobalExceptionHandler;
 import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
 import org.com.itpple.spot.server.domain.pot.service.impl.PotServiceImpl;
+import org.com.itpple.spot.server.domain.user.entity.User;
+import org.com.itpple.spot.server.global.common.constant.PotType;
+import org.com.itpple.spot.server.global.common.constant.Role;
+import org.com.itpple.spot.server.global.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

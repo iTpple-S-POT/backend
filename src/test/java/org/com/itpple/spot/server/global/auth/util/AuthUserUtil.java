@@ -1,8 +1,8 @@
-package org.com.itpple.spot.server.util;
+package org.com.itpple.spot.server.global.auth.util;
 
+import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.global.common.constant.Role;
-import org.com.itpple.spot.server.domain.user.entity.User;
 
 public class AuthUserUtil {
 

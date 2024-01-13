@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.controller;
+package org.com.itpple.spot.server.domain.pot.api;
 
 
 import static org.mockito.ArgumentMatchers.any;
@@ -15,8 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.com.itpple.spot.server.global.common.constant.PotType;
-import org.com.itpple.spot.server.domain.pot.api.PotController;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
 import org.com.itpple.spot.server.domain.pot.dto.PotDTO;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
@@ -25,7 +23,8 @@ import org.com.itpple.spot.server.domain.pot.dto.request.UploadImageRequest;
 import org.com.itpple.spot.server.domain.pot.dto.response.CreatePotResponse;
 import org.com.itpple.spot.server.domain.pot.dto.response.UploadImageResponse;
 import org.com.itpple.spot.server.domain.pot.service.PotService;
-import org.com.itpple.spot.server.util.AuthUserUtil;
+import org.com.itpple.spot.server.global.auth.util.AuthUserUtil;
+import org.com.itpple.spot.server.global.common.constant.PotType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
