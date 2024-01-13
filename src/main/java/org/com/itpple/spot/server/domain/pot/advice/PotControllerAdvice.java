@@ -1,9 +1,8 @@
-package org.com.itpple.spot.server.domain.pot;
+package org.com.itpple.spot.server.domain.pot.advice;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.com.itpple.spot.server.domain.pot.api.PotController;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
+import org.com.itpple.spot.server.domain.pot.api.PotController;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.CircleSearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.RectangleSearchRange;
