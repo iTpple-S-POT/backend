@@ -2,24 +2,24 @@ package org.com.itpple.spot.server.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.com.itpple.spot.server.util.GeometryUtil.createPoint;
+import static org.com.itpple.spot.server.global.util.GeometryUtil.createPoint;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.com.itpple.spot.server.constant.PotType;
-import org.com.itpple.spot.server.constant.Role;
-import org.com.itpple.spot.server.dto.PointDTO;
-import org.com.itpple.spot.server.dto.pot.SearchCondition.CircleSearchRange;
-import org.com.itpple.spot.server.dto.pot.SearchCondition.SearchRange;
-import org.com.itpple.spot.server.entity.Category;
-import org.com.itpple.spot.server.entity.Pot;
-import org.com.itpple.spot.server.entity.User;
-import org.com.itpple.spot.server.exception.GlobalExceptionHandler;
-import org.com.itpple.spot.server.repository.PotRepository;
-import org.com.itpple.spot.server.service.impl.PotServiceImpl;
+import org.com.itpple.spot.server.global.common.constant.PotType;
+import org.com.itpple.spot.server.global.common.constant.Role;
+import org.com.itpple.spot.server.domain.location.dto.PointDTO;
+import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.CircleSearchRange;
+import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
+import org.com.itpple.spot.server.domain.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.entity.Pot;
+import org.com.itpple.spot.server.domain.user.entity.User;
+import org.com.itpple.spot.server.global.exception.GlobalExceptionHandler;
+import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
+import org.com.itpple.spot.server.domain.pot.service.impl.PotServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

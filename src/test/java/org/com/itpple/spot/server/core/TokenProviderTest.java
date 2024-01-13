@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.com.itpple.spot.server.common.auth.jwt.TokenProvider;
-import org.com.itpple.spot.server.common.auth.userDetails.CustomUserDetails;
-import org.com.itpple.spot.server.constant.Role;
-import org.com.itpple.spot.server.entity.User;
+import org.com.itpple.spot.server.global.auth.jwt.TokenProvider;
+import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
+import org.com.itpple.spot.server.global.common.constant.Role;
+import org.com.itpple.spot.server.domain.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,17 +1,19 @@
 package org.com.itpple.spot.server.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.com.itpple.spot.server.util.GeometryUtil.createCircle;
-import static org.com.itpple.spot.server.util.GeometryUtil.createPoint;
-import static org.com.itpple.spot.server.util.GeometryUtil.createPolygon;
+import static org.com.itpple.spot.server.global.util.GeometryUtil.createCircle;
+import static org.com.itpple.spot.server.global.util.GeometryUtil.createPoint;
+import static org.com.itpple.spot.server.global.util.GeometryUtil.createPolygon;
 
 import lombok.RequiredArgsConstructor;
-import org.com.itpple.spot.server.constant.PotType;
-import org.com.itpple.spot.server.constant.Role;
-import org.com.itpple.spot.server.dto.PointDTO;
-import org.com.itpple.spot.server.entity.Category;
-import org.com.itpple.spot.server.entity.Pot;
-import org.com.itpple.spot.server.entity.User;
+
+import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
+import org.com.itpple.spot.server.global.common.constant.PotType;
+import org.com.itpple.spot.server.global.common.constant.Role;
+import org.com.itpple.spot.server.domain.location.dto.PointDTO;
+import org.com.itpple.spot.server.domain.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.entity.Pot;
+import org.com.itpple.spot.server.domain.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
