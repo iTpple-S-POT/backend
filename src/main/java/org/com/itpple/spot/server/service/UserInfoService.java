@@ -7,4 +7,6 @@ public interface UserInfoService {
     UserInfoResponse fillUserInfo(Long userId, UserInfoRequest userInfoRequest);
     void isAlreadyExistNickname(String nickname);
     void validateNickname(String nickname);
+    UserInfoResponse getUserInfo(Long userId);
+    UserInfoResponse updateUserInfo(Long userId, UserInfoRequest userInfoRequest);
 }
