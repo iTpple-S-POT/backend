@@ -1,5 +1,7 @@
 package org.com.itpple.spot.server.exception;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -24,6 +26,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
+        log.error("[Custom_Exception]: {}", convertExceptionStackTraceToString(ex));
+        
         return ResponseEntity
                 .status(ex.getHttpStatus())
                 .body(new ErrorResponse(ex.getCode(), ex.getMessage()));
@@ -31,9 +35,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status,
-            WebRequest request
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request
     ) {
+        log.error("[MethodArgument_NotValid_Exception]: {}", convertExceptionStackTraceToString(ex));
+        
         List<FieldError> errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> new FieldError(
                         error.getField(),
@@ -51,8 +56,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ValidationErrorResponse> handleConstraintViolationException(
-            ConstraintViolationException ex) {
+    public ResponseEntity<ValidationErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
+        log.error("[Constraint_Violation_Exception]: {}", convertExceptionStackTraceToString(ex));
+        
         List<FieldError> errors = ex.getConstraintViolations().stream()
                 .map(violation -> new FieldError(
                         getFieldName(violation),
@@ -70,10 +76,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status,
-            WebRequest request
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request
     ) {
+        log.error("[Spring_MVC_Standard_Exception]: {}", convertExceptionStackTraceToString(ex));
+        
         GlobalErrorCode globalErrorCode = GlobalErrorCode.from(ex.getClass());
+        
         return ResponseEntity
                 .status(status)
                 .body(new ErrorResponse(
@@ -84,7 +92,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        log.error("{}", ex);
+        log.error("[Exception]: {}", convertExceptionStackTraceToString(ex));
+        
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(
@@ -97,5 +106,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String propertyPath = violation.getPropertyPath().toString();
         int dotIdx = propertyPath.lastIndexOf(".");
         return propertyPath.substring(dotIdx + 1);
+    }
+
+    private static String convertExceptionStackTraceToString(Exception ex) {
+        StringWriter stringWriter = new StringWriter();
+        ex.printStackTrace(new PrintWriter(stringWriter));
+        return String.valueOf(stringWriter);
     }
 }
