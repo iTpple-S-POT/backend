@@ -5,6 +5,6 @@ import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 
 public class UserIdAlreadyExistsException extends CustomException {
     public UserIdAlreadyExistsException() {
-        super(ErrorCode.MEMBER_ID_ALREADY_EXISTS);
+        super(ErrorCode.USER_ID_ALREADY_EXISTS);
     }
 }

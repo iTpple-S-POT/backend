@@ -13,7 +13,6 @@ import javax.persistence.Id;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.constant.*;
 import org.com.itpple.spot.server.global.common.entity.BasicDateEntity;
 import org.com.itpple.spot.server.global.common.constant.Gender;
 import org.com.itpple.spot.server.global.common.constant.Interest;
