@@ -57,9 +57,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> getCommentList(Long userId, Long potId) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserIdNotFoundException("PK = " + userId);
-        }
+        checkUserExistsById(userId);
 
         if (!potRepository.existsById(potId)) {
             throw new PotIdNotFoundException("PK = " + userId);
@@ -75,9 +73,7 @@ public class CommentServiceImpl implements CommentService {
     public void updateComment(
         Long userId, Long commentId, UpdateCommentRequest request
     ) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserIdNotFoundException("PK = " + userId);
-        }
+        checkUserExistsById(userId);
 
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new CommentIdNotFoundException("PK = " + commentId));
@@ -87,6 +83,27 @@ public class CommentServiceImpl implements CommentService {
         }
 
         comment.updateContent(request.content());
+    }
+
+    @Transactional
+    @Override
+    public void deleteComment(Long userId, Long commentId) {
+        checkUserExistsById(userId);
+
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new CommentIdNotFoundException("PK = " + commentId));
+
+        if (comment.getWriter().getId() != userId) {
+            throw new CommentWriterNotMatchException();
+        }
+
+        commentRepository.deleteById(commentId);
+    }
+
+    private void checkUserExistsById(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserIdNotFoundException("PK = " + userId);
+        }
     }
 
     private Comment getParentComment(Long potId, Long parentCommentId) {

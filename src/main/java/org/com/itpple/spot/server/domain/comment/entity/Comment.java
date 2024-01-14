@@ -21,13 +21,11 @@ import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.common.entity.BasicDateEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLDeleteAll;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @SQLDelete(sql = "UPDATE comment SET is_deleted = true WHERE comment_id = ?")
-@SQLDeleteAll(sql = "UPDATE comment SET is_deleted = true WHERE comment_id in ?")
 @Entity
 public class Comment extends BasicDateEntity {
 

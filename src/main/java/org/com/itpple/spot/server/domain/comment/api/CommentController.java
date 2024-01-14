@@ -13,6 +13,7 @@ import org.com.itpple.spot.server.domain.comment.dto.response.CreateCommentRespo
 import org.com.itpple.spot.server.domain.comment.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,6 +61,18 @@ public class CommentController {
     ) {
         Long userId = customUserDetails.getUserId();
         commentService.updateComment(userId, commentId, updateCommentRequest);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(null);
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity deleteComment(
+        @Auth CustomUserDetails customUserDetails,
+        @PathVariable(name = "commentId") Long commentId
+    ) {
+        Long userId = customUserDetails.getUserId();
+        commentService.deleteComment(userId, commentId);
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(null);
