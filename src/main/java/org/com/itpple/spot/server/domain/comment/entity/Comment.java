@@ -64,4 +64,8 @@ public class Comment extends BasicDateEntity {
         this.parentComment = parentComment;
         this.content = content;
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

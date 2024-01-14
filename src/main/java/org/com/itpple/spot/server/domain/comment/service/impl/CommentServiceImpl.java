@@ -7,8 +7,11 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.com.itpple.spot.server.domain.comment.dto.CommentDto;
 import org.com.itpple.spot.server.domain.comment.dto.request.CreateCommentRequest;
+import org.com.itpple.spot.server.domain.comment.dto.request.UpdateCommentRequest;
 import org.com.itpple.spot.server.domain.comment.dto.response.CreateCommentResponse;
 import org.com.itpple.spot.server.domain.comment.entity.Comment;
+import org.com.itpple.spot.server.domain.comment.exception.CommentIdNotFoundException;
+import org.com.itpple.spot.server.domain.comment.exception.CommentWriterNotMatchException;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.domain.comment.exception.ParentCommentNotFoundException;
@@ -65,6 +68,25 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> commentList = commentRepository.findAllComment(potId);
 
         return convertToHierarchy(commentList);
+    }
+
+    @Transactional
+    @Override
+    public void updateComment(
+        Long userId, Long commentId, UpdateCommentRequest request
+    ) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserIdNotFoundException("PK = " + userId);
+        }
+
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new CommentIdNotFoundException("PK = " + commentId));
+
+        if (comment.getWriter().getId() != userId) {
+            throw new CommentWriterNotMatchException();
+        }
+
+        comment.updateContent(request.content());
     }
 
     private Comment getParentComment(Long potId, Long parentCommentId) {
