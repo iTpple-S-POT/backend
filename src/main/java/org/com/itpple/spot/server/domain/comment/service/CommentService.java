@@ -8,7 +8,7 @@ import org.com.itpple.spot.server.domain.comment.dto.response.CreateCommentRespo
 
 public interface CommentService {
 
-    CreateCommentResponse addComment(Long userId, Long potId, CreateCommentRequest request);
+    CreateCommentResponse addComment(Long userId, CreateCommentRequest request);
 
     List<CommentDto> getCommentList(Long userId, Long potId);
 

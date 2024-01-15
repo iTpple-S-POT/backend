@@ -36,9 +36,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CreateCommentResponse addComment(Long userId, Long potId, CreateCommentRequest request) {
+    public CreateCommentResponse addComment(Long userId, CreateCommentRequest request) {
         User writer = userRepository.findById(userId)
             .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
+
+        Long potId = request.potId();
 
         Pot pot = potRepository.findById(potId)
             .orElseThrow(() -> new PotIdNotFoundException("PK = " + potId));

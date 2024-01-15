@@ -33,13 +33,12 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CreateCommentResponse> addComment(
         @Auth CustomUserDetails customUserDetails,
-        @RequestParam(name = "potId") Long potId,
         @Valid @RequestBody CreateCommentRequest createCommentRequest
     ) {
         Long userId = customUserDetails.getUserId();
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(commentService.addComment(userId, potId, createCommentRequest));
+            .body(commentService.addComment(userId, createCommentRequest));
     }
 
     @GetMapping
