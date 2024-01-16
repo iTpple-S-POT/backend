@@ -3,13 +3,7 @@ package org.com.itpple.spot.server.domain.user.entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +62,7 @@ public class User extends BasicDateEntity {
     @Column(name = "mbti", length = 10)
     private Mbti mbti;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "interest", length = 10)
     private List<Interest> interests = new ArrayList<>();
 
