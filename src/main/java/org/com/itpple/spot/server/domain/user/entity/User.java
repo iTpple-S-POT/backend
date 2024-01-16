@@ -69,7 +69,6 @@ public class User extends BasicDateEntity {
     private Mbti mbti;
 
     @ElementCollection
-    @Enumerated(EnumType.STRING)
     @Column(name = "interest", length = 10)
     private List<Interest> interests = new ArrayList<>();
 
