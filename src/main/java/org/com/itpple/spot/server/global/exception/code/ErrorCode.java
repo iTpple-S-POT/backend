@@ -39,7 +39,9 @@ public enum ErrorCode {
 
     // Comment 관련
     NOT_FOUND_PARENT_COMMENT(1901, "답글 추가하기 위한 댓글이 없습니다.", HttpStatus.NOT_FOUND),
-    COMMENT_POT_NOT_MATCH(1902, "추가하려는 답글과 댓글의 POT이 다릅니다.", HttpStatus.BAD_REQUEST),
+    NOT_MATCH_COMMENT_POT(1902, "추가하려는 답글과 댓글의 POT이 다릅니다.", HttpStatus.CONFLICT),
+    NOT_FOUND_COMMENT(1903, "댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    NOT_MATCH_COMMENT_WRITER(1904, "요청을 보낸 사용자가 등록한 댓글이 아닙니다.", HttpStatus.FORBIDDEN),
     ;
 
     private final Integer code;

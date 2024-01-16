@@ -7,8 +7,11 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.com.itpple.spot.server.domain.comment.dto.CommentDto;
 import org.com.itpple.spot.server.domain.comment.dto.request.CreateCommentRequest;
+import org.com.itpple.spot.server.domain.comment.dto.request.UpdateCommentRequest;
 import org.com.itpple.spot.server.domain.comment.dto.response.CreateCommentResponse;
 import org.com.itpple.spot.server.domain.comment.entity.Comment;
+import org.com.itpple.spot.server.domain.comment.exception.CommentIdNotFoundException;
+import org.com.itpple.spot.server.domain.comment.exception.CommentWriterNotMatchException;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.domain.comment.exception.ParentCommentNotFoundException;
@@ -33,9 +36,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CreateCommentResponse addComment(Long userId, Long potId, CreateCommentRequest request) {
+    public CreateCommentResponse addComment(Long userId, CreateCommentRequest request) {
         User writer = userRepository.findById(userId)
             .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
+
+        Long potId = request.potId();
 
         Pot pot = potRepository.findById(potId)
             .orElseThrow(() -> new PotIdNotFoundException("PK = " + potId));
@@ -54,9 +59,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> getCommentList(Long userId, Long potId) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserIdNotFoundException("PK = " + userId);
-        }
+        checkUserExistsById(userId);
 
         if (!potRepository.existsById(potId)) {
             throw new PotIdNotFoundException("PK = " + userId);
@@ -65,6 +68,44 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> commentList = commentRepository.findAllComment(potId);
 
         return convertToHierarchy(commentList);
+    }
+
+    @Transactional
+    @Override
+    public void updateComment(
+        Long userId, Long commentId, UpdateCommentRequest request
+    ) {
+        checkUserExistsById(userId);
+
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new CommentIdNotFoundException("PK = " + commentId));
+
+        if (comment.getWriter().getId() != userId) {
+            throw new CommentWriterNotMatchException();
+        }
+
+        comment.updateContent(request.content());
+    }
+
+    @Transactional
+    @Override
+    public void deleteComment(Long userId, Long commentId) {
+        checkUserExistsById(userId);
+
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new CommentIdNotFoundException("PK = " + commentId));
+
+        if (comment.getWriter().getId() != userId) {
+            throw new CommentWriterNotMatchException();
+        }
+
+        commentRepository.deleteById(commentId);
+    }
+
+    private void checkUserExistsById(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserIdNotFoundException("PK = " + userId);
+        }
     }
 
     private Comment getParentComment(Long potId, Long parentCommentId) {
