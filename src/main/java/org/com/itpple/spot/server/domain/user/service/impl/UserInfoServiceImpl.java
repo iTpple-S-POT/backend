@@ -2,6 +2,7 @@ package org.com.itpple.spot.server.domain.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.domain.user.dto.UserInfoDto;
 import org.com.itpple.spot.server.global.common.constant.NickNameData;
 import org.com.itpple.spot.server.global.common.constant.Status;
 import org.com.itpple.spot.server.domain.user.dto.request.UserInfoRequest;
