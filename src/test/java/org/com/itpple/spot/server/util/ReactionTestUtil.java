@@ -16,11 +16,14 @@ public class ReactionTestUtil {
 	}
 
 	public static Reaction create(Pot pot, User user, ReactionType reactionType, boolean isDeleted) {
-		return Reaction.builder()
-			.pot(pot)
-			.user(user)
-			.reactionType(reactionType)
-			.isDeleted(isDeleted)
-			.build();
+		Reaction reaction = Reaction.builder()
+				.pot(pot)
+				.user(user)
+				.reactionType(reactionType)
+				.build();
+
+		reaction.updateIsDeleted(isDeleted);
+		
+		return reaction;
 	}
 }
