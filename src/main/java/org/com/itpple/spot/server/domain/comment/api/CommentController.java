@@ -73,7 +73,7 @@ public class CommentController {
         Long userId = customUserDetails.getUserId();
         commentService.deleteComment(userId, commentId);
         return ResponseEntity
-            .status(HttpStatus.OK)
+            .status(HttpStatus.NO_CONTENT)
             .body(null);
     }
 }
