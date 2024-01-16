@@ -3,19 +3,14 @@ package org.com.itpple.spot.server.domain.user.api;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.domain.user.dto.UserInfoDto;
 import org.com.itpple.spot.server.domain.user.dto.request.UserInfoRequest;
 import org.com.itpple.spot.server.domain.user.dto.response.UserInfoResponse;
 import org.com.itpple.spot.server.domain.user.service.UserInfoService;
 import org.com.itpple.spot.server.global.auth.Auth;
 import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -43,7 +38,7 @@ public class UserInfoController {
 
     //유저 조회
     @GetMapping("")
-    public ResponseEntity<UserInfoResponse> getUserInfo(@Auth CustomUserDetails customUserDetails) {
+    public ResponseEntity<UserInfoDto> getUserInfo(@Auth CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
         return ResponseEntity.ok(userInfoService.getUserInfo(userId));
     }

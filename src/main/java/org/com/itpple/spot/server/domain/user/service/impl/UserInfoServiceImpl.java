@@ -76,10 +76,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
     }
 
-    public UserInfoResponse getUserInfo(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
-        return UserInfoResponse.from(user);
+    public UserInfoDto getUserInfo(Long userId) {
+        return UserInfoDto.from(userRepository.findById(userId)
+                .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId)));
     }
 
     @Transactional
