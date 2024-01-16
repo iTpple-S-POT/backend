@@ -4,7 +4,7 @@ import org.com.itpple.spot.server.domain.user.entity.User;
 
 public class UserTestUtil {
 
-	public static User createUser() {
+	public static User create() {
 		return User.builder().build();
 	}
 }

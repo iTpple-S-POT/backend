@@ -34,9 +34,9 @@ class ReactionRepositoryTest {
 	private final ReactionRepository reactionRepository;
 	private final TestEntityManager testEntityManager;
 
-	private final User user = UserTestUtil.createUser();
+	private final User user = UserTestUtil.create();
 	private final Category category = PotTestUtil.createCategory();
-	private final Pot pot = PotTestUtil.createPot(user, category);
+	private final Pot pot = PotTestUtil.create(user, category);
 	private final ReactionType REACTION_TYPE = ReactionType.GOOD;
 
 	@BeforeEach
@@ -50,11 +50,11 @@ class ReactionRepositoryTest {
 	void 추가한_반응을_조회할_때_isDeleted가_false인_것만_조회된다() {
 		// given
 		List<Reaction> reactionList = List.of(
-			ReactionTestUtil.createReaction(pot, user, REACTION_TYPE, false),
-			ReactionTestUtil.createReaction(pot, user, REACTION_TYPE, true),
-			ReactionTestUtil.createReaction(pot, user, REACTION_TYPE, true),
-			ReactionTestUtil.createReaction(pot, user, REACTION_TYPE, false),
-			ReactionTestUtil.createReaction(pot, user, REACTION_TYPE, false)
+			ReactionTestUtil.create(pot, user, REACTION_TYPE, false),
+			ReactionTestUtil.create(pot, user, REACTION_TYPE, true),
+			ReactionTestUtil.create(pot, user, REACTION_TYPE, true),
+			ReactionTestUtil.create(pot, user, REACTION_TYPE, false),
+			ReactionTestUtil.create(pot, user, REACTION_TYPE, false)
 		);
 		reactionRepository.saveAll(reactionList);
 		testEntityManager.flush();

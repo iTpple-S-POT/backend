@@ -13,9 +13,9 @@ public class PotTestUtil {
 
 	private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-	public static Pot createPot() {
+	public static Pot create() {
 		return Pot.builder()
-			.user(UserTestUtil.createUser())
+			.user(UserTestUtil.create())
 			.category(createCategory())
 			.potType(PotType.TEXT)
 			.imageKey("imageKey")
@@ -24,7 +24,7 @@ public class PotTestUtil {
 			.build();
 	}
 
-	public static Pot createPot(User user, Category category) {
+	public static Pot create(User user, Category category) {
 		return Pot.builder()
 			.user(user)
 			.category(category)

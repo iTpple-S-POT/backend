@@ -7,15 +7,15 @@ import org.com.itpple.spot.server.global.common.constant.ReactionType;
 
 public class ReactionTestUtil {
 
-	public static Reaction createReaction(ReactionType reactionType) {
+	public static Reaction create(ReactionType reactionType) {
 		return Reaction.builder()
-			.pot(PotTestUtil.createPot())
-			.user(UserTestUtil.createUser())
+			.pot(PotTestUtil.create())
+			.user(UserTestUtil.create())
 			.reactionType(reactionType)
 			.build();
 	}
 
-	public static Reaction createReaction(Pot pot, User user, ReactionType reactionType, boolean isDeleted) {
+	public static Reaction create(Pot pot, User user, ReactionType reactionType, boolean isDeleted) {
 		return Reaction.builder()
 			.pot(pot)
 			.user(user)

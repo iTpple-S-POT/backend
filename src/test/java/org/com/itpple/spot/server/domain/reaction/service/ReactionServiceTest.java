@@ -44,9 +44,9 @@ class ReactionServiceTest {
 	@Test
 	void 반응_타입을_입력받아_POT에_반응을_추가한다() {
 		// given
-		User user = UserTestUtil.createUser();
-		Pot pot = PotTestUtil.createPot();
-		Reaction expectSavedReaction = ReactionTestUtil.createReaction(REACTION_TYPE);
+		User user = UserTestUtil.create();
+		Pot pot = PotTestUtil.create();
+		Reaction expectSavedReaction = ReactionTestUtil.create(REACTION_TYPE);
 		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(potRepository.findById(anyLong())).willReturn(Optional.of(pot));
 		given(reactionRepository.existsByPotAndUser(pot, user)).willReturn(false);
@@ -62,8 +62,8 @@ class ReactionServiceTest {
 	@Test
 	void 반응을_추가했던_POT에_추가로_반응을_남기려고_하면_에러가_발생한다() {
 		// given
-		User user = UserTestUtil.createUser();
-		Pot pot = PotTestUtil.createPot();
+		User user = UserTestUtil.create();
+		Pot pot = PotTestUtil.create();
 		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(potRepository.findById(anyLong())).willReturn(Optional.of(pot));
 		given(reactionRepository.existsByPotAndUser(pot, user)).willReturn(true);
