@@ -18,19 +18,18 @@ import lombok.NoArgsConstructor;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.global.common.constant.ReactionType;
+import org.com.itpple.spot.server.global.common.entity.BasicDateEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLDeleteAll;
 import org.hibernate.annotations.Where;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @DynamicInsert
 @SQLDelete(sql = "UPDATE reaction SET is_deleted = true WHERE reaction_id = ?")
-@SQLDeleteAll(sql = "UPDATE reaction SET is_deleted = true WHERE reaction_id in ?")
 @Where(clause = "is_deleted = false")
 @Entity
-public class Reaction {
+public class Reaction extends BasicDateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,5 +56,9 @@ public class Reaction {
         this.pot = pot;
         this.user = user;
         this.reactionType = reactionType;
+    }
+
+    public void updateIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
