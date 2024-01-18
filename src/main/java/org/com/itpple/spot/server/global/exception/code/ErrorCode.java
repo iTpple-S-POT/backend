@@ -42,6 +42,9 @@ public enum ErrorCode {
     NOT_MATCH_COMMENT_POT(1902, "추가하려는 답글과 댓글의 POT이 다릅니다.", HttpStatus.CONFLICT),
     NOT_FOUND_COMMENT(1903, "댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     NOT_MATCH_COMMENT_WRITER(1904, "요청을 보낸 사용자가 등록한 댓글이 아닙니다.", HttpStatus.FORBIDDEN),
+
+    // Location 관련
+    NOT_FOUND_LOCATION(2001, "유저 위치를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     ;
 
     private final Integer code;

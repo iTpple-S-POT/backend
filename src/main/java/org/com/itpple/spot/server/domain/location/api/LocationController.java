@@ -7,18 +7,14 @@ import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.domain.location.dto.request.LocationRequest;
 import org.com.itpple.spot.server.domain.location.dto.response.LocationResponse;
 import org.com.itpple.spot.server.domain.location.service.impl.LocationServiceImpl;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/location")
+@RequestMapping("api/v1/location")
 @RequiredArgsConstructor
 public class LocationController {
     private final LocationServiceImpl locationServiceImpl;
@@ -29,8 +25,12 @@ public class LocationController {
             @Valid @RequestBody LocationRequest locationRequest
     ) {
         Long userId = customUserDetails.getUserId();
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(locationServiceImpl.save(userId,locationRequest));
+        return ResponseEntity.ok(locationServiceImpl.save(userId, locationRequest));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<LocationResponse> getLocation(@Auth CustomUserDetails customUserDetails) {
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(locationServiceImpl.getLocation(userId));
     }
 }
