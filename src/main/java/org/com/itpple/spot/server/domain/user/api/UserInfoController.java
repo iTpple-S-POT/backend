@@ -52,4 +52,11 @@ public class UserInfoController {
         Long userId = customUserDetails.getUserId();
         return ResponseEntity.ok(userInfoService.updateUserInfo(userId, userInfoRequest));
     }
+
+    //다른 유저 프로필 조회
+    @GetMapping("/{userid}")
+    public ResponseEntity<UserInfoDto> getUserProfile(@PathVariable Long userid) {
+        Long userId = userid;
+        return ResponseEntity.ok(userInfoService.getUserInfo(userId));
+    }
 }
