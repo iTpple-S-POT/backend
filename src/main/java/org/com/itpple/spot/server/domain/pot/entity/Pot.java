@@ -2,6 +2,8 @@ package org.com.itpple.spot.server.domain.pot.entity;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,12 +13,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.domain.hashtag.entity.Hashtag;
+import org.com.itpple.spot.server.domain.pot.domain.hashtag.entity.PotHashtag;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.common.constant.PotType;
 import org.com.itpple.spot.server.global.common.entity.BasicDateEntity;
@@ -67,10 +72,21 @@ public class Pot extends BasicDateEntity {
     @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
     private boolean isDeleted;
 
+    @OneToMany(mappedBy = "pot")
+    @JoinColumn(name = "hashtag_id")
+    private final List<PotHashtag> hashtagList = new ArrayList<>();
+
     @PrePersist
     public void prePersist() {
         this.expiredAt = LocalDateTime.now().plusDays(1);
     }
 
-    //TODO: 해시태그 기획이 확정되면 추가
+
+    public void addHashtagList(List<Hashtag> hashtagList) {
+        hashtagList.forEach(hashtag -> this.hashtagList.add(PotHashtag.create(this, hashtag)));
+    }
+
+    public void removeHashtagList(List<Hashtag> hashtagList) {
+        hashtagList.forEach(hashtag -> this.hashtagList.removeIf(potHashtag -> potHashtag.getHashtag().equals(hashtag)));
+    }
 }

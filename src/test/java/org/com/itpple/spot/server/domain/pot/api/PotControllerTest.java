@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
+import org.com.itpple.spot.server.domain.pot.domain.hashtag.service.HashtagService;
 import org.com.itpple.spot.server.domain.pot.dto.PotDTO;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreatePotRequest;
@@ -41,6 +42,8 @@ class PotControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private PotService potService;
+    @MockBean
+    private HashtagService hashTagService;
 
     @Test
     void uploadImageUsingPreSignedUrl_Invalid_Image_Extension() throws Exception {
@@ -77,7 +80,7 @@ class PotControllerTest {
     void createPot_Invalid_Image_Extension() throws Exception {
         final var url = "/api/v1/pot";
         final var createPotRequest = new CreatePotRequest(
-                1L, "test.txt", PotType.IMAGE, new PointDTO(0.0, 0.0), null);
+                1L, "test.txt", PotType.IMAGE, new PointDTO(0.0, 0.0), null, List.of());
 
         final ResultActions resultActions = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +95,7 @@ class PotControllerTest {
     void createPot_Success() throws Exception {
         final var url = "/api/v1/pot";
         final var createPotRequest = new CreatePotRequest(
-                1L, "test.jpg", PotType.IMAGE, new PointDTO(0.0, 0.0), null);
+                1L, "test.jpg", PotType.IMAGE, new PointDTO(0.0, 0.0), null, List.of());
 
         doReturn(CreatePotResponse.builder()
                 .build()).when(potService).createPot(any(), any(CreatePotRequest.class));
@@ -190,6 +193,7 @@ class PotControllerTest {
 
         resultActions.andExpect(status().isOk());
     }
+
     @Test
     void getPotList_Failed_Rectangle_distance_max() throws Exception {
         final var url = "/api/v1/pot";

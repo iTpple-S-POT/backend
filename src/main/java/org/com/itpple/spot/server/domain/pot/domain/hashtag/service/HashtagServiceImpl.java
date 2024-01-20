@@ -3,6 +3,7 @@ package org.com.itpple.spot.server.domain.pot.domain.hashtag.service;
 import io.jsonwebtoken.lang.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.entity.Hashtag;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.repository.HashtagRepository;
 import org.com.itpple.spot.server.domain.pot.dto.HashtagDTO;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class HashtagServiceImpl implements HashtagService {

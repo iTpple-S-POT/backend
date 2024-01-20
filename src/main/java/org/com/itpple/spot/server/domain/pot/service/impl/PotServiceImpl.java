@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.pot.domain.category.repository.CategoryRepository;
+import org.com.itpple.spot.server.domain.pot.domain.hashtag.repository.HashtagRepository;
 import org.com.itpple.spot.server.domain.pot.dto.PotDTO;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreatePotRequest;
@@ -31,6 +32,7 @@ public class PotServiceImpl implements PotService {
     private final PotRepository potRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final HashtagRepository hashtagRepository;
 
     @Override
     public GetCategoryResponse getCategory() {
@@ -57,7 +59,9 @@ public class PotServiceImpl implements PotService {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest, user, category)));
+        var hashtagList = hashtagRepository.findAllById(createPotRequest.hashtagIdList());
+
+        return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest, user, category, hashtagList)));
     }
 
     @Override
