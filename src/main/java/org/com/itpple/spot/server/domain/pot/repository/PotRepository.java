@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface PotRepository extends JpaRepository<Pot, Long> {
 
     @Query(value = "SELECT p FROM Pot p "
+            + "left join fetch p.potHashtagList ph "
             + "WHERE st_intersects(p.location,:polygon) = true "
             + "AND p.expiredAt > now() "
             + "AND (:categoryId is null or p.category.id = :categoryId) "
@@ -17,7 +18,8 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
     List<Pot> findByLocationAndCategoryId(@Param("polygon") Polygon polygon,
             @Param("categoryId") Long categoryId);
 
-    @Query(value = "SELECT p FROM Pot p "
+    @Query(value = "SELECT p FROM Pot p  "
+            + "left join fetch p.potHashtagList ph "
             + "WHERE (:polygon is null or st_intersects(p.location,:polygon) = true) "
             + "AND (:categoryId is null or p.category.id = :categoryId) ")
     List<Pot> findByLocationAndCategoryForAdmin(@Param("polygon") Polygon polygon,

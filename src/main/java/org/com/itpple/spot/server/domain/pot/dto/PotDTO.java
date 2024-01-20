@@ -5,9 +5,9 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.com.itpple.spot.server.global.common.constant.PotType;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
+import org.com.itpple.spot.server.global.common.constant.PotType;
 
 /**
  * response 반환용 뿐 아니라 다른 서비스에서 사용할 수 있도록 DTO로 분리
@@ -25,6 +25,7 @@ public class PotDTO {
     private final PointDTO location;
     private final String imageKey;
     private final LocalDateTime expiredAt;
+    private final List<HashtagDTO> hashtagList;
 
     public static PotDTO from(Pot pot) {
         return PotDTO.builder()
@@ -36,6 +37,9 @@ public class PotDTO {
                 .location(PointDTO.from(pot.getLocation()))
                 .imageKey(pot.getImageKey())
                 .expiredAt(pot.getExpiredAt())
+                .hashtagList(pot.getPotHashtagList().stream()
+                        .map(potHashtag -> HashtagDTO.from(potHashtag.getHashtag())
+                        ).toList())
                 .build();
     }
 }

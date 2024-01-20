@@ -74,7 +74,7 @@ public class Pot extends BasicDateEntity {
 
     @OneToMany(mappedBy = "pot")
     @JoinColumn(name = "hashtag_id")
-    private final List<PotHashtag> hashtagList = new ArrayList<>();
+    private final List<PotHashtag> potHashtagList = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
@@ -83,10 +83,10 @@ public class Pot extends BasicDateEntity {
 
 
     public void addHashtagList(List<Hashtag> hashtagList) {
-        hashtagList.forEach(hashtag -> this.hashtagList.add(PotHashtag.create(this, hashtag)));
+        hashtagList.forEach(hashtag -> this.potHashtagList.add(PotHashtag.create(this, hashtag)));
     }
 
     public void removeHashtagList(List<Hashtag> hashtagList) {
-        hashtagList.forEach(hashtag -> this.hashtagList.removeIf(potHashtag -> potHashtag.getHashtag().equals(hashtag)));
+        hashtagList.forEach(hashtag -> this.potHashtagList.removeIf(potHashtag -> potHashtag.getHashtag().equals(hashtag)));
     }
 }

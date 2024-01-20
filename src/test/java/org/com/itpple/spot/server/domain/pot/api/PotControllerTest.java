@@ -111,11 +111,11 @@ class PotControllerTest {
 
     private final List<PotDTO> potDTOList = (List.of(
             new PotDTO(1L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
-                    LocalDateTime.now().plusDays(1)),
+                    LocalDateTime.now().plusDays(1), List.of()),
             new PotDTO(2L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
-                    LocalDateTime.now().plusDays(1)),
+                    LocalDateTime.now().plusDays(1), List.of()),
             new PotDTO(3L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
-                    LocalDateTime.now().plusDays(1))
+                    LocalDateTime.now().plusDays(1), List.of())
     ));
 
     @Test
