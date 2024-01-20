@@ -73,7 +73,6 @@ public class Pot extends BasicDateEntity {
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "pot")
-    @JoinColumn(name = "hashtag_id")
     private final List<PotHashtag> potHashtagList = new ArrayList<>();
 
     @PrePersist
