@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.user.dto.UserInfoDto;
+import org.com.itpple.spot.server.domain.user.dto.request.UpdateUserInfoRequest;
 import org.com.itpple.spot.server.domain.user.dto.request.UserInfoRequest;
 import org.com.itpple.spot.server.domain.user.dto.response.UserInfoResponse;
 import org.com.itpple.spot.server.domain.user.service.UserInfoService;
@@ -47,9 +48,9 @@ public class UserInfoController {
     @PutMapping("")
     public ResponseEntity<UserInfoResponse> updateUserInfo(
             @Auth CustomUserDetails customUserDetails,
-            @Valid @RequestBody UserInfoRequest userInfoRequest
+            @Valid @RequestBody UpdateUserInfoRequest updateUserInfoRequest
     ) {
         Long userId = customUserDetails.getUserId();
-        return ResponseEntity.ok(userInfoService.updateUserInfo(userId, userInfoRequest));
+        return ResponseEntity.ok(userInfoService.updateUserInfo(userId, updateUserInfoRequest));
     }
 }
