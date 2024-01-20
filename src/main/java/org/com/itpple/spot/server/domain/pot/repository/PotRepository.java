@@ -14,9 +14,10 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
             + "WHERE st_intersects(p.location,:polygon) = true "
             + "AND p.expiredAt > now() "
             + "AND (:categoryId is null or p.category.id = :categoryId) "
+            + "AND (:hashtagId is null or ph.hashtag.id = :hashtagId) "
             + "AND p.isDeleted = false ")
-    List<Pot> findByLocationAndCategoryId(@Param("polygon") Polygon polygon,
-            @Param("categoryId") Long categoryId);
+    List<Pot> findBySearchCondition(@Param("polygon") Polygon polygon,
+            @Param("categoryId") Long categoryId, @Param("hashtagId") Long hashtagId);
 
     @Query(value = "SELECT p FROM Pot p  "
             + "left join fetch p.potHashtagList ph "

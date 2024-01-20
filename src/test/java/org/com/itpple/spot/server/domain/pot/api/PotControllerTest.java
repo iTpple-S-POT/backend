@@ -122,7 +122,7 @@ class PotControllerTest {
     void getPotList_Success_no_type() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -140,7 +140,7 @@ class PotControllerTest {
     void getPotList_Success_circle() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -159,7 +159,7 @@ class PotControllerTest {
     void getPotList_Fail_Rectangle_Min_Size() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -178,7 +178,7 @@ class PotControllerTest {
     void getPotList_Success_Rectangle() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -198,7 +198,7 @@ class PotControllerTest {
     void getPotList_Failed_Rectangle_distance_max() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))

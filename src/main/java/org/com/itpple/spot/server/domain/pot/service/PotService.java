@@ -18,7 +18,7 @@ public interface PotService {
 
     List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId);
 
-    List<PotDTO> getPotList(SearchRange searchRange, Long categoryId);
+    List<PotDTO> getPotList(SearchRange searchRange, Long categoryId, Long hashtagId);
 
     List<PotDTO> getPotListForMy(Long userId);
 

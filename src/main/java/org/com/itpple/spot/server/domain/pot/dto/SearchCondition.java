@@ -31,6 +31,9 @@ public class SearchCondition {
     @Min(1)
     private Long categoryId;
 
+    @Min(1)
+    private Long hashtagId;
+
 
     public Polygon polygon() {
         return searchRange.polygon();

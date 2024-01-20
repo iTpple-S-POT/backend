@@ -83,7 +83,7 @@ public class PotServiceTest {
     @Test
     public void POT_리스트_조회하기_범위() {
         //given
-        when(potRepository.findByLocationAndCategoryId(any(Polygon.class), anyLong())).thenReturn(
+        when(potRepository.findBySearchCondition(any(Polygon.class), anyLong(), any())).thenReturn(
                 List.of(
                         Pot.builder().id(1L).user(user).category(category)
                                 .imageKey("test.jpg")
@@ -95,7 +95,7 @@ public class PotServiceTest {
         Long categoryId = 1L;
 
         //when
-        final var result = target.getPotList(searchRange, categoryId);
+        final var result = target.getPotList(searchRange, categoryId, null);
 
         //then
         assertThat(result).hasSize(1);

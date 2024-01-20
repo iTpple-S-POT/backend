@@ -47,7 +47,7 @@ public class PotController {
     public ResponseEntity<List<PotDTO>> getPotList(
             @ModelAttribute("searchCondition") @Valid SearchCondition searchCondition) {
         return ResponseEntity.ok(potService.getPotList(searchCondition.getSearchRange(),
-                searchCondition.getCategoryId()));
+                searchCondition.getCategoryId(), searchCondition.getHashtagId()));
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)

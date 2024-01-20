@@ -90,12 +90,12 @@ public class PotRepositoryTest {
         entityManager.flush();
 
         //when
-        final var result = potRepository.findByLocationAndCategoryId(createPolygon(new PointDTO[]{
+        final var result = potRepository.findBySearchCondition(createPolygon(new PointDTO[]{
                 new PointDTO(1.0, 1.0),
                 new PointDTO(1.0, 3.0),
                 new PointDTO(3.0, 1.0),
                 new PointDTO(3.0, 3.0)
-        }), category.getId());
+        }), category.getId(), null);
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
@@ -118,8 +118,8 @@ public class PotRepositoryTest {
         entityManager.flush();
 
         //when
-        final var result = potRepository.findByLocationAndCategoryId(
-                createCircle(pointDTO1, 1000), category.getId());
+        final var result = potRepository.findBySearchCondition(
+                createCircle(pointDTO1, 1000), category.getId(), null);
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
