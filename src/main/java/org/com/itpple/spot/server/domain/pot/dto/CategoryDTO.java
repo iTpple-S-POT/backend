@@ -1,6 +1,6 @@
 package org.com.itpple.spot.server.domain.pot.dto;
 
-import org.com.itpple.spot.server.domain.pot.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
 
 public record CategoryDTO(Long id, String name, String description) {
 

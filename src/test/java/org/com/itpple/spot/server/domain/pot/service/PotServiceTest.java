@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
-import org.com.itpple.spot.server.domain.pot.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.CircleSearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;

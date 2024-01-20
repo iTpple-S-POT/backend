@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.com.itpple.spot.server.domain.pot.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.common.constant.PotType;
 import org.com.itpple.spot.server.global.common.entity.BasicDateEntity;

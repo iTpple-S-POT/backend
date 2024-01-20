@@ -1,12 +1,12 @@
 package org.com.itpple.spot.server.domain.reaction.repository;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.*;
-import static org.springframework.test.context.TestConstructor.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import static org.springframework.test.context.TestConstructor.AutowireMode;
 
 import java.util.List;
-
-import org.com.itpple.spot.server.domain.pot.category.entity.Category;
+import lombok.RequiredArgsConstructor;
+import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.reaction.entity.Reaction;
 import org.com.itpple.spot.server.domain.user.entity.User;
@@ -21,8 +21,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestConstructor;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @TestConstructor(autowireMode = AutowireMode.ALL)

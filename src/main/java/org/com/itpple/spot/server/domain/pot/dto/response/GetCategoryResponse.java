@@ -2,7 +2,7 @@ package org.com.itpple.spot.server.domain.pot.dto.response;
 
 import java.util.Collection;
 import java.util.List;
-import org.com.itpple.spot.server.domain.pot.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.pot.dto.CategoryDTO;
 
 

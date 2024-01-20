@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.domain.pot.category.repository.CategoryRepository;
+import org.com.itpple.spot.server.domain.pot.domain.category.repository.CategoryRepository;
 import org.com.itpple.spot.server.domain.pot.dto.PotDTO;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreatePotRequest;
