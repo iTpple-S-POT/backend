@@ -57,7 +57,6 @@ public class UserInfoController {
     //다른 유저 프로필 조회
     @GetMapping("/{userid}")
     public ResponseEntity<UserProfileDto> getUserProfile(@PathVariable Long userid) {
-        Long userId = userid;
-        return ResponseEntity.ok(userInfoService.getUserProfile(userId));
+        return ResponseEntity.ok(userInfoService.getUserProfile(userid));
     }
 }

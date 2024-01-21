@@ -3,7 +3,6 @@ package org.com.itpple.spot.server.domain.user.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.com.itpple.spot.server.domain.user.dto.response.UserInfoResponse;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.common.constant.Gender;
 import org.com.itpple.spot.server.global.common.constant.Interest;
