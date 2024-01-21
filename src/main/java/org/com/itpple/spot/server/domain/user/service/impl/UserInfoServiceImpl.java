@@ -29,7 +29,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     public UserInfoResponse fillUserInfo(Long userId, UserInfoRequest userInfoRequest) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
+        .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
         if (userInfoRequest.nickname() == null || userInfoRequest.nickname().isEmpty()) {
             String defaultNickname = generateDefaultNickname();
             user.setNickname(defaultNickname);
@@ -89,27 +89,15 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
-    public UserInfoResponse updateUserInfo(Long userId, UserInfoRequest userInfoRequest) {
+    public UserInfoResponse updateUserInfo(Long userId, UpdateUserInfoRequest userInfoRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
-        if (userInfoRequest.nickname() != null && !userInfoRequest.nickname().isEmpty()) {
-            user.setNickname(userInfoRequest.nickname());
-        }
-        if (userInfoRequest.phoneNumber() != null && !userInfoRequest.phoneNumber().isEmpty()) {
-            user.setPhoneNumber(userInfoRequest.phoneNumber());
-        }
-        if (userInfoRequest.birthDay() != null) {
-            user.setBirthDay(userInfoRequest.birthDay());
-        }
-        if (userInfoRequest.gender() != null) {
-            user.setGender(userInfoRequest.gender());
-        }
-        if (userInfoRequest.mbti() != null) {
-            user.setMbti(userInfoRequest.mbti());
-        }
-        if (userInfoRequest.interests() != null && !userInfoRequest.interests().isEmpty()) {
-            user.setInterests(userInfoRequest.interests());
-        }
+        user.setNickname(userInfoRequest.nickname());
+        user.setPhoneNumber(userInfoRequest.phoneNumber());
+        user.setBirthDay(userInfoRequest.birthDay());
+        user.setGender(userInfoRequest.gender());
+        user.setMbti(userInfoRequest.mbti());
+        user.setInterests(userInfoRequest.interests());
         User updateUser = userRepository.save(user);
         return UserInfoResponse.from(updateUser);
     }

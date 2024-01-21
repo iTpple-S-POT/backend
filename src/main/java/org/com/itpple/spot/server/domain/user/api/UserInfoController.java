@@ -48,10 +48,10 @@ public class UserInfoController {
     @PutMapping("")
     public ResponseEntity<UserInfoResponse> updateUserInfo(
             @Auth CustomUserDetails customUserDetails,
-            @Valid @RequestBody UserInfoRequest userInfoRequest
+            @Valid @RequestBody UpdateUserInfoRequest updateUserInfoRequest
     ) {
         Long userId = customUserDetails.getUserId();
-        return ResponseEntity.ok(userInfoService.updateUserInfo(userId, userInfoRequest));
+        return ResponseEntity.ok(userInfoService.updateUserInfo(userId, updateUserInfoRequest));
     }
 
     //다른 유저 프로필 조회
