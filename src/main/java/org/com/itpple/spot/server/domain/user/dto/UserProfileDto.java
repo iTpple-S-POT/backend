@@ -21,7 +21,6 @@ public class UserProfileDto {
     private final String profileImageUrl;
     private final String name;
     private final String nickname;
-    private final String phoneNumber;
     private final LocalDate birthDay;
     private final Gender gender;
     private final Mbti mbti;
@@ -33,7 +32,6 @@ public class UserProfileDto {
                 .profileImageUrl(user.getProfileImageUrl())
                 .name(user.getName())
                 .nickname(user.getNickname())
-                .phoneNumber(user.getPhoneNumber())
                 .birthDay(user.getBirthDay())
                 .gender(user.getGender())
                 .mbti(user.getMbti())
