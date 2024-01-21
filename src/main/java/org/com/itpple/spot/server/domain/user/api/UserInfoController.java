@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.user.dto.UserInfoDto;
 import org.com.itpple.spot.server.domain.user.dto.UserProfileDto;
+import org.com.itpple.spot.server.domain.user.dto.request.UpdateUserInfoRequest;
 import org.com.itpple.spot.server.domain.user.dto.request.UserInfoRequest;
 import org.com.itpple.spot.server.domain.user.dto.response.UserInfoResponse;
 import org.com.itpple.spot.server.domain.user.service.UserInfoService;
