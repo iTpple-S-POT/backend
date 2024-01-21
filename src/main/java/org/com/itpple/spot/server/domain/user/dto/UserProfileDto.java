@@ -1,31 +1,33 @@
-package org.com.itpple.spot.server.domain.user.dto.response;
+package org.com.itpple.spot.server.domain.user.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import org.com.itpple.spot.server.domain.user.dto.response.UserInfoResponse;
+import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.common.constant.Gender;
 import org.com.itpple.spot.server.global.common.constant.Interest;
 import org.com.itpple.spot.server.global.common.constant.Mbti;
-import org.com.itpple.spot.server.global.common.constant.Status;
-import org.com.itpple.spot.server.domain.user.entity.User;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@AllArgsConstructor
 @Builder
-public record UserInfoResponse(
-        Long id,
-        String loginType,
-        String profileImageUrl,
-        String name,
-        String nickname,
-        String phoneNumber,
-        LocalDate birthDay,
-        Gender gender,
-        Mbti mbti,
-        List<Interest> interests,
-        Status status
-) {
-    public static UserInfoResponse from(User user) {
-        return UserInfoResponse.builder()
+@Getter
+public class UserProfileDto {
+    private final Long id;
+    private final String loginType;
+    private final String profileImageUrl;
+    private final String name;
+    private final String nickname;
+    private final String phoneNumber;
+    private final LocalDate birthDay;
+    private final Gender gender;
+    private final Mbti mbti;
+    private final List<Interest> interests;
+    public static UserProfileDto from(User user) {
+        return UserProfileDto.builder()
                 .id(user.getId())
                 .loginType(user.getLoginType())
                 .profileImageUrl(user.getProfileImageUrl())
@@ -36,7 +38,7 @@ public record UserInfoResponse(
                 .gender(user.getGender())
                 .mbti(user.getMbti())
                 .interests(user.getInterests())
-                .status(user.getStatus())
                 .build();
     }
+
 }

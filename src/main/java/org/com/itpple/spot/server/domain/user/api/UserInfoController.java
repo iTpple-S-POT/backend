@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.user.dto.UserInfoDto;
+import org.com.itpple.spot.server.domain.user.dto.UserProfileDto;
 import org.com.itpple.spot.server.domain.user.dto.request.UserInfoRequest;
 import org.com.itpple.spot.server.domain.user.dto.response.UserInfoResponse;
 import org.com.itpple.spot.server.domain.user.service.UserInfoService;
@@ -55,8 +56,8 @@ public class UserInfoController {
 
     //다른 유저 프로필 조회
     @GetMapping("/{userid}")
-    public ResponseEntity<UserInfoDto> getUserProfile(@PathVariable Long userid) {
+    public ResponseEntity<UserProfileDto> getUserProfile(@PathVariable Long userid) {
         Long userId = userid;
-        return ResponseEntity.ok(userInfoService.getUserInfo(userId));
+        return ResponseEntity.ok(userInfoService.getUserProfile(userId));
     }
 }
