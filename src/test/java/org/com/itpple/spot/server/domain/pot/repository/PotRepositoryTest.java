@@ -137,7 +137,7 @@ public class PotRepositoryTest {
 
         //when
         final var result = potRepository.findByLocationAndCategoryForAdmin(
-                null, null);
+                createCircle(new PointDTO(0.0,0.0), 10000000), null);
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);

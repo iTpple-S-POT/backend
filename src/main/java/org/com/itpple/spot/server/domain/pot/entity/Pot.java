@@ -58,7 +58,7 @@ public class Pot extends BasicDateEntity {
     @Column(name = "image_key", nullable = false, length = 100)
     private String imageKey;
 
-    @Column(name = "location", nullable = false)
+    @Column(name = "location", nullable = false, columnDefinition = "GEOMETRY(Point, 4326)")
     private Point location;
 
     @Column(name = "expired_at", nullable = false)
