@@ -3,6 +3,7 @@ package org.com.itpple.spot.server.domain.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.user.dto.UserInfoDto;
+import org.com.itpple.spot.server.domain.user.dto.UserProfileDto;
 import org.com.itpple.spot.server.domain.user.dto.request.UpdateUserInfoRequest;
 import org.com.itpple.spot.server.global.common.constant.NickNameData;
 import org.com.itpple.spot.server.global.common.constant.Status;
@@ -80,6 +81,11 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     public UserInfoDto getUserInfo(Long userId) {
         return UserInfoDto.from(userRepository.findById(userId)
+                .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId)));
+    }
+
+    public UserProfileDto getUserProfile(Long userId) {
+        return UserProfileDto.from(userRepository.findById(userId)
                 .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId)));
     }
 
