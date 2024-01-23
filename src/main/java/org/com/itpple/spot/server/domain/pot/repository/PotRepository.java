@@ -28,4 +28,9 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
 
     List<Pot> findByUserId(Long userId);
 
+    @Query(value = "SELECT p FROM Pot p "
+            + "WHERE p.user.id in :idList "
+            + "AND p.expiredAt > now()")
+    List<Pot> findByIdAndNotExpired(@Param("idList") List<Long> idList);
+
 }

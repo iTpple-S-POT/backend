@@ -23,4 +23,6 @@ public interface PotService {
     List<PotDTO> getPotListForMy(Long userId);
 
     PotDTO getPot(Long potId, Long userId);
+
+    List<PotDTO> getPotListByRecentlyViewed(Long userId);
 }
