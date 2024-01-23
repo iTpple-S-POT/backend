@@ -1,16 +1,15 @@
 package org.com.itpple.spot.server.util;
 
+import static org.com.itpple.spot.server.global.util.GeometryUtil.createPoint;
+
 import java.time.LocalDateTime;
+import org.com.itpple.spot.server.domain.location.dto.PointDTO;
 import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.common.constant.PotType;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.PrecisionModel;
 
 public class PotTestUtil {
-
-	private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
 	public static Pot create() {
 		return Pot.builder()
@@ -18,7 +17,7 @@ public class PotTestUtil {
 			.category(createCategory())
 			.potType(PotType.TEXT)
 			.imageKey("imageKey")
-			.location(geometryFactory.createPoint())
+			.location(createPoint(new PointDTO(1.0, 1.0)))
 			.expiredAt(LocalDateTime.MAX)
 			.build();
 	}
@@ -29,7 +28,7 @@ public class PotTestUtil {
 			.category(category)
 			.potType(PotType.TEXT)
 			.imageKey("imageKey")
-			.location(geometryFactory.createPoint())
+			.location(createPoint(new PointDTO(1.0, 1.0)))
 			.expiredAt(LocalDateTime.MAX)
 			.build();
 	}
