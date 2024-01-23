@@ -82,7 +82,11 @@ public class Pot extends BasicDateEntity {
     @OneToMany(mappedBy = "pot")
     private final List<PotHashtag> potHashtagList = new ArrayList<>();
 
-    @Column(name = "view_count", nullable = false, columnDefinition = "int default 0")
+    /**
+     * viewHistory가 있지만, viewCount를 따로 두는 이유는
+     * join을 통해 viewHistory를 가져오는 것보다 viewCount를 가져오는 것이 더 효율적이기 때문이다.
+     * */
+    @Column(name = "view_count", nullable = false, columnDefinition = "bigint default 0")
     private Long viewCount;
 
     @PrePersist
