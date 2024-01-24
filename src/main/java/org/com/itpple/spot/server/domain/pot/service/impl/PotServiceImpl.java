@@ -121,9 +121,9 @@ public class PotServiceImpl implements PotService {
     }
 
     @Override
-    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId) {
-        return potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(),
-                        categoryId).stream()
+    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId, Long hashtagId) {
+        return potRepository.findBySearchConditionForAdmin(searchRange.polygon(),
+                        categoryId, hashtagId).stream()
                 .map(PotDTO::from)
                 .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
                 .toList();

@@ -25,9 +25,11 @@ public class PotControllerAdvice {
         var searchRange = getSearchRange(searchType, request);
         var categoryId = StringUtils.isBlank(request.getParameter("categoryId")) ? null
                 : Long.parseLong(request.getParameter("categoryId"));
+        var hashtagId = StringUtils.isBlank(request.getParameter("hashtagId")) ? null
+                : Long.parseLong(request.getParameter("hashtagId"));
 
         return SearchCondition.builder().searchRange(searchRange).searchType(searchType)
-                .categoryId(categoryId).build();
+                .categoryId(categoryId).hashtagId(hashtagId).build();
     }
 
     private SearchRange getSearchRange(SearchType searchType, HttpServletRequest request) {

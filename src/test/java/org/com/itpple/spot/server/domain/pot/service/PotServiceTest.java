@@ -56,7 +56,7 @@ public class PotServiceTest {
         //given
         SearchRange searchRange = new CircleSearchRange(1.0, new PointDTO(2.0, 2.0));
         Long categoryId = 1L;
-        when(potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(), 1L)).thenReturn(
+        when(potRepository.findBySearchConditionForAdmin(searchRange.polygon(), 1L, null)).thenReturn(
                 List.of(
                         Pot.builder().id(1L).user(user).category(category)
                                 .imageKey("test.jpg").potType(
@@ -74,7 +74,7 @@ public class PotServiceTest {
                 ));
 
         //when
-        final var result = target.getPotListForAdmin(searchRange, categoryId);
+        final var result = target.getPotListForAdmin(searchRange, categoryId, null);
 
         //then
         assertThat(result).hasSize(3);
