@@ -2,6 +2,7 @@ package org.com.itpple.spot.server.global.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.domain.user.dto.UserDto;
 import org.com.itpple.spot.server.global.auth.jwt.TokenProvider;
 import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.global.common.constant.OAuthType;
@@ -17,6 +18,8 @@ import org.com.itpple.spot.server.global.auth.service.TokenService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,20 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final TokenService tokenService;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UserDto> findBySocialId(String socialId) {
+        return userRepository.findBySocialId(socialId)
+                .map(UserDto::from);
+    }
+
+    @Override
+    @Transactional
+    public UserDto join(UserDto userDto) {
+        User user = userRepository.save(userDto.toEntity());
+        return UserDto.from(user);
+    }
 
     @Override
     @Transactional
@@ -48,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
 
                     return userRepository.save(newUser);
                 });
-        var customUserDetails = CustomUserDetails.from(user);
+        var customUserDetails = CustomUserDetails.from(UserDto.from(user));
 
         var tokenResponse = tokenProvider.generateToken(customUserDetails);
         var newRefreshToken = tokenResponse.getRefreshToken();
@@ -73,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
 
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-        var customUserDetails = CustomUserDetails.from(user);
+        var customUserDetails = CustomUserDetails.from(UserDto.from(user));
 
         var tokenResponse = tokenProvider.generateToken(customUserDetails);
         var newRefreshToken = tokenResponse.getRefreshToken();
