@@ -1,5 +1,6 @@
 package org.com.itpple.spot.server.global.auth.util;
 
+import org.com.itpple.spot.server.domain.user.dto.UserDto;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.global.common.constant.Role;
@@ -17,8 +18,8 @@ public class AuthUserUtil {
     }
 
     public static CustomUserDetails getCustomUserDetails(Long id, Role role) {
-
-        return CustomUserDetails.from(User.builder().id(id).role(Role.USER).build());
+        User user = User.builder().id(id).role(Role.USER).build();
+        return CustomUserDetails.from(UserDto.from(user));
     }
 
 }

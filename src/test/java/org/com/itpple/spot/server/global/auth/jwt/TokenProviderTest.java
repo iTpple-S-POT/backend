@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.com.itpple.spot.server.domain.user.dto.UserDto;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.global.common.constant.Role;
@@ -41,7 +42,9 @@ public class TokenProviderTest {
                 .role(role)
                 .build();
 
-        var generatedToken = tokenProvider.generateToken(CustomUserDetails.from(user));
+        UserDto userDto = UserDto.from(user);
+
+        var generatedToken = tokenProvider.generateToken(CustomUserDetails.from(userDto));
         var payload = tokenProvider.getClaims(generatedToken.getAccessToken());
 
         assertAll(() -> assertEquals("1", payload.getSubject()),
@@ -59,8 +62,10 @@ public class TokenProviderTest {
                 .role(role)
                 .build();
 
+        UserDto userDto = UserDto.from(user);
+
         var accessToken =
-                tokenProvider.generateToken(CustomUserDetails.from(user)).getAccessToken() + "a";
+                tokenProvider.generateToken(CustomUserDetails.from(userDto)).getAccessToken() + "a";
 
         assertThrows(RuntimeException.class, () -> tokenProvider.getClaims(accessToken));
     }
@@ -75,7 +80,9 @@ public class TokenProviderTest {
                 .role(role)
                 .build();
 
-        var accessToken = tokenProvider.generateToken(CustomUserDetails.from(user))
+        UserDto userDto = UserDto.from(user);
+
+        var accessToken = tokenProvider.generateToken(CustomUserDetails.from(userDto))
                 .getAccessToken();
 
         try {
