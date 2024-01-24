@@ -7,7 +7,7 @@ import static org.com.itpple.spot.server.global.util.GeometryUtil.createPolygon;
 
 import lombok.RequiredArgsConstructor;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
-import org.com.itpple.spot.server.domain.pot.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.user.entity.User;
 import org.com.itpple.spot.server.global.common.constant.PotType;
@@ -90,12 +90,12 @@ public class PotRepositoryTest {
         entityManager.flush();
 
         //when
-        final var result = potRepository.findByLocationAndCategoryId(createPolygon(new PointDTO[]{
+        final var result = potRepository.findBySearchCondition(createPolygon(new PointDTO[]{
                 new PointDTO(1.0, 1.0),
                 new PointDTO(1.0, 3.0),
                 new PointDTO(3.0, 1.0),
                 new PointDTO(3.0, 3.0)
-        }), category.getId());
+        }), category.getId(), null);
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
@@ -105,7 +105,7 @@ public class PotRepositoryTest {
     public void POT_리스트_조회하기_원_범위() {
         var pointDTO1 = new PointDTO(37.53181382825802, 126.91438309995776);//국회의사당
         var pointDTO2 = new PointDTO(37.531077388272465, 126.91773278201156);//국회도서관(1km 이내)
-        var pointDTO3 = new PointDTO( 37.52258059969025, 126.90525326032581);//여의도시장역(1km 밖)
+        var pointDTO3 = new PointDTO(37.52258059969025, 126.90525326032581);//여의도시장역(1km 밖)
         final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
                 PotType.IMAGE).location(createPoint(pointDTO1)).build();
         final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
@@ -118,8 +118,8 @@ public class PotRepositoryTest {
         entityManager.flush();
 
         //when
-        final var result = potRepository.findByLocationAndCategoryId(
-                createCircle(pointDTO1, 1000), category.getId());
+        final var result = potRepository.findBySearchCondition(
+                createCircle(pointDTO1, 1000), category.getId(), null);
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
@@ -128,7 +128,8 @@ public class PotRepositoryTest {
     @Test
     public void POT_리스트_조회하기_조건_무시() {
         final Pot pot1 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
-                PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0))).isDeleted(true).build();
+                        PotType.IMAGE).location(createPoint(new PointDTO(2.0, 2.0))).isDeleted(true)
+                .build();
         final Pot pot2 = Pot.builder().user(user).category(category).imageKey("test.jpg").potType(
                 PotType.IMAGE).location(createPoint(new PointDTO(2.0, 3.0))).build();
         entityManager.persist(pot1);
@@ -136,8 +137,8 @@ public class PotRepositoryTest {
         entityManager.flush();
 
         //when
-        final var result = potRepository.findByLocationAndCategoryForAdmin(
-                createCircle(new PointDTO(0.0,0.0), 10000000), null);
+        final var result = potRepository.findBySearchConditionForAdmin(
+                createCircle(new PointDTO(0.0, 0.0), 10000000), null, null);
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);

@@ -1,4 +1,4 @@
-package org.com.itpple.spot.server.domain.pot.category.entity;
+package org.com.itpple.spot.server.domain.pot.domain.category.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

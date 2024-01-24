@@ -4,15 +4,20 @@ import static org.com.itpple.spot.server.global.common.constant.Constant.POT_IMA
 
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.domain.pot.category.repository.CategoryRepository;
+import org.com.itpple.spot.server.domain.pot.domain.category.repository.CategoryRepository;
+import org.com.itpple.spot.server.domain.pot.domain.hashtag.repository.HashtagRepository;
+import org.com.itpple.spot.server.domain.pot.domain.viewHistory.entity.ViewHistory;
+import org.com.itpple.spot.server.domain.pot.domain.viewHistory.repository.ViewHistoryRepository;
 import org.com.itpple.spot.server.domain.pot.dto.PotDTO;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreatePotRequest;
 import org.com.itpple.spot.server.domain.pot.dto.response.CreatePotResponse;
 import org.com.itpple.spot.server.domain.pot.dto.response.GetCategoryResponse;
 import org.com.itpple.spot.server.domain.pot.dto.response.UploadImageResponse;
+import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
 import org.com.itpple.spot.server.domain.pot.service.PotService;
 import org.com.itpple.spot.server.domain.user.repository.UserRepository;
@@ -31,6 +36,8 @@ public class PotServiceImpl implements PotService {
     private final PotRepository potRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final HashtagRepository hashtagRepository;
+    private final ViewHistoryRepository viewHistoryRepository;
 
     @Override
     public GetCategoryResponse getCategory() {
@@ -57,12 +64,15 @@ public class PotServiceImpl implements PotService {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        return CreatePotResponse.from(potRepository.save(CreatePotRequest.toPot(createPotRequest, user, category)));
+        var hashtagList = hashtagRepository.findAllById(createPotRequest.hashtagIdList());
+
+        return CreatePotResponse.from(potRepository.save(
+                CreatePotRequest.toPot(createPotRequest, user, category, hashtagList)));
     }
 
     @Override
-    public List<PotDTO> getPotList(SearchRange searchRange, Long categoryId) {
-        return potRepository.findByLocationAndCategoryId(searchRange.polygon(), categoryId)
+    public List<PotDTO> getPotList(SearchRange searchRange, Long categoryId, Long hashtagId) {
+        return potRepository.findBySearchCondition(searchRange.polygon(), categoryId, hashtagId)
                 .stream()
                 .map(PotDTO::from)
                 .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
@@ -77,19 +87,57 @@ public class PotServiceImpl implements PotService {
                 .toList();
     }
 
+
     @Override
+    public List<PotDTO> getPotListByRecentlyViewed(Long userId) {
+        var viewHistoryList = viewHistoryRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
+
+        var potIdList = viewHistoryList.stream()
+                .map(viewHistory -> viewHistory.getPot().getId())
+                .toList();
+
+        return potRepository.findByIdAndNotExpired(potIdList).stream()
+                .map(PotDTO::from)
+                .sorted((pot1, pot2) -> potIdList.indexOf(pot2.getId()) - potIdList.indexOf(
+                        pot1.getId()))
+                .toList();
+    }
+
+
+    @Override
+    @Transactional
     public PotDTO getPot(Long potId, Long userId) {
-        return PotDTO.from(potRepository.findById(potId)
-                .filter(pot -> pot.getUser().getId().equals(userId) || pot.getExpiredAt().isAfter(LocalDateTime.now()))
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POT)));
+        return potRepository.findById(potId)
+                .filter(pot -> pot.getUser().getId().equals(userId) || pot.getExpiredAt()
+                        .isAfter(LocalDateTime.now()))
+                .map(pot -> {
+                    if (!pot.getUser().getId().equals(userId)) {
+                        pot.addViewCount();
+                        this.createViewHistory(userId, pot);
+                    }
+                    return PotDTO.from(pot);
+                })
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POT));
     }
 
     @Override
-    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId) {
-        return potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(),
-                        categoryId).stream()
+    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId, Long hashtagId) {
+        return potRepository.findBySearchConditionForAdmin(searchRange.polygon(),
+                        categoryId, hashtagId).stream()
                 .map(PotDTO::from)
                 .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
                 .toList();
+    }
+
+    private void createViewHistory(Long userId, Pot pot) {
+        if (pot.getUser().getId().equals(userId)) {
+            return;
+        }
+
+        var viewedUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        viewHistoryRepository.save(ViewHistory.of(viewedUser, pot));
+
     }
 }

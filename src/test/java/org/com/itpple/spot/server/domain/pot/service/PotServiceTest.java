@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
-import org.com.itpple.spot.server.domain.pot.category.entity.Category;
+import org.com.itpple.spot.server.domain.pot.domain.category.entity.Category;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.CircleSearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
@@ -56,7 +56,7 @@ public class PotServiceTest {
         //given
         SearchRange searchRange = new CircleSearchRange(1.0, new PointDTO(2.0, 2.0));
         Long categoryId = 1L;
-        when(potRepository.findByLocationAndCategoryForAdmin(searchRange.polygon(), 1L)).thenReturn(
+        when(potRepository.findBySearchConditionForAdmin(searchRange.polygon(), 1L, null)).thenReturn(
                 List.of(
                         Pot.builder().id(1L).user(user).category(category)
                                 .imageKey("test.jpg").potType(
@@ -74,7 +74,7 @@ public class PotServiceTest {
                 ));
 
         //when
-        final var result = target.getPotListForAdmin(searchRange, categoryId);
+        final var result = target.getPotListForAdmin(searchRange, categoryId, null);
 
         //then
         assertThat(result).hasSize(3);
@@ -83,7 +83,7 @@ public class PotServiceTest {
     @Test
     public void POT_리스트_조회하기_범위() {
         //given
-        when(potRepository.findByLocationAndCategoryId(any(Polygon.class), anyLong())).thenReturn(
+        when(potRepository.findBySearchCondition(any(Polygon.class), anyLong(), any())).thenReturn(
                 List.of(
                         Pot.builder().id(1L).user(user).category(category)
                                 .imageKey("test.jpg")
@@ -95,7 +95,7 @@ public class PotServiceTest {
         Long categoryId = 1L;
 
         //when
-        final var result = target.getPotList(searchRange, categoryId);
+        final var result = target.getPotList(searchRange, categoryId, null);
 
         //then
         assertThat(result).hasSize(1);

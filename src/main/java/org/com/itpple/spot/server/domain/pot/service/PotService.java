@@ -16,11 +16,13 @@ public interface PotService {
 
     CreatePotResponse createPot(Long userId, CreatePotRequest createPotRequest);
 
-    List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId);
+    List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId, Long hashtagId);
 
-    List<PotDTO> getPotList(SearchRange searchRange, Long categoryId);
+    List<PotDTO> getPotList(SearchRange searchRange, Long categoryId, Long hashtagId);
 
     List<PotDTO> getPotListForMy(Long userId);
 
     PotDTO getPot(Long potId, Long userId);
+
+    List<PotDTO> getPotListByRecentlyViewed(Long userId);
 }
