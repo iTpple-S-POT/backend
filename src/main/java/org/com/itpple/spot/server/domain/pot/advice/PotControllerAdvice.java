@@ -8,6 +8,7 @@ import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.CircleSearchRan
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.RectangleSearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchType;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -22,7 +23,8 @@ public class PotControllerAdvice {
         }
         var searchType = SearchType.valueOf(type);
         var searchRange = getSearchRange(searchType, request);
-        var categoryId = Long.parseLong(request.getParameter("categoryId"));
+        var categoryId = StringUtils.isBlank(request.getParameter("categoryId")) ? null
+                : Long.parseLong(request.getParameter("categoryId"));
 
         return SearchCondition.builder().searchRange(searchRange).searchType(searchType)
                 .categoryId(categoryId).build();

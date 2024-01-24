@@ -29,7 +29,7 @@ import org.springframework.test.context.TestConstructor;
 @DataJpaTest
 class ReactionRepositoryTest {
 
-	private final ReactionRepository reactionRepository;
+	private final ReactionRepository sut;
 	private final TestEntityManager testEntityManager;
 
 	private final User user = UserTestUtil.create();
@@ -54,11 +54,11 @@ class ReactionRepositoryTest {
 			ReactionTestUtil.create(pot, user, REACTION_TYPE, false),
 			ReactionTestUtil.create(pot, user, REACTION_TYPE, false)
 		);
-		reactionRepository.saveAll(reactionList);
+		sut.saveAll(reactionList);
 		testEntityManager.flush();
 
 		// when
-		List<Reaction> actualReactionList = reactionRepository.findAll();
+		List<Reaction> actualReactionList = sut.findAll();
 
 		// then
 		assertThat(actualReactionList.size()).isEqualTo(3);
