@@ -67,6 +67,13 @@ public class PotController {
         return ResponseEntity.ok(potService.getPotListForMy(userId));
     }
 
+    @GetMapping(value = "/recently-viewed", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PotDTO>> getPotListByRecentlyViewed(
+            @Auth CustomUserDetails customUserDetails) {
+        var userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(potService.getPotListByRecentlyViewed(userId));
+    }
+
     @GetMapping(value = "/{potId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PotDTO> getPot(
             @Auth CustomUserDetails customUserDetails,

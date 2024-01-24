@@ -26,7 +26,7 @@ public class PotDTO {
     private final String imageKey;
     private final LocalDateTime expiredAt;
     private final List<HashtagDTO> hashtagList;
-
+    private final Long viewCount;
     public static PotDTO from(Pot pot) {
         return PotDTO.builder()
                 .id(pot.getId())
@@ -40,6 +40,7 @@ public class PotDTO {
                 .hashtagList(pot.getPotHashtagList().stream()
                         .map(potHashtag -> HashtagDTO.from(potHashtag.getHashtag())
                         ).toList())
+                .viewCount(pot.getViewCount())
                 .build();
     }
 }
