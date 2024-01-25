@@ -14,8 +14,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ErrorCode {
     // Auth 관련
-    INVALID_REFRESH_TOKEN(1301, "리프레시 토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST),
-    NOT_FOUND_REFRESH_TOKEN(1302, "리프레시 토큰을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    TOKEN_NOT_VALID(1301, "유효하지 않는 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    TOKEN_EXPIRED(1302, "유효기간이 만료된 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    INVALID_REFRESH_TOKEN(1303, "리프레시 토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_REFRESH_TOKEN(1304, "리프레시 토큰을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // User 관련
     NOT_FOUND_USER(1401, "사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
@@ -29,6 +31,9 @@ public enum ErrorCode {
 
     // OAuth 관련
     NOT_MATCH_APP_ID(1601, "앱 아이디가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    APPLE_LOGIN_ERROR(1602, "애플 로그인 과정에서 에러가 발생해 로그인에 실패했습니다.", HttpStatus.UNAUTHORIZED),
+    APPLE_SERVER_ERROR(1603, "애플 서버와 통신 중 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    OBJECT_MAPPER_IO_ERROR(1604, "ObjectMapper로 값을 읽거나 쓸 때 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // Pot 관련
     NOT_FOUND_POT(1701, "팟을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

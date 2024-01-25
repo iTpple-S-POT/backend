@@ -3,7 +3,7 @@ package org.com.itpple.spot.server.global.auth.userDetails;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
-import org.com.itpple.spot.server.domain.user.entity.User;
+import org.com.itpple.spot.server.domain.user.dto.UserDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +11,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RequiredArgsConstructor(staticName = "from")
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private final UserDto userDto;
 
     public Long getUserId() {
-        return this.user.getId();
+        return this.userDto.id();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(this.user.getRole().name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(this.userDto.role().name()));
     }
 
     @Override

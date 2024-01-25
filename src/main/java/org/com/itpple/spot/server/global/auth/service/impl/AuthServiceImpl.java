@@ -1,19 +1,21 @@
 package org.com.itpple.spot.server.global.auth.service.impl;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.global.auth.jwt.TokenProvider;
-import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
-import org.com.itpple.spot.server.global.common.constant.OAuthType;
-import org.com.itpple.spot.server.global.common.constant.Role;
-import org.com.itpple.spot.server.global.auth.dto.TokenResponse;
+import org.com.itpple.spot.server.domain.user.dto.UserDto;
 import org.com.itpple.spot.server.domain.user.entity.User;
-import org.com.itpple.spot.server.global.exception.CustomException;
-import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.com.itpple.spot.server.domain.user.repository.UserRepository;
+import org.com.itpple.spot.server.global.auth.dto.TokenResponse;
+import org.com.itpple.spot.server.global.auth.jwt.TokenProvider;
 import org.com.itpple.spot.server.global.auth.service.AuthService;
 import org.com.itpple.spot.server.global.auth.service.OAuthServiceFactory;
 import org.com.itpple.spot.server.global.auth.service.TokenService;
+import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
+import org.com.itpple.spot.server.global.common.constant.OAuthType;
+import org.com.itpple.spot.server.global.common.constant.Role;
+import org.com.itpple.spot.server.global.exception.CustomException;
+import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,16 +30,29 @@ public class AuthServiceImpl implements AuthService {
     private final TokenService tokenService;
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<UserDto> findBySocialId(String socialId) {
+        return userRepository.findBySocialId(socialId)
+                .map(UserDto::from);
+    }
+
+    @Override
     @Transactional
-    public TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken,
-            String refreshToken) {
+    public UserDto join(UserDto userDto) {
+        User user = userRepository.save(userDto.toEntity());
+        return UserDto.from(user);
+    }
+
+    @Override
+    @Transactional
+    public TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken) {
         var oAuthService = oAuthServiceFactory.getOAuthService(oAuthType);
 
-        var socialId = oAuthService.getSocialIdByToken(accessToken, refreshToken);
+        var socialId = oAuthService.getSocialIdByToken(accessToken);
 
         var user = userRepository.findBySocialId(socialId)
                 .orElseGet(() -> {
-                    var userInfo = oAuthService.getUserInfoByToken(accessToken, refreshToken);
+                    var userInfo = oAuthService.getUserInfoByToken(accessToken);
 
                     var newUser = User.builder()
                             .socialId(socialId)
@@ -48,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
 
                     return userRepository.save(newUser);
                 });
-        var customUserDetails = CustomUserDetails.from(user);
+        var customUserDetails = CustomUserDetails.from(UserDto.from(user));
 
         var tokenResponse = tokenProvider.generateToken(customUserDetails);
         var newRefreshToken = tokenResponse.getRefreshToken();
@@ -73,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
 
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-        var customUserDetails = CustomUserDetails.from(user);
+        var customUserDetails = CustomUserDetails.from(UserDto.from(user));
 
         var tokenResponse = tokenProvider.generateToken(customUserDetails);
         var newRefreshToken = tokenResponse.getRefreshToken();
