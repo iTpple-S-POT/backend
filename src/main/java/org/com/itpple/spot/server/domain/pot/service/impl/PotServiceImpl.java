@@ -3,11 +3,13 @@ package org.com.itpple.spot.server.domain.pot.service.impl;
 import static org.com.itpple.spot.server.global.common.constant.Constant.POT_IMAGE_PATH;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.pot.domain.category.repository.CategoryRepository;
+import org.com.itpple.spot.server.domain.pot.domain.hashtag.entity.Hashtag;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.repository.HashtagRepository;
 import org.com.itpple.spot.server.domain.pot.domain.viewHistory.entity.ViewHistory;
 import org.com.itpple.spot.server.domain.pot.domain.viewHistory.repository.ViewHistoryRepository;
@@ -26,6 +28,7 @@ import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.com.itpple.spot.server.global.s3.service.FileService;
 import org.com.itpple.spot.server.global.util.FileUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Service
@@ -64,7 +67,8 @@ public class PotServiceImpl implements PotService {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        var hashtagList = hashtagRepository.findAllById(createPotRequest.hashtagIdList());
+        var hashtagList = CollectionUtils.isEmpty(createPotRequest.hashtagIdList()) ?
+                new ArrayList<Hashtag>() : hashtagRepository.findAllById(createPotRequest.hashtagIdList());
 
         return CreatePotResponse.from(potRepository.save(
                 CreatePotRequest.toPot(createPotRequest, user, category, hashtagList)));
@@ -121,7 +125,8 @@ public class PotServiceImpl implements PotService {
     }
 
     @Override
-    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId, Long hashtagId) {
+    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId,
+            Long hashtagId) {
         return potRepository.findBySearchConditionForAdmin(searchRange.polygon(),
                         categoryId, hashtagId).stream()
                 .map(PotDTO::from)
