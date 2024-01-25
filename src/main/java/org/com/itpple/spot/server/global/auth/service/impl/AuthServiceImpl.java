@@ -1,24 +1,23 @@
 package org.com.itpple.spot.server.global.auth.service.impl;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.user.dto.UserDto;
-import org.com.itpple.spot.server.global.auth.jwt.TokenProvider;
-import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
-import org.com.itpple.spot.server.global.common.constant.OAuthType;
-import org.com.itpple.spot.server.global.common.constant.Role;
-import org.com.itpple.spot.server.global.auth.dto.TokenResponse;
 import org.com.itpple.spot.server.domain.user.entity.User;
-import org.com.itpple.spot.server.global.exception.CustomException;
-import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.com.itpple.spot.server.domain.user.repository.UserRepository;
+import org.com.itpple.spot.server.global.auth.dto.TokenResponse;
+import org.com.itpple.spot.server.global.auth.jwt.TokenProvider;
 import org.com.itpple.spot.server.global.auth.service.AuthService;
 import org.com.itpple.spot.server.global.auth.service.OAuthServiceFactory;
 import org.com.itpple.spot.server.global.auth.service.TokenService;
+import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
+import org.com.itpple.spot.server.global.common.constant.OAuthType;
+import org.com.itpple.spot.server.global.common.constant.Role;
+import org.com.itpple.spot.server.global.exception.CustomException;
+import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -46,15 +45,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken,
-            String refreshToken) {
+    public TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken) {
         var oAuthService = oAuthServiceFactory.getOAuthService(oAuthType);
 
-        var socialId = oAuthService.getSocialIdByToken(accessToken, refreshToken);
+        var socialId = oAuthService.getSocialIdByToken(accessToken);
 
         var user = userRepository.findBySocialId(socialId)
                 .orElseGet(() -> {
-                    var userInfo = oAuthService.getUserInfoByToken(accessToken, refreshToken);
+                    var userInfo = oAuthService.getUserInfoByToken(accessToken);
 
                     var newUser = User.builder()
                             .socialId(socialId)

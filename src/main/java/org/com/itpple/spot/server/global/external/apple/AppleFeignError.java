@@ -2,7 +2,7 @@ package org.com.itpple.spot.server.global.external.apple;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import org.com.itpple.spot.server.global.apple.exception.AppleServerException;
+import org.com.itpple.spot.server.global.auth.exception.AppleServerException;
 
 public class AppleFeignError implements ErrorDecoder {
 

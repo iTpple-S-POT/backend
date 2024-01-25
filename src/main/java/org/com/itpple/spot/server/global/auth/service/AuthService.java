@@ -1,10 +1,9 @@
 package org.com.itpple.spot.server.global.auth.service;
 
-import org.com.itpple.spot.server.domain.user.dto.UserDto;
-import org.com.itpple.spot.server.global.common.constant.OAuthType;
-import org.com.itpple.spot.server.global.auth.dto.TokenResponse;
-
 import java.util.Optional;
+import org.com.itpple.spot.server.domain.user.dto.UserDto;
+import org.com.itpple.spot.server.global.auth.dto.TokenResponse;
+import org.com.itpple.spot.server.global.common.constant.OAuthType;
 
 public interface AuthService {
 
@@ -12,7 +11,7 @@ public interface AuthService {
 
     UserDto join(UserDto userDto);
 
-    TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken, String refreshToken);
+    TokenResponse loginWithOAuth(OAuthType oAuthType, String accessToken);
 
     TokenResponse refresh(String refreshToken);
 
