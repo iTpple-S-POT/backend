@@ -1,9 +1,8 @@
-package org.com.itpple.spot.server.global.apple.dto;
-
-import lombok.Getter;
-import org.com.itpple.spot.server.global.apple.exception.AppleLoginException;
+package org.com.itpple.spot.server.global.auth.dto.apple.dto;
 
 import java.util.List;
+import lombok.Getter;
+import org.com.itpple.spot.server.global.auth.exception.AppleLoginException;
 
 @Getter
 public class ApplePublicKey {

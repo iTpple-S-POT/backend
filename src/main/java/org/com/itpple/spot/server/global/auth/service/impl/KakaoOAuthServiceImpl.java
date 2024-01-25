@@ -2,13 +2,13 @@ package org.com.itpple.spot.server.global.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.com.itpple.spot.server.global.common.constant.OAuthType;
 import org.com.itpple.spot.server.global.auth.dto.UserInfo;
 import org.com.itpple.spot.server.global.auth.dto.kakao.KakaoInfo;
+import org.com.itpple.spot.server.global.auth.service.OAuthService;
+import org.com.itpple.spot.server.global.common.constant.OAuthType;
 import org.com.itpple.spot.server.global.exception.CustomException;
 import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.com.itpple.spot.server.global.external.KakaoClient;
-import org.com.itpple.spot.server.global.auth.service.OAuthService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class KakaoOAuthServiceImpl implements OAuthService {
         return OAUTH_TYPE;
     }
 
-    public String getSocialIdByToken(String accessToken, String refreshToken) {
+    public String getSocialIdByToken(String accessToken) {
         var tokenInfo = kakaoClient.getTokenInfo(HEADER_PREFIX + accessToken);
         if (!APP_ID.equals(tokenInfo.getAppId())) {
             throw new CustomException(ErrorCode.NOT_MATCH_APP_ID);
@@ -38,7 +38,7 @@ public class KakaoOAuthServiceImpl implements OAuthService {
         return this.generateSocialId(tokenInfo.getId());
     }
 
-    public UserInfo getUserInfoByToken(String accessToken, String refreshToken) {
+    public UserInfo getUserInfoByToken(String accessToken) {
         var kakaoInfo = kakaoClient.getInfo(HEADER_PREFIX + accessToken);
         var socialId = this.generateSocialId(kakaoInfo.getId());
 

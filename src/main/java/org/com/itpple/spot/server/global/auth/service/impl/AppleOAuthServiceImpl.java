@@ -1,19 +1,9 @@
-package org.com.itpple.spot.server.global.apple.service.impl;
+package org.com.itpple.spot.server.global.auth.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
-import org.com.itpple.spot.server.global.apple.dto.ApplePublicKey;
-import org.com.itpple.spot.server.global.apple.dto.AppleUserInfo;
-import org.com.itpple.spot.server.global.apple.exception.AppleLoginException;
-import org.com.itpple.spot.server.global.auth.exception.TokenExpiredException;
-import org.com.itpple.spot.server.global.auth.exception.TokenValidException;
-import org.com.itpple.spot.server.global.apple.service.AppleOAuthService;
-import org.com.itpple.spot.server.global.external.apple.AppleApiClient;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -23,19 +13,53 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.com.itpple.spot.server.global.auth.dto.UserInfo;
+import org.com.itpple.spot.server.global.auth.dto.apple.dto.ApplePublicKey;
+import org.com.itpple.spot.server.global.auth.dto.apple.dto.AppleUserInfo;
+import org.com.itpple.spot.server.global.auth.exception.AppleLoginException;
+import org.com.itpple.spot.server.global.auth.exception.TokenExpiredException;
+import org.com.itpple.spot.server.global.auth.exception.TokenValidException;
+import org.com.itpple.spot.server.global.auth.service.OAuthService;
+import org.com.itpple.spot.server.global.common.constant.OAuthType;
+import org.com.itpple.spot.server.global.external.apple.AppleApiClient;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class AppleOAuthServiceImpl implements AppleOAuthService {
+public class AppleOAuthServiceImpl implements OAuthService {
 
+	private static final OAuthType OAUTH_TYPE = OAuthType.APPLE;
 	private final AppleApiClient appleApiClient;
 
 	@Override
-	public AppleUserInfo getUserInfo(String identityToken) {
+	public OAuthType getOAuthType() {
+		return OAUTH_TYPE;
+	}
+
+	@Override
+	public String getSocialIdByToken(String identityToken) {
 		Map<String, String> identityTokenHeader = parseHeader(identityToken);
 		PublicKey publicKey = getApplePublicKey(identityTokenHeader);
 		Claims claims = parseClaims(identityToken, publicKey);
-		return AppleUserInfo.from(claims);
+
+		return this.generateSocialId(claims.getSubject());
+	}
+
+	@Override
+	public UserInfo getUserInfoByToken(String accessToken) {
+		Map<String, String> identityTokenHeader = parseHeader(accessToken);
+		PublicKey publicKey = getApplePublicKey(identityTokenHeader);
+		Claims claims = parseClaims(accessToken, publicKey);
+		AppleUserInfo appleUserInfo = AppleUserInfo.from(claims);
+
+		var socialId = this.generateSocialId(appleUserInfo.getSub());
+
+		return UserInfo.builder().socialId(socialId).build();
+	}
+
+	private String generateSocialId(String sub) {
+		return OAUTH_TYPE.getName() + "_" + sub;
 	}
 
 	private Map<String, String> parseHeader(String identityToken) {
