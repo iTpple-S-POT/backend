@@ -112,7 +112,6 @@ public class PotController {
     }
 
     @PostMapping(value = "/hashtag", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<HashtagDTO>> createHashtag(
             @Valid @RequestBody CreateHashtagRequest createHashtagRequest) {
         return ResponseEntity
