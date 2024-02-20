@@ -9,6 +9,7 @@ import org.com.itpple.spot.server.domain.comment.dto.CommentDto;
 import org.com.itpple.spot.server.domain.comment.dto.request.CreateCommentRequest;
 import org.com.itpple.spot.server.domain.comment.dto.request.UpdateCommentRequest;
 import org.com.itpple.spot.server.domain.comment.dto.response.CreateCommentResponse;
+import org.com.itpple.spot.server.domain.comment.dto.response.UpdateCommentResponse;
 import org.com.itpple.spot.server.domain.comment.entity.Comment;
 import org.com.itpple.spot.server.domain.comment.exception.CommentIdNotFoundException;
 import org.com.itpple.spot.server.domain.comment.exception.CommentWriterNotMatchException;
@@ -72,7 +73,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void updateComment(
+    public UpdateCommentResponse updateComment(
         Long userId, Long commentId, UpdateCommentRequest request
     ) {
         checkUserExistsById(userId);
@@ -85,6 +86,8 @@ public class CommentServiceImpl implements CommentService {
         }
 
         comment.updateContent(request.content());
+
+        return UpdateCommentResponse.from(comment);
     }
 
     @Transactional
