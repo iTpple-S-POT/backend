@@ -4,6 +4,7 @@ package org.com.itpple.spot.server.domain.pot.entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -79,7 +80,7 @@ public class Pot extends BasicDateEntity {
     @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "pot")
+    @OneToMany(mappedBy = "pot", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<PotHashtag> potHashtagList = new ArrayList<>();
 
     /**

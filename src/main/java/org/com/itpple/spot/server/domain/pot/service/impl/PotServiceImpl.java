@@ -115,7 +115,7 @@ public class PotServiceImpl implements PotService {
                 .filter(pot -> pot.getUser().getId().equals(userId) || pot.getExpiredAt()
                         .isAfter(LocalDateTime.now()))
                 .map(pot -> {
-                    if (!pot.getUser().getId().equals(userId)) {
+                    if (!pot.getUser().getId().equals(userId) && !viewHistoryRepository.existsByPotIdAndUserId(potId, userId)) {
                         pot.addViewCount();
                         this.createViewHistory(userId, pot);
                     }

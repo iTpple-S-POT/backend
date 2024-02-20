@@ -30,8 +30,7 @@ public record CreatePotRequest(
                 .user(user)
                 .imageKey(createPotRequest.imageKey())
                 .potType(createPotRequest.type())
-                .content(
-                        createPotRequest.type() == PotType.TEXT ? createPotRequest.content() : null)
+                .content(createPotRequest.content())
                 .expiredAt(LocalDateTime.now().plusDays(POT_EXPIRED_DAYS))
                 .location(createPoint(createPotRequest.location()))
                 .build();
