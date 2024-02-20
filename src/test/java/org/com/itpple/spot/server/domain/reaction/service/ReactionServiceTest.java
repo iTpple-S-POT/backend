@@ -98,7 +98,7 @@ class ReactionServiceTest {
 	}
 
 	@Test
-	void 요청을_보낸_사용자가_추가한_반응이_아니라면_에러가_발생한다() {
+	void 반응_삭제_요청을_보낸_사용자가_추가한_반응이_아니라면_에러가_발생한다() {
 		// given
 		Long userId = 50L;
 		User wrongUser = Mockito.spy(UserTestUtil.create());
