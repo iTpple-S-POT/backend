@@ -4,6 +4,7 @@ import org.com.itpple.spot.server.domain.comment.dto.CommentDto;
 import org.com.itpple.spot.server.domain.comment.dto.request.CreateCommentRequest;
 import org.com.itpple.spot.server.domain.comment.dto.request.UpdateCommentRequest;
 import org.com.itpple.spot.server.domain.comment.dto.response.CreateCommentResponse;
+import org.com.itpple.spot.server.domain.comment.dto.response.UpdateCommentResponse;
 import org.com.itpple.spot.server.domain.comment.entity.Comment;
 import org.com.itpple.spot.server.domain.comment.exception.CommentPotNotMatchException;
 import org.com.itpple.spot.server.domain.comment.exception.CommentWriterNotMatchException;
@@ -105,6 +106,23 @@ class CommentServiceTest {
 
 		// then
 		assertThat(getCommentList.size()).isEqualTo(1);
+	}
+
+	@Test
+	void 댓글_수정에_성공하면_수정한_댓글의_데이터를_반환한다() {
+		// given
+		User user = UserTestUtil.create();
+		Pot pot = PotTestUtil.create();
+		Comment comment = CommentTestUtil.create(pot, user, null, "content");
+		UpdateCommentRequest updateContent = updateCommentRequest("update content");
+		given(userRepository.existsById(user.getId())).willReturn(true);
+		given(commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
+
+		// when
+		UpdateCommentResponse actualUpdateContent = sut.updateComment(user.getId(), anyLong(), updateContent);
+
+		// then
+		assertThat(actualUpdateContent.content()).isEqualTo(updateContent.content());
 	}
 
 	@Test

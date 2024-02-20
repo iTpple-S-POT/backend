@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.com.itpple.spot.server.domain.comment.dto.request.UpdateCommentRequest;
+import org.com.itpple.spot.server.domain.comment.dto.response.UpdateCommentResponse;
 import org.com.itpple.spot.server.global.auth.Auth;
 import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.domain.comment.dto.CommentDto;
@@ -53,16 +54,15 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity updateComment(
+    public ResponseEntity<UpdateCommentResponse> updateComment(
         @Auth CustomUserDetails customUserDetails,
         @PathVariable(name = "commentId") Long commentId,
         @Valid @RequestBody UpdateCommentRequest updateCommentRequest
     ) {
         Long userId = customUserDetails.getUserId();
-        commentService.updateComment(userId, commentId, updateCommentRequest);
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(null);
+            .body(commentService.updateComment(userId, commentId, updateCommentRequest));
     }
 
     @DeleteMapping("/{commentId}")
