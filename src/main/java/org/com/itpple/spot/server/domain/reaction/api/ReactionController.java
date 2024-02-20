@@ -38,7 +38,7 @@ public class ReactionController {
         reactionService.deleteReaction(userId, reactionId);
 
         return ResponseEntity
-            .status(HttpStatus.CREATED)
+            .status(HttpStatus.NO_CONTENT)
             .body(null);
     }
 }
