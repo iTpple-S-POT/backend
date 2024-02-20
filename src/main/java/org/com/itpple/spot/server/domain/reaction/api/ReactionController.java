@@ -9,10 +9,7 @@ import org.com.itpple.spot.server.domain.reaction.dto.response.CreateReactionRes
 import org.com.itpple.spot.server.domain.reaction.service.ReactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/reaction")
@@ -30,5 +27,18 @@ public class ReactionController {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(reactionService.addReaction(userId, createReactionRequest));
+    }
+
+    @DeleteMapping("/{reactionId}")
+    public ResponseEntity<Void> deleteReaction(
+        @Auth CustomUserDetails customUserDetails,
+        @PathVariable(value = "reactionId") Long reactionId
+    ) {
+        Long userId = customUserDetails.getUserId();
+        reactionService.deleteReaction(userId, reactionId);
+
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(null);
     }
 }

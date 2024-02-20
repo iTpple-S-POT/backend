@@ -6,4 +6,6 @@ import org.com.itpple.spot.server.domain.reaction.dto.response.CreateReactionRes
 public interface ReactionService {
 
     CreateReactionResponse addReaction(Long userId, CreateReactionRequest request);
+
+	void deleteReaction(Long userId, Long reactionId);
 }

@@ -42,6 +42,7 @@ public enum ErrorCode {
 
     // Reaction 관련
     NOT_ADD_MULTIPLE_REACTION(1801, "팟에 여러 개의 반응을 추가할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    NOT_MATCH_REACTION_USER(1904, "요청을 보낸 사용자가 추가한 반응이 아닙니다.", HttpStatus.FORBIDDEN),
 
     // Comment 관련
     NOT_FOUND_PARENT_COMMENT(1901, "답글 추가하기 위한 댓글이 없습니다.", HttpStatus.NOT_FOUND),

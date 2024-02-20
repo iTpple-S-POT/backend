@@ -1,6 +1,7 @@
 package org.com.itpple.spot.server.domain.reaction.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.com.itpple.spot.server.domain.reaction.exception.ReactionUserNotMatchException;
 import org.com.itpple.spot.server.global.common.constant.ReactionType;
 import org.com.itpple.spot.server.domain.reaction.dto.request.CreateReactionRequest;
 import org.com.itpple.spot.server.domain.reaction.dto.response.CreateReactionResponse;
@@ -29,7 +30,6 @@ public class ReactionServiceImpl implements ReactionService {
     @Transactional
     @Override
     public CreateReactionResponse addReaction(Long userId, CreateReactionRequest request) {
-
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
 
@@ -50,4 +50,21 @@ public class ReactionServiceImpl implements ReactionService {
 
         return CreateReactionResponse.from(savedReaction);
     }
+
+    @Transactional
+	@Override
+	public void deleteReaction(Long userId, Long reactionId) {
+		if (!userRepository.existsById(userId)) {
+            throw new UserIdNotFoundException("PK = " + userId);
+        }
+
+        Reaction reaction = reactionRepository.findById(reactionId)
+            .orElseThrow(() -> new PotIdNotFoundException("PK = " + reactionId));
+
+        if (reaction.getUser().getId() != userId) {
+            throw new ReactionUserNotMatchException();
+        }
+
+        reactionRepository.delete(reaction);
+	}
 }
