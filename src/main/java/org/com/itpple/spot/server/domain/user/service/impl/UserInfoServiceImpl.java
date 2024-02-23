@@ -113,7 +113,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         return UserInfoResponse.from(updateUser);
     }
 
-    @Override
+    @Transactional
     public void deleteUserInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
