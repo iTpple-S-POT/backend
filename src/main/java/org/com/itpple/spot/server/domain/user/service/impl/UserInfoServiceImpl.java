@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.comment.entity.Comment;
 import org.com.itpple.spot.server.domain.comment.repository.CommentRepository;
+import org.com.itpple.spot.server.domain.location.entity.Location;
+import org.com.itpple.spot.server.domain.location.repository.LocationRepository;
+import org.com.itpple.spot.server.domain.pot.domain.viewHistory.entity.ViewHistory;
+import org.com.itpple.spot.server.domain.pot.domain.viewHistory.repository.ViewHistoryRepository;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
 import org.com.itpple.spot.server.domain.reaction.entity.Reaction;
@@ -36,6 +40,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final PotRepository potRepository;
     private final CommentRepository commentRepository;
     private final ReactionRepository reactionRepository;
+    private final LocationRepository locationRepository;
+    private final ViewHistoryRepository viewHistoryRepository;
 
     @Transactional
     public UserInfoResponse fillUserInfo(Long userId, UserInfoRequest userInfoRequest) {
@@ -117,9 +123,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     public void deleteUserInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
+        List<Location> location = locationRepository.findByUserId(userId);
+        List<ViewHistory> viewHistory = viewHistoryRepository.findByUserId(userId);
         List<Pot> pot = potRepository.findByUserId(userId);
         List<Comment> comment = commentRepository.findByWriterId(userId);
         List<Reaction> reaction = reactionRepository.findByUserId(userId);
+        locationRepository.deleteAll(location);
+        viewHistoryRepository.deleteAll(viewHistory);
         reactionRepository.deleteAll(reaction);
         commentRepository.deleteAll(comment);
         potRepository.deleteAll(pot);
