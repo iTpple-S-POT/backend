@@ -12,6 +12,7 @@ import org.com.itpple.spot.server.domain.reaction.dto.request.CreateReactionRequ
 import org.com.itpple.spot.server.domain.reaction.dto.response.CreateReactionResponse;
 import org.com.itpple.spot.server.domain.reaction.entity.Reaction;
 import org.com.itpple.spot.server.domain.reaction.exception.AddMultipleReactionException;
+import org.com.itpple.spot.server.domain.reaction.exception.ReactionUserNotMatchException;
 import org.com.itpple.spot.server.domain.reaction.repository.ReactionRepository;
 import org.com.itpple.spot.server.domain.reaction.service.impl.ReactionServiceImpl;
 import org.com.itpple.spot.server.domain.user.entity.User;
@@ -24,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -74,6 +76,43 @@ class ReactionServiceTest {
 
 		// then
 		assertThat(throwable).isInstanceOf(AddMultipleReactionException.class);
+	}
+
+	@Test
+	void 삭제할_반응의_PK와_요청을_보낸_사용자의_PK를_받아_반응을_삭제한다() {
+		// given
+		Long userId = 1L;
+		User user = Mockito.spy(UserTestUtil.create());
+		Pot pot = PotTestUtil.create();
+		Reaction reaction = ReactionTestUtil.create(pot, user,REACTION_TYPE, false);
+		doReturn(userId).when(user).getId();
+		given(userRepository.existsById(anyLong())).willReturn(true);
+		given(reactionRepository.findById(anyLong())).willReturn(Optional.of(reaction));
+		willDoNothing().given(reactionRepository).delete(any(Reaction.class));
+
+		// when
+		sut.deleteReaction(userId, anyLong());
+
+		// then
+		then(reactionRepository).should().delete(any(Reaction.class));
+	}
+
+	@Test
+	void 반응_삭제_요청을_보낸_사용자가_추가한_반응이_아니라면_에러가_발생한다() {
+		// given
+		Long userId = 50L;
+		User wrongUser = Mockito.spy(UserTestUtil.create());
+		Pot pot = Mockito.spy(PotTestUtil.create());
+		Reaction reaction = ReactionTestUtil.create(pot, wrongUser,REACTION_TYPE, false);
+		doReturn(1L).when(wrongUser).getId();
+		given(userRepository.existsById(anyLong())).willReturn(true);
+		given(reactionRepository.findById(anyLong())).willReturn(Optional.of(reaction));
+
+		// when
+		Throwable throwable = Assertions.catchThrowable(() -> sut.deleteReaction(userId, anyLong()));
+
+		// then
+		assertThat(throwable).isInstanceOf(ReactionUserNotMatchException.class);
 	}
 
 	private CreateReactionRequest createReactionRequest(ReactionType reactionType) {
