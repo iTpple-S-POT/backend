@@ -1,11 +1,5 @@
 package org.com.itpple.spot.server.domain.pot.service.impl;
 
-import static org.com.itpple.spot.server.global.common.constant.Constant.POT_IMAGE_PATH;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.pot.domain.category.repository.CategoryRepository;
@@ -23,12 +17,19 @@ import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
 import org.com.itpple.spot.server.domain.pot.service.PotService;
 import org.com.itpple.spot.server.domain.user.repository.UserRepository;
-import org.com.itpple.spot.server.global.exception.CustomException;
+import org.com.itpple.spot.server.global.exception.BusinessException;
 import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.com.itpple.spot.server.global.s3.service.FileService;
 import org.com.itpple.spot.server.global.util.FileUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.com.itpple.spot.server.global.common.constant.Constant.POT_IMAGE_PATH;
 
 @Slf4j
 @Service
@@ -58,14 +59,14 @@ public class PotServiceImpl implements PotService {
 
         var isUploadedImage = fileService.isUploaded(createPotRequest.imageKey());
         if (!isUploadedImage) {
-            throw new CustomException(ErrorCode.INVALID_FILE_KEY);
+            throw new BusinessException(ErrorCode.INVALID_FILE_KEY);
         }
 
         var category = categoryRepository.findById(createPotRequest.categoryId())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_CATEGORY));
 
         var user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
 
         var hashtagList = CollectionUtils.isEmpty(createPotRequest.hashtagIdList()) ?
                 new ArrayList<Hashtag>() : hashtagRepository.findAllById(createPotRequest.hashtagIdList());
@@ -121,14 +122,12 @@ public class PotServiceImpl implements PotService {
                     }
                     return PotDTO.from(pot);
                 })
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POT));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POT));
     }
 
     @Override
-    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId,
-            Long hashtagId) {
-        return potRepository.findBySearchConditionForAdmin(searchRange.polygon(),
-                        categoryId, hashtagId).stream()
+    public List<PotDTO> getPotListForAdmin(SearchRange searchRange, Long categoryId, Long hashtagId) {
+        return potRepository.findBySearchConditionForAdmin(searchRange.polygon(), categoryId, hashtagId).stream()
                 .map(PotDTO::from)
                 .sorted((pot1, pot2) -> pot2.getExpiredAt().compareTo(pot1.getExpiredAt()))
                 .toList();
@@ -140,7 +139,7 @@ public class PotServiceImpl implements PotService {
         }
 
         var viewedUser = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
 
         viewHistoryRepository.save(ViewHistory.of(viewedUser, pot));
 
