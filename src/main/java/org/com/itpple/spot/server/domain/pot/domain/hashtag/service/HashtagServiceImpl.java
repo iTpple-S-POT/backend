@@ -1,18 +1,19 @@
 package org.com.itpple.spot.server.domain.pot.domain.hashtag.service;
 
 import io.jsonwebtoken.lang.Collections;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.entity.Hashtag;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.repository.HashtagRepository;
 import org.com.itpple.spot.server.domain.pot.dto.HashtagDTO;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreateHashtagRequest;
-import org.com.itpple.spot.server.global.exception.CustomException;
+import org.com.itpple.spot.server.global.exception.BusinessException;
 import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -49,7 +50,7 @@ public class HashtagServiceImpl implements HashtagService {
     private void checkDuplicateHashtagList(List<String> hashtagList) {
         var existHashtagList = hashtagRepository.findByHashtagIn(hashtagList);
         if (!Collections.isEmpty(existHashtagList)) {
-            throw new CustomException(
+            throw new BusinessException(
                     ErrorCode.CONFLICT_HASHTAG,
                     existHashtagList.stream().map(Hashtag::getHashtag)
                             .reduce((s, s2) -> s + ", " + s2).orElse("")

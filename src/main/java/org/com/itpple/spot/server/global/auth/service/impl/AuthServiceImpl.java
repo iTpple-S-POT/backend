@@ -1,6 +1,5 @@
 package org.com.itpple.spot.server.global.auth.service.impl;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.user.dto.UserDto;
@@ -14,10 +13,12 @@ import org.com.itpple.spot.server.global.auth.service.TokenService;
 import org.com.itpple.spot.server.global.auth.userDetails.CustomUserDetails;
 import org.com.itpple.spot.server.global.common.constant.OAuthType;
 import org.com.itpple.spot.server.global.common.constant.Role;
-import org.com.itpple.spot.server.global.exception.CustomException;
+import org.com.itpple.spot.server.global.exception.BusinessException;
 import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -77,17 +78,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenResponse refresh(String refreshToken) {
         if (!this.tokenProvider.validateRefreshToken(refreshToken)) {
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+            throw new BusinessException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         var userId = this.tokenProvider.getUserIdFromRefreshToken(refreshToken);
 
         if (!this.tokenService.isRefreshTokenExist(userId, refreshToken)) {
-            throw new CustomException(ErrorCode.NOT_FOUND_REFRESH_TOKEN);
+            throw new BusinessException(ErrorCode.NOT_FOUND_REFRESH_TOKEN);
         }
 
         var user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
         var customUserDetails = CustomUserDetails.from(UserDto.from(user));
 
         var tokenResponse = tokenProvider.generateToken(customUserDetails);

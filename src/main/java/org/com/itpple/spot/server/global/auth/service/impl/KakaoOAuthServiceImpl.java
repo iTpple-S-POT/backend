@@ -6,7 +6,7 @@ import org.com.itpple.spot.server.global.auth.dto.UserInfo;
 import org.com.itpple.spot.server.global.auth.dto.kakao.KakaoInfo;
 import org.com.itpple.spot.server.global.auth.service.OAuthService;
 import org.com.itpple.spot.server.global.common.constant.OAuthType;
-import org.com.itpple.spot.server.global.exception.CustomException;
+import org.com.itpple.spot.server.global.exception.BusinessException;
 import org.com.itpple.spot.server.global.exception.code.ErrorCode;
 import org.com.itpple.spot.server.global.external.KakaoClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,7 @@ public class KakaoOAuthServiceImpl implements OAuthService {
     public String getSocialIdByToken(String accessToken) {
         var tokenInfo = kakaoClient.getTokenInfo(HEADER_PREFIX + accessToken);
         if (!APP_ID.equals(tokenInfo.getAppId())) {
-            throw new CustomException(ErrorCode.NOT_MATCH_APP_ID);
+            throw new BusinessException(ErrorCode.NOT_MATCH_APP_ID);
         }
         return this.generateSocialId(tokenInfo.getId());
     }
