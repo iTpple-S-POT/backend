@@ -7,12 +7,8 @@ import javax.persistence.*;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.com.itpple.spot.server.global.common.constant.*;
 import org.com.itpple.spot.server.global.common.entity.BasicDateEntity;
-import org.com.itpple.spot.server.global.common.constant.Gender;
-import org.com.itpple.spot.server.global.common.constant.Interest;
-import org.com.itpple.spot.server.global.common.constant.Mbti;
-import org.com.itpple.spot.server.global.common.constant.Role;
-import org.com.itpple.spot.server.global.common.constant.Status;
 import org.hibernate.annotations.DynamicInsert;
 
 @Slf4j
@@ -30,7 +26,7 @@ public class User extends BasicDateEntity {
     private Long id;
 
     @Column(name = "login_type", length = 100)
-    private String loginType;
+    private OAuthType loginType;
 
     @Column(name = "social_id")
     private String socialId;
@@ -92,8 +88,9 @@ public class User extends BasicDateEntity {
         this.interests = interests;
     }
     @Builder
-    public User(String phoneNumber, String nickname, Gender gender, LocalDate birthDay, Mbti mbti, List interests) {
+    public User(String phoneNumber, OAuthType loginType, String nickname, Gender gender, LocalDate birthDay, Mbti mbti, List interests) {
         this.role = Role.USER;
+        this.loginType = loginType;
         this.phoneNumber = phoneNumber;
         this.nickname = nickname;
         this.gender = gender;

@@ -3,12 +3,8 @@ package org.com.itpple.spot.server.domain.user.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.com.itpple.spot.server.domain.user.dto.response.UserInfoResponse;
 import org.com.itpple.spot.server.domain.user.entity.User;
-import org.com.itpple.spot.server.global.common.constant.Gender;
-import org.com.itpple.spot.server.global.common.constant.Interest;
-import org.com.itpple.spot.server.global.common.constant.Mbti;
-import org.com.itpple.spot.server.global.common.constant.Status;
+import org.com.itpple.spot.server.global.common.constant.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +14,7 @@ import java.util.List;
 @Getter
 public class UserInfoDto {
     private final Long id;
-    private final String loginType;
+    private final OAuthType loginType;
     private final String role;
     private final String profileImageUrl;
     private final String name;

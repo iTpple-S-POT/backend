@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
                     var newUser = User.builder()
                             .socialId(socialId)
                             .role(Role.USER)
+                            .loginType(oAuthType)
                             .name(userInfo.getNickname())
                             .profileImageUrl(userInfo.getProfileImage())
                             .build();
