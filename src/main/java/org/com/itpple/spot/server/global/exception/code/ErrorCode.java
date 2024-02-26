@@ -6,9 +6,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
- * 사용자 정의 에러 목록
- * <p>
- * 1300 ~
+ * 사용자 정의 에러 목록 (1300 ~)
  */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

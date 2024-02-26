@@ -99,12 +99,13 @@ class ReactionServiceTest {
     @Test
     void 반응_삭제_요청을_보낸_사용자가_추가한_반응이_아니라면_반응_조회에_실패한다() {
         // given
+        Long reactionId = 1L;
         Long wrongUserId = 50L;
         given(userRepository.existsById(wrongUserId)).willReturn(true);
-        given(reactionRepository.findByIdAndUserId(anyLong(), wrongUserId)).willReturn(Optional.empty());
+        given(reactionRepository.findByIdAndUserId(reactionId, wrongUserId)).willReturn(Optional.empty());
 
         // when
-        Throwable throwable = Assertions.catchThrowable(() -> sut.deleteReaction(wrongUserId, anyLong()));
+        Throwable throwable = Assertions.catchThrowable(() -> sut.deleteReaction(wrongUserId, reactionId));
 
         // then
         assertThat(throwable).isInstanceOf(ReactionIdNotFoundException.class);
