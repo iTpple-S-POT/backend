@@ -6,8 +6,8 @@ import org.com.itpple.spot.server.domain.comment.dto.request.UpdateCommentReques
 import org.com.itpple.spot.server.domain.comment.dto.response.CreateCommentResponse;
 import org.com.itpple.spot.server.domain.comment.dto.response.UpdateCommentResponse;
 import org.com.itpple.spot.server.domain.comment.entity.Comment;
+import org.com.itpple.spot.server.domain.comment.exception.CommentIdNotFoundException;
 import org.com.itpple.spot.server.domain.comment.exception.CommentPotNotMatchException;
-import org.com.itpple.spot.server.domain.comment.exception.CommentWriterNotMatchException;
 import org.com.itpple.spot.server.domain.comment.repository.CommentRepository;
 import org.com.itpple.spot.server.domain.comment.service.impl.CommentServiceImpl;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
@@ -35,157 +35,152 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
 
-	@InjectMocks
-	private CommentServiceImpl sut;
+    @InjectMocks
+    private CommentServiceImpl sut;
 
-	@Mock
-	private CommentRepository commentRepository;
-	@Mock
-	private UserRepository userRepository;
-	@Mock
-	private PotRepository potRepository;
+    @Mock
+    private CommentRepository commentRepository;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private PotRepository potRepository;
 
-	@Test
-	void 작성하고자_하는_댓글에_대한_데이터를_받아_추가한다() {
-		// given
-		User user = UserTestUtil.create();
-		Pot pot = PotTestUtil.create();
-		Comment expectSaveComment = CommentTestUtil.create(pot, user, null, "content");
-		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-		given(potRepository.findById(anyLong())).willReturn(Optional.of(pot));
-		given(commentRepository.save(any(Comment.class))).willReturn(expectSaveComment);
+    @Test
+    void 작성하고자_하는_댓글에_대한_데이터를_받아_추가한다() {
+        // given
+        User user = UserTestUtil.create();
+        Pot pot = PotTestUtil.create();
+        Comment expectSaveComment = CommentTestUtil.create(pot, user, null, "content");
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+        given(potRepository.findById(anyLong())).willReturn(Optional.of(pot));
+        given(commentRepository.save(any(Comment.class))).willReturn(expectSaveComment);
 
-		// when
-		CreateCommentResponse actualSavedComment = sut.addComment(
-				anyLong(), createCommentRequest(1L, null, expectSaveComment.getContent())
-		);
+        // when
+        CreateCommentResponse actualSavedComment = sut.addComment(
+            anyLong(), createCommentRequest(1L, null, expectSaveComment.getContent())
+        );
 
-		// then
-		assertThat(actualSavedComment.writerProfileImageUrl()).isEqualTo(user.getProfileImageUrl());
-		assertThat(actualSavedComment.writerName()).isEqualTo(user.getName());
-		assertThat(actualSavedComment.content()).isEqualTo(expectSaveComment.getContent());
-	}
+        // then
+        assertThat(actualSavedComment.writerProfileImageUrl()).isEqualTo(user.getProfileImageUrl());
+        assertThat(actualSavedComment.writerName()).isEqualTo(user.getName());
+        assertThat(actualSavedComment.content()).isEqualTo(expectSaveComment.getContent());
+    }
 
-	@Test
-	void 추가할_댓글의_potId가_부모_댓글의_potId와_다르다면_에러가_발생한다() {
-		// given
-		Long wrongPotId = 50L;
-		User user = UserTestUtil.create();
-		Pot pot = spy(PotTestUtil.create());
-		Comment parentComment = CommentTestUtil.create(pot, user, null, "content1");
-		doReturn(1L).when(pot).getId();
-		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-		given(potRepository.findById(anyLong())).willReturn(Optional.of(pot));
-		given(commentRepository.findById(anyLong())).willReturn(Optional.of(parentComment));
+    @Test
+    void 추가할_댓글의_potId가_부모_댓글의_potId와_다르다면_에러가_발생한다() {
+        // given
+        Long wrongPotId = 50L;
+        User user = UserTestUtil.create();
+        Pot pot = spy(PotTestUtil.create());
+        Comment parentComment = CommentTestUtil.create(pot, user, null, "content1");
+        doReturn(1L).when(pot).getId();
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+        given(potRepository.findById(anyLong())).willReturn(Optional.of(pot));
+        given(commentRepository.findById(anyLong())).willReturn(Optional.of(parentComment));
 
-		// when
-		Throwable throwable = catchThrowable(
-				() -> sut.addComment(anyLong(), createCommentRequest(wrongPotId, 1L, "content")));
+        // when
+        Throwable throwable = catchThrowable(
+            () -> sut.addComment(anyLong(), createCommentRequest(wrongPotId, 1L, "content")));
 
-		// then
-		assertThat(throwable).isInstanceOf(CommentPotNotMatchException.class);
-	}
+        // then
+        assertThat(throwable).isInstanceOf(CommentPotNotMatchException.class);
+    }
 
-	@Test
-	void POT에_존재하는_모든_댓글을_조회해_자식댓글이_존재한다면_부모댓글에_하위계층에_넣어_반환한다() {
-		// given
-		User user = UserTestUtil.create();
-		Pot pot = PotTestUtil.create();
-		Comment parentComment = CommentTestUtil.create(pot, user, null, "content");
-		List<Comment> commentList = List.of(
-				parentComment,
-				CommentTestUtil.create(pot, user, parentComment, "content2"),
-				CommentTestUtil.create(pot, user, parentComment, "content3")
-		);
-		given(userRepository.existsById(anyLong())).willReturn(true);
-		given(potRepository.existsById(anyLong())).willReturn(true);
-		given(commentRepository.findAllComment(anyLong())).willReturn(commentList);
+    @Test
+    void POT에_존재하는_모든_댓글을_조회해_자식댓글이_존재한다면_부모댓글에_하위계층에_넣어_반환한다() {
+        // given
+        User user = UserTestUtil.create();
+        Pot pot = PotTestUtil.create();
+        Comment parentComment = CommentTestUtil.create(pot, user, null, "content");
+        List<Comment> commentList = List.of(
+            parentComment,
+            CommentTestUtil.create(pot, user, parentComment, "content2"),
+            CommentTestUtil.create(pot, user, parentComment, "content3")
+        );
+        given(userRepository.existsById(anyLong())).willReturn(true);
+        given(potRepository.existsById(anyLong())).willReturn(true);
+        given(commentRepository.findAllComment(anyLong())).willReturn(commentList);
 
-		// when
-		List<CommentDto> getCommentList = sut.getCommentList(1L, 1L);
+        // when
+        List<CommentDto> getCommentList = sut.getCommentList(1L, 1L);
 
-		// then
-		assertThat(getCommentList.size()).isEqualTo(1);
-	}
+        // then
+        assertThat(getCommentList.size()).isEqualTo(1);
+    }
 
-	@Test
-	void 댓글_수정에_성공하면_수정한_댓글의_데이터를_반환한다() {
-		// given
-		User user = UserTestUtil.create();
-		Pot pot = PotTestUtil.create();
-		Comment comment = CommentTestUtil.create(pot, user, null, "content");
-		UpdateCommentRequest updateContent = updateCommentRequest("update content");
-		given(userRepository.existsById(user.getId())).willReturn(true);
-		given(commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
+    @Test
+    void 댓글_수정에_성공하면_수정한_댓글의_데이터를_반환한다() {
+        // given
+        User user = UserTestUtil.create();
+        Pot pot = PotTestUtil.create();
+        Comment comment = CommentTestUtil.create(pot, user, null, "content");
+        UpdateCommentRequest updateContent = updateCommentRequest("update content");
+        given(userRepository.existsById(anyLong())).willReturn(true);
+        given(commentRepository.findByIdAndUserId(anyLong(), anyLong())).willReturn(Optional.of(comment));
 
-		// when
-		UpdateCommentResponse actualUpdateContent = sut.updateComment(user.getId(), anyLong(), updateContent);
+        // when
+        UpdateCommentResponse actualUpdateContent = sut.updateComment(1L, anyLong(), updateContent);
 
-		// then
-		assertThat(actualUpdateContent.content()).isEqualTo(updateContent.content());
-	}
+        // then
+        assertThat(actualUpdateContent.content()).isEqualTo(updateContent.content());
+    }
 
-	@Test
-	void 댓글을_수정할_때_요청을_보낸_사용자가_등록한_댓글이_아니라면_에러가_발생한다() {
-		// given
-		Long wrongUserId = 50L;
-		User user = spy(UserTestUtil.create());
-		Pot pot = PotTestUtil.create();
-		Comment comment = CommentTestUtil.create(pot, user, null, "content");
-		doReturn(1L).when(user).getId();
-		given(userRepository.existsById(anyLong())).willReturn(true);
-		given(commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
+    @Test
+    void 댓글을_수정할_때_요청을_보낸_사용자가_등록한_댓글이_아니라면_댓글_조회에_실패한다() {
+        // given
+        Long commentId = 1L;
+        Long wrongUserId = 50L;
+        given(userRepository.existsById(wrongUserId)).willReturn(true);
+        given(commentRepository.findByIdAndUserId(commentId, wrongUserId)).willReturn(Optional.empty());
 
-		// when
-		Throwable throwable = catchThrowable(
-				() -> sut.updateComment(wrongUserId, anyLong(), updateCommentRequest("update content")));
+        // when
+        Throwable throwable = catchThrowable(
+            () -> sut.updateComment(wrongUserId, commentId, updateCommentRequest("update content")));
 
-		// then
-		assertThat(throwable).isInstanceOf(CommentWriterNotMatchException.class);
-	}
+        // then
+        assertThat(throwable).isInstanceOf(CommentIdNotFoundException.class);
+    }
 
-	@Test
-	void 삭제할_댓글의_PK를_받아_댓글을_삭제한다() {
-		// given
-		Long userId = 1L;
-		User user = spy(UserTestUtil.create());
-		Pot pot = PotTestUtil.create();
-		Comment comment = CommentTestUtil.create(pot, user, null, "content");
-		doReturn(userId).when(user).getId();
-		given(userRepository.existsById(anyLong())).willReturn(true);
-		given(commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
-		willDoNothing().given(commentRepository).deleteById(anyLong());
+    @Test
+    void 삭제할_댓글의_PK를_받아_댓글을_삭제한다() {
+        // given
+        Long userId = 1L;
+        User user = UserTestUtil.create();
+        Pot pot = PotTestUtil.create();
+        Comment comment = CommentTestUtil.create(pot, user, null, "content");
+        given(userRepository.existsById(anyLong())).willReturn(true);
+        given(commentRepository.findByIdAndUserId(anyLong(), anyLong())).willReturn(Optional.of(comment));
+        willDoNothing().given(commentRepository).delete(any(Comment.class));
 
-		// when
-		sut.deleteComment(userId, anyLong());
+        // when
+        sut.deleteComment(userId, anyLong());
 
-		// then
-		then(commentRepository).should().deleteById(anyLong());
-	}
+        // then
+        then(commentRepository).should().delete(any(Comment.class));
+    }
 
-	@Test
-	void 댓글을_삭제할_때_요청을_보낸_사용자가_등록한_댓글이_아니라면_에러가_발생한다() {
-		// given
-		Long wrongUserId = 50L;
-		User user = spy(UserTestUtil.create());
-		Pot pot = PotTestUtil.create();
-		Comment comment = CommentTestUtil.create(pot, user, null, "content");
-		doReturn(1L).when(user).getId();
-		given(userRepository.existsById(anyLong())).willReturn(true);
-		given(commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
+    @Test
+    void 댓글을_삭제할_때_요청을_보낸_사용자가_등록한_댓글이_아니라면__댓글_조회에_실패한다() {
+        // given
+        Long wrongUserId = 50L;
+        User user = UserTestUtil.create();
+        Pot pot = PotTestUtil.create();
+        Comment comment = CommentTestUtil.create(pot, user, null, "content");
+        given(userRepository.existsById(anyLong())).willReturn(true);
+        given(commentRepository.findByIdAndUserId(anyLong(), anyLong())).willReturn(Optional.empty());
 
-		// when
-		Throwable throwable = catchThrowable(() -> sut.deleteComment(wrongUserId, 1L));
+        // when
+        Throwable throwable = catchThrowable(() -> sut.deleteComment(wrongUserId, 1L));
 
-		// then
-		assertThat(throwable).isInstanceOf(CommentWriterNotMatchException.class);
-	}
+        // then
+        assertThat(throwable).isInstanceOf(CommentIdNotFoundException.class);
+    }
 
-	private CreateCommentRequest createCommentRequest(Long potId, Long parentCommentId, String content) {
-		return new CreateCommentRequest(potId, parentCommentId, content);
-	}
+    private CreateCommentRequest createCommentRequest(Long potId, Long parentCommentId, String content) {
+        return new CreateCommentRequest(potId, parentCommentId, content);
+    }
 
-	private UpdateCommentRequest updateCommentRequest(String content) {
-		return new UpdateCommentRequest(content);
-	}
+    private UpdateCommentRequest updateCommentRequest(String content) {
+        return new UpdateCommentRequest(content);
+    }
 }

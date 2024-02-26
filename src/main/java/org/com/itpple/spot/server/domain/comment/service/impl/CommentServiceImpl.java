@@ -1,9 +1,5 @@
 package org.com.itpple.spot.server.domain.comment.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.com.itpple.spot.server.domain.comment.dto.CommentDto;
 import org.com.itpple.spot.server.domain.comment.dto.request.CreateCommentRequest;
@@ -12,19 +8,23 @@ import org.com.itpple.spot.server.domain.comment.dto.response.CreateCommentRespo
 import org.com.itpple.spot.server.domain.comment.dto.response.UpdateCommentResponse;
 import org.com.itpple.spot.server.domain.comment.entity.Comment;
 import org.com.itpple.spot.server.domain.comment.exception.CommentIdNotFoundException;
-import org.com.itpple.spot.server.domain.comment.exception.CommentWriterNotMatchException;
-import org.com.itpple.spot.server.domain.pot.entity.Pot;
-import org.com.itpple.spot.server.domain.user.entity.User;
-import org.com.itpple.spot.server.domain.comment.exception.ParentCommentNotFoundException;
 import org.com.itpple.spot.server.domain.comment.exception.CommentPotNotMatchException;
-import org.com.itpple.spot.server.domain.pot.exception.PotIdNotFoundException;
-import org.com.itpple.spot.server.domain.user.exception.UserIdNotFoundException;
+import org.com.itpple.spot.server.domain.comment.exception.ParentCommentNotFoundException;
 import org.com.itpple.spot.server.domain.comment.repository.CommentRepository;
-import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
-import org.com.itpple.spot.server.domain.user.repository.UserRepository;
 import org.com.itpple.spot.server.domain.comment.service.CommentService;
+import org.com.itpple.spot.server.domain.pot.entity.Pot;
+import org.com.itpple.spot.server.domain.pot.exception.PotIdNotFoundException;
+import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
+import org.com.itpple.spot.server.domain.user.entity.User;
+import org.com.itpple.spot.server.domain.user.exception.UserIdNotFoundException;
+import org.com.itpple.spot.server.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -78,12 +78,8 @@ public class CommentServiceImpl implements CommentService {
     ) {
         checkUserExistsById(userId);
 
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByIdAndUserId(commentId, userId)
             .orElseThrow(() -> new CommentIdNotFoundException("PK = " + commentId));
-
-        if (comment.getWriter().getId() != userId) {
-            throw new CommentWriterNotMatchException();
-        }
 
         comment.updateContent(request.content());
 
@@ -95,14 +91,10 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Long userId, Long commentId) {
         checkUserExistsById(userId);
 
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByIdAndUserId(commentId, userId)
             .orElseThrow(() -> new CommentIdNotFoundException("PK = " + commentId));
 
-        if (comment.getWriter().getId() != userId) {
-            throw new CommentWriterNotMatchException();
-        }
-
-        commentRepository.deleteById(commentId);
+        commentRepository.delete(comment);
     }
 
     private void checkUserExistsById(Long userId) {
