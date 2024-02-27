@@ -1,10 +1,7 @@
 package org.com.itpple.spot.server.domain.user.dto.response;
 
 import lombok.Builder;
-import org.com.itpple.spot.server.global.common.constant.Gender;
-import org.com.itpple.spot.server.global.common.constant.Interest;
-import org.com.itpple.spot.server.global.common.constant.Mbti;
-import org.com.itpple.spot.server.global.common.constant.Status;
+import org.com.itpple.spot.server.global.common.constant.*;
 import org.com.itpple.spot.server.domain.user.entity.User;
 
 import java.time.LocalDate;
@@ -13,7 +10,7 @@ import java.util.List;
 @Builder
 public record UserInfoResponse(
         Long id,
-        String loginType,
+        OAuthType loginType,
         String profileImageUrl,
         String name,
         String nickname,

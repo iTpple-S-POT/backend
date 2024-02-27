@@ -14,6 +14,8 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
 
     boolean existsByPotAndUser(Pot pot, User user);
 
+    List<Reaction> findByUserId(Long userId);
+  
     @Query("SELECT r.reactionType AS reactionType, COUNT(*) AS count " +
             "FROM Reaction r " +
             "WHERE r.pot.id = :potId " +

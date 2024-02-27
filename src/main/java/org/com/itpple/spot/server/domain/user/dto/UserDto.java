@@ -8,7 +8,7 @@ import java.util.List;
 
 public record UserDto(
 		Long id,
-		String loginType,
+		OAuthType loginType,
 		String socialId,
 		Role role,
 		String name,
@@ -23,7 +23,7 @@ public record UserDto(
 ) {
 
 	public static UserDto of(
-			Long id, String loginType, String socialId, Role role, String name, String profileImageUrl, String phoneNumber,
+			Long id, OAuthType loginType, String socialId, Role role, String name, String profileImageUrl, String phoneNumber,
 			String nickname, LocalDate birthDay, Gender gender, Mbti mbti, List<Interest> interests, Status status
 	) {
 		return new UserDto(

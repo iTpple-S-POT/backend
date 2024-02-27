@@ -44,7 +44,6 @@ import org.locationtech.jts.geom.Point;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE pot SET is_deleted = true WHERE pot_id = ?")
-@SQLDeleteAll(sql = "UPDATE pot SET is_deleted = true WHERE pot_id in ?")
 @DynamicInsert
 public class Pot extends BasicDateEntity {
 
