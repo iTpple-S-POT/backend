@@ -11,4 +11,6 @@ public interface ViewHistoryRepository extends JpaRepository<ViewHistory, Long> 
     List<ViewHistory> findAllByUserIdOrderByCreatedAtDesc(Long userId);
 
     boolean existsByPotIdAndUserId(Long userId, Long potId);
+
+    List<ViewHistory> findByUserId(Long userId);
 }

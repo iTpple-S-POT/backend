@@ -10,4 +10,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c LEFT JOIN FETCH c.parentComment LEFT JOIN FETCH c.writer "
         + "WHERE c.pot.id = :potId ORDER BY c.parentComment.id ASC NULLS FIRST, c.createdAt ASC")
     List<Comment> findAllComment(Long potId);
+
+    List<Comment> findByWriterId(Long userId);
 }
