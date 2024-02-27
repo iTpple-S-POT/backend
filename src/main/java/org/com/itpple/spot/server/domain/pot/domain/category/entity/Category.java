@@ -19,7 +19,6 @@ import org.hibernate.annotations.Where;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE category_id = ?")
-@SQLDeleteAll(sql = "UPDATE category SET is_deleted = true WHERE category_id in ?")
 @Where(clause = "is_deleted = false")
 public class Category extends BasicDateEntity {
 
