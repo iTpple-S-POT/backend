@@ -1,6 +1,9 @@
 package org.com.itpple.spot.server.domain.pot.domain.hashtag.service;
 
 import io.jsonwebtoken.lang.Collections;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.entity.Hashtag;
@@ -9,11 +12,8 @@ import org.com.itpple.spot.server.domain.pot.dto.HashtagDTO;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreateHashtagRequest;
 import org.com.itpple.spot.server.global.exception.BusinessException;
 import org.com.itpple.spot.server.global.exception.code.ErrorCode;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -27,12 +27,25 @@ public class HashtagServiceImpl implements HashtagService {
     @Override
     @Transactional(readOnly = true)
     public List<HashtagDTO> getHashtag(String keyword, int page) {
-        var pageable = PageRequest.of(page, HASHTAG_PAGE_SIZE);
-        return hashtagRepository.findByHashtagContainingOrderByCountDesc(keyword, pageable)
-                .stream().filter(hashtag -> hashtag.getCount()
-                        > 1) // 페이징 시 count 기준으로 정렬되어 있어서 1보다 작은 경우는 필터링해도 문제 없음
+
+        var hashtagList = hashtagRepository.findAllByHashtagContaining(keyword)
+                .stream().filter(hashtag -> hashtag.getCount() > 1) // 페이징 시 count 기준으로 정렬되어 있어서 1보다 작은 경우는 필터링해도 문제 없음
                 .sorted((o1, o2) -> Math.toIntExact(o2.getCount() - o1.getCount()))
                 .map(HashtagDTO::from).toList();
+
+
+        if (hashtagList.isEmpty()) {
+            hashtagList = this.getHashtag(keyword)
+                    .map(List::of)
+                    .orElseGet(ArrayList::new);
+        }
+
+        return hashtagList;
+    }
+
+    private Optional<HashtagDTO> getHashtag(String keyword) {
+        return hashtagRepository.findByHashtagEquals(keyword)
+                .map(HashtagDTO::from);
     }
 
     @Override
