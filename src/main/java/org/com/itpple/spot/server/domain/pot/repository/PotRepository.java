@@ -27,9 +27,14 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
     List<Pot> findBySearchConditionForAdmin(@Param("polygon") Polygon polygon,
             @Param("categoryId") Long categoryId, @Param("hashtagId") Long hashtagId);
 
+    @Query(value = "SELECT distinct p FROM Pot p  "
+            + "left join fetch p.potHashtagList ph "
+            + "WHERE p.user.id = :userId "
+            + "AND p.isDeleted = false ")
     List<Pot> findByUserId(Long userId);
 
-    @Query(value = "SELECT p FROM Pot p "
+    @Query(value = "SELECT distinct p FROM Pot p "
+            + "left join fetch p.potHashtagList ph "
             + "WHERE p.user.id in :idList "
             + "AND p.expiredAt > now()")
     List<Pot> findByIdAndNotExpired(@Param("idList") List<Long> idList);
