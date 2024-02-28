@@ -123,6 +123,22 @@ public class UserInfoServiceImpl implements UserInfoService {
     public void deleteUserInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserIdNotFoundException("PK = " + userId));
+
+        List<Location> location = locationRepository.findByUserId(userId);
+        locationRepository.deleteAll(location);
+
+        List<ViewHistory> viewHistory = viewHistoryRepository.findByUserId(userId);
+        viewHistoryRepository.deleteAll(viewHistory);
+
+        List<Pot> pot = potRepository.findByUserId(userId);
+        potRepository.deleteAll(pot);
+
+        List<Comment> comment = commentRepository.findByWriterId(userId);
+        commentRepository.deleteAll(comment);
+
+        List<Reaction> reaction = reactionRepository.findByUserId(userId);
+        reactionRepository.deleteAll(reaction);
+
         userRepository.delete(user);
     }
 }
