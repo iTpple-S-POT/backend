@@ -1,20 +1,7 @@
 package org.com.itpple.spot.server.domain.pot.api;
 
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.service.HashtagService;
 import org.com.itpple.spot.server.domain.pot.dto.PotDTO;
@@ -33,6 +20,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PotController.class)
 class PotControllerTest {
@@ -111,11 +110,11 @@ class PotControllerTest {
 
     private final List<PotDTO> potDTOList = (List.of(
             new PotDTO(1L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
-                    LocalDateTime.now().plusDays(1), List.of(),0L),
+                    LocalDateTime.now().plusDays(1), List.of(), 0L, null),
             new PotDTO(2L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
-                    LocalDateTime.now().plusDays(1), List.of(),0L),
+                    LocalDateTime.now().plusDays(1), List.of(), 0L, null),
             new PotDTO(3L, 1L, List.of(1L), PotType.IMAGE, null, new PointDTO(2.0, 2.0), "test.jpg",
-                    LocalDateTime.now().plusDays(1), List.of(),0L)
+                    LocalDateTime.now().plusDays(1), List.of(), 0L, null)
     ));
 
     @Test

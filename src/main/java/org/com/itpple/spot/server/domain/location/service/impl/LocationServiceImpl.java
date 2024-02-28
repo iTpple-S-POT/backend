@@ -33,4 +33,10 @@ public class LocationServiceImpl implements LocationService {
 
         return LocationResponse.fromLocation(savedLocation);
     }
+
+    @Override
+    public LocationResponse getLocation(Long userId, Long id) {
+        Location savedLocation = locationRepository.findById(id).orElseThrow();
+        return LocationResponse.fromLocation(savedLocation);
+    }
 }

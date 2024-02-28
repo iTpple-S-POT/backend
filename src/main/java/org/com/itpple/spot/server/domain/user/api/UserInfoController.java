@@ -38,7 +38,7 @@ public class UserInfoController {
         return ResponseEntity.ok().build();
     }
 
-    //유저 조회
+    //유저 정보 조회
     @GetMapping("")
     public ResponseEntity<UserInfoDto> getUserInfo(@Auth CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
@@ -53,6 +53,16 @@ public class UserInfoController {
     ) {
         Long userId = customUserDetails.getUserId();
         return ResponseEntity.ok(userInfoService.updateUserInfo(userId, updateUserInfoRequest));
+    }
+
+    //탈퇴하기
+    @DeleteMapping("")
+    public ResponseEntity<Void> deleteUserInfo(
+            @Auth CustomUserDetails customUserDetails
+    ){
+        Long userId = customUserDetails.getUserId();
+        userInfoService.deleteUserInfo(userId);
+        return ResponseEntity.ok().build();
     }
 
     //다른 유저 프로필 조회

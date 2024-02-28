@@ -13,4 +13,5 @@ public interface UserInfoService {
     UserInfoDto getUserInfo(Long userId);
     UserProfileDto getUserProfile(Long userId);
     UserInfoResponse updateUserInfo(Long userId, UpdateUserInfoRequest updateUserInfoRequest);
+    void deleteUserInfo(Long userId);
 }

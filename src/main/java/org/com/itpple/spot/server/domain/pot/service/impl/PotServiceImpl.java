@@ -16,6 +16,7 @@ import org.com.itpple.spot.server.domain.pot.dto.response.UploadImageResponse;
 import org.com.itpple.spot.server.domain.pot.entity.Pot;
 import org.com.itpple.spot.server.domain.pot.repository.PotRepository;
 import org.com.itpple.spot.server.domain.pot.service.PotService;
+import org.com.itpple.spot.server.domain.reaction.repository.ReactionRepository;
 import org.com.itpple.spot.server.domain.user.repository.UserRepository;
 import org.com.itpple.spot.server.global.exception.BusinessException;
 import org.com.itpple.spot.server.global.exception.code.ErrorCode;
@@ -42,6 +43,7 @@ public class PotServiceImpl implements PotService {
     private final UserRepository userRepository;
     private final HashtagRepository hashtagRepository;
     private final ViewHistoryRepository viewHistoryRepository;
+    private final ReactionRepository reactionRepository;
 
     @Override
     public GetCategoryResponse getCategory() {
@@ -120,7 +122,7 @@ public class PotServiceImpl implements PotService {
                         pot.addViewCount();
                         this.createViewHistory(userId, pot);
                     }
-                    return PotDTO.from(pot);
+                    return PotDTO.from(pot, reactionRepository.countEachReactionType(potId));
                 })
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POT));
     }
