@@ -46,7 +46,6 @@ public class SecurityConfig {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/v1/auth/login/**").permitAll()
                 .antMatchers("/api/v1/auth/refresh").permitAll()
-                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
