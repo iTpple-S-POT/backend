@@ -95,7 +95,7 @@ public class PotServiceTest {
         Long categoryId = 1L;
 
         //when
-        final var result = target.getPotList(searchRange, categoryId, null);
+        final var result = target.getPotList(searchRange, categoryId, null, null);
 
         //then
         assertThat(result).hasSize(1);

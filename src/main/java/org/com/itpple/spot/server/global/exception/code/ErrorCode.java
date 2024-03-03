@@ -39,6 +39,8 @@ public enum ErrorCode {
     NOT_FOUND_POT(1701, "팟을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     NOT_FOUND_CATEGORY(1702, "카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     CONFLICT_HASHTAG(1703, "이미 존재하는 해시태그입니다.", HttpStatus.CONFLICT),
+    CANNOT_REPORT_MY_POT(1704,"자신의 팟을 신고할 수 없습니다.",HttpStatus.BAD_REQUEST),
+    ALREADY_REPORTED_POT(1705,"이미 신고한 팟입니다.",HttpStatus.CONFLICT),
 
     // Reaction 관련
     NOT_ADD_MULTIPLE_REACTION(1801, "팟에 여러 개의 반응을 추가할 수 없습니다.", HttpStatus.BAD_REQUEST),
