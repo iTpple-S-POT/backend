@@ -9,12 +9,15 @@ import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.service.HashtagService;
+import org.com.itpple.spot.server.domain.pot.domain.potReportHistory.service.PotReportHistoryService;
 import org.com.itpple.spot.server.domain.pot.dto.HashtagDTO;
 import org.com.itpple.spot.server.domain.pot.dto.PotDTO;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreateHashtagRequest;
+import org.com.itpple.spot.server.domain.pot.dto.request.CreatePotReportRequest;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreatePotRequest;
 import org.com.itpple.spot.server.domain.pot.dto.request.UploadImageRequest;
+import org.com.itpple.spot.server.domain.pot.dto.response.CreatePotReportResponse;
 import org.com.itpple.spot.server.domain.pot.dto.response.CreatePotResponse;
 import org.com.itpple.spot.server.domain.pot.dto.response.GetCategoryResponse;
 import org.com.itpple.spot.server.domain.pot.dto.response.UploadImageResponse;
@@ -41,13 +44,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class PotController {
 
     private final PotService potService;
+    private final PotReportHistoryService potReportHistoryService;
     private final HashtagService hashtagService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PotDTO>> getPotList(
+            @Auth CustomUserDetails customUserDetails,
             @ModelAttribute("searchCondition") @Valid SearchCondition searchCondition) {
         return ResponseEntity.ok(potService.getPotList(searchCondition.getSearchRange(),
-                searchCondition.getCategoryId(), searchCondition.getHashtagId()));
+                searchCondition.getCategoryId(), searchCondition.getHashtagId(), customUserDetails.getUserId()));
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -80,6 +85,16 @@ public class PotController {
             @PathVariable("potId") Long potId) {
         var userId = customUserDetails.getUserId();
         return ResponseEntity.ok(potService.getPot(potId, userId));
+    }
+
+    @PostMapping(value = "/{potId}/report", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CreatePotReportResponse> reportPot(
+            @Auth CustomUserDetails customUserDetails,
+            @PathVariable("potId") Long potId,
+            @RequestBody @Valid CreatePotReportRequest createPotReportRequest) {
+        var userId = customUserDetails.getUserId();
+        var result = potReportHistoryService.reportPot(userId, potId, createPotReportRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)

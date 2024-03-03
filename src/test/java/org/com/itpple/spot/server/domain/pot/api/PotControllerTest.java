@@ -1,9 +1,23 @@
 package org.com.itpple.spot.server.domain.pot.api;
 
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.com.itpple.spot.server.domain.location.dto.PointDTO;
 import org.com.itpple.spot.server.domain.pot.domain.hashtag.service.HashtagService;
+import org.com.itpple.spot.server.domain.pot.domain.potReportHistory.service.PotReportHistoryService;
 import org.com.itpple.spot.server.domain.pot.dto.PotDTO;
 import org.com.itpple.spot.server.domain.pot.dto.SearchCondition.SearchRange;
 import org.com.itpple.spot.server.domain.pot.dto.request.CreatePotRequest;
@@ -21,18 +35,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(controllers = PotController.class)
 class PotControllerTest {
 
@@ -43,6 +45,8 @@ class PotControllerTest {
     private PotService potService;
     @MockBean
     private HashtagService hashTagService;
+    @MockBean
+    private PotReportHistoryService potReportHistoryService;
 
     @Test
     void uploadImageUsingPreSignedUrl_Invalid_Image_Extension() throws Exception {
@@ -121,7 +125,7 @@ class PotControllerTest {
     void getPotList_Success_no_type() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -139,7 +143,7 @@ class PotControllerTest {
     void getPotList_Success_circle() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -158,7 +162,7 @@ class PotControllerTest {
     void getPotList_Fail_Rectangle_Min_Size() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -177,7 +181,7 @@ class PotControllerTest {
     void getPotList_Success_Rectangle() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
@@ -197,7 +201,7 @@ class PotControllerTest {
     void getPotList_Failed_Rectangle_distance_max() throws Exception {
         final var url = "/api/v1/pot";
 
-        when(potService.getPotList(any(SearchRange.class), anyLong(), any())).thenReturn(potDTOList);
+        when(potService.getPotList(any(SearchRange.class), anyLong(), any(), any())).thenReturn(potDTOList);
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(AuthUserUtil.getCustomUserDetails()))
